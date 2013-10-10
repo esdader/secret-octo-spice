@@ -1,0 +1,52 @@
+/* required for containers to inherit vertical size from window */
+// html.use-iso,
+// body.use-iso {
+//   height: 100%;
+// }
+
+html,
+body {
+	height: 100%;
+}
+.container {
+	margin: 0 130px;
+  	padding: 5px;
+  	margin-bottom: 20px;
+  	overflow: visible !important;
+}
+
+.wrapper {
+	margin: 94px 130px 0;
+  	padding: 0 5px 5px;
+}
+
+.cart-container {
+	position: fixed;
+	right: 37px;
+	top: 36px;
+	width: 40px;
+	text-align: right;
+}
+
+.search-container {
+	position: fixed;
+	left: 36px;
+	top: 36px;
+}
+
+.main-nav-container {
+	position: fixed;
+	right: 37px;
+	top: 150px;
+}
+
+.open-main-nav .main-nav-container {
+	display: none;
+}
+
+.sub-collections-con {
+	position: fixed;
+	left: 9px;
+	top: 150px;
+	width: 120px;
+}

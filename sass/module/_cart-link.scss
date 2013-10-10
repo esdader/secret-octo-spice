@@ -1,0 +1,30 @@
+.cart-link {
+	display: block;
+	z-index: 9999;
+	width: 17px;
+	height: 33px;
+	background: siu("s.svg") no-repeat -577px -7px;
+	background-size: 600px 162px;
+	float: right;
+}
+
+.no-svg .cart-link {
+	background: siu("s.png") no-repeat -577px -7px;
+}
+.cart-container:hover .cart-link,
+.cart-link:hover {
+	background-position: -577px -51px;
+}
+
+.cart-count {
+	margin-right: 3px;
+	float: right;
+	line-height: 33px;
+	color: rgb(220, 221, 222);
+	text-decoration: none;
+}
+
+.cart-container:hover .cart-count,
+.cart-count:hover {
+	color: rgb(77,77,79);
+}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {% if template == 'index' %}
+        <title>{{ shop.name }} | {{ page_title }}</title>
+    {% elsif template == '404' %}
+        <title>Page Not Found | {{ shop.name }}</title>
+    {% else %}
+        <title>{{ page_title }} | {{ shop.name }}</title>
+    {% endif %}
+
+    {% if page_description %}
+        <meta name="description" content="{{ page_description }}" />
+    {% endif %}
+
+    <link rel="canonical" href="{{ canonical_url }}" />
+    
+    {{ content_for_header }}
+
+    {{ 'main.css' | asset_url | stylesheet_tag }}
+    {{ 'modernizr-2.6.2.min.js' | asset_url | script_tag }}
+</head>
+<body class='{% if template == 'index' %}open-main-nav{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}customer-care-links-open{% endif %}{% if template contains 'info' or template contains 'about' %}info-links-open{% endif %}'>
+  <a href="/" class="main-logo"><img src="{{ 'logo.svg' | asset_url }}" alt="Wbritt logo" /></a>
+
+    <div class="search-container">
+        <a href="#open-search" class="open-search-btn ir">Open search</a>
+    </div>
+    {% if template contains 'collection' %}
+        {% for link in linklists.sub-collections.links %}
+            {% if collection.handle == link.handle %}
+                <div class="sub-collections-con">
+                    <div class="vertical-rail"> </div>
+                    <nav>
+                        <ul class="sub-collections-nav subnav">
+                            {% for link in linklists.sub-collections.links %}
+                                <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %}>{{ link.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="cart-container">
+        <a href="/cart" class="cart-link ir">Cart</a>
+        <a href="/cart" class="cart-count">{{ cart.item_count }}</a>
+    </div>
+    <a href="#open-main-nav" class="main-nav-btn ir">Open main nav</a>
+    <div class="main-nav-container">
+        <nav>
+            <ul class="main-nav">
+                <li class="l-shop-link{% if template contains 'collection' or template contains 'product' %} is-open{% endif %}"><a href="#open-shop-links" class="shop-link-btn ir">Shop</a></li>
+                <li class="l-info-link{% if template contains 'info' or template contains 'about' %} is-open{% endif %}"><a href="#open-info-links" class="info-link-btn ir">Info</a></li>
+                <li class="l-follow-link"><a href="#open-follow-links" class="follow-link-btn ir">Follow</a></li>
+                <li class="l-customer-care-link{% if template contains 'customer-care' %} is-open{% endif %}"><a href="#open-customer-care-links" class="customer-care-link-btn ir">Customer Care</a></li>
+            </ul>
+        </nav>
+        <div class="subnav-con shop-links">
+            <ul class="subnav">
+            {% for link in linklists.shop.links %}
+                <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %}>{{ link.title }}</a></li> 
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="subnav-con info-links">
+            <ul class="subnav">
+            {% for link in linklists.info.links %}
+                <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %}>{{ link.title }}</a></li> 
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="subnav-con follow-links">
+            <ul class="subnav">
+                {% for link in linklists.social-media.links %}
+                    <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %}>{{ link.title }}</a></li> 
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="subnav-con customer-care-links">
+            <ul class="subnav">
+                {% for link in linklists.customer-care.links %}
+                    <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %}>{{ link.title }}</a></li> 
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% if template contains 'collection' or template == 'index' %}
+        <div class="container invisible">
+    {% elsif template contains 'product' %}
+        <div class="product-page">
+    {% else %}
+        <div class="wrapper">
+    {% endif %}
+        {{ content_for_layout }}    
+    </div>
+    
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{ "jquery-1.10.2.min.js" | asset_url }}"><\/script>')</script>
+    {{ 'plugins.js' | asset_url | script_tag }}
+    {{ 'handlebars.runtime.js' | asset_url | script_tag }}
+    {{ 'handlebars_helpers.js' | asset_url | script_tag }}
+    {{ 'product.handlebars.js' | asset_url | script_tag }}
+    {{ 'main.js' | asset_url | script_tag }}
+
+    {% if template contains 'product' %}
+        <script>
+            var $productOptions = $('.product-options-images'),
+                $variImages     = $productOptions.find('img'),
+                $variLinks      = $productOptions.find('a'),
+                $variants       = $('#product-select'),
+                $mainImage      = $('.product-main-image'),
+                $materialTitle  = $('.selected-material'),
+                $shareBtn       = $('.social-share-btn'),
+                $shareCon       = $('.social-share-con'),
+                $biggerImgBtn   = $('.bigger-image-btn'),
+                $smallerImgBtn  = $('.smaller-image-btn');
+
+            $shareBtn.on('click', function(e){
+                e.preventDefault();
+                $shareCon.toggleClass('is-open');
+            });
+
+            $biggerImgBtn.on('click', function(e){
+                e.preventDefault();
+            });
+
+            $smallerImgBtn.on('click', function(e){
+                e.preventDefault();
+            });
+
+            $variLinks.on('click', function(e){
+                e.preventDefault();
+                var $this = $(this),
+                    earl = $this.attr('href'),
+                    currImg = $this.find('img'),
+                    imgSrc = currImg.attr('src'),
+                    pattern = /(_m_)(.*)(?=_large\.(gif|jpg|jpeg|tiff|png))/;
+                    
+                    $productOptions.find('.active').removeClass('active');
+                    currImg.parent().parent().addClass('active');
+
+                    var file = imgSrc.match(pattern);
+                    if (file) {
+                        var currentVari = file[2].split('_').join('-');
+                        currentVari = currentVari.toLowerCase();
+                        $variants.find('option:selected').attr('selected', false);
+                        var t = $variants.find('.' + currentVari);
+                        $(t).attr('selected', true);
+                        $materialTitle.text($(t).attr('data-title'));
+                    }
+
+
+                    $mainImage.attr('src', earl);
+
+
+            });
+            
+            $(window).load(function() {
+                var $flexy = $('.flexslider'),
+                    $prevBtn = $('.product-slider-prev'),
+                    $nextBtn = $('.product-slider-next');
+
+                $('.flexslider').flexslider({
+                    controlNav: true,
+                    directionNav: false,
+                    slideshow: false,
+                    animation: 'slide'
+                });
+
+                $prevBtn.on('click', function(e){
+                    e.preventDefault();
+                    $flexy.flexslider('previous');
+                });
+
+                $nextBtn.on('click', function(e){
+                    e.preventDefault();
+                    $flexy.flexslider('next');
+                });
+
+            });
+
+        </script>
+    {% endif  %}
+</body>
+</html>

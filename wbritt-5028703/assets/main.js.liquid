@@ -1,0 +1,508 @@
+(function($, window){
+
+    var mainNavBtn          = $('.main-nav-btn'),
+        mainNavCon          = $('.main-nav-container'),
+        theBody             = $('body'),
+        shopLinkBtn         = $('.shop-link-btn'),
+        infoLinkBtn         = $('.info-link-btn'),
+        followLinkBtn       = $('.follow-link-btn'),
+        customerCareLinkBtn = $('.customer-care-link-btn'),
+        subnavCons          = $('.subnav-con');
+
+    // main nav open button
+    mainNavBtn.on('click', function(e){
+        e.preventDefault(e);
+        theBody.toggleClass('open-main-nav');
+        // mainNavCon.fadeToggle('slow');
+    });
+
+    // shop nav button
+    shopLinkBtn.on('click', function(e) {
+        e.preventDefault(e);
+        var $this = $(this)
+            $parent = $this.parent();
+        if ($parent.hasClass('is-open')) {
+            subnavCons.fadeOut('slow');
+            $parent.removeClass('is-open');
+        } else {
+            subnavCons.fadeOut('slow');
+            mainNavCon.find('.is-open').removeClass('is-open');
+            $('.shop-links').fadeToggle('slow');
+            $parent.toggleClass('is-open');
+        }
+    });
+
+    // info nav button
+    infoLinkBtn.on('click', function(e) {
+        e.preventDefault(e);
+        var $this = $(this)
+            $parent = $this.parent();
+        if ($parent.hasClass('is-open')) {
+            subnavCons.fadeOut('slow');
+            $parent.removeClass('is-open');
+        } else {
+            subnavCons.fadeOut('slow');
+            mainNavCon.find('.is-open').removeClass('is-open');
+            $('.info-links').fadeToggle('slow');
+            $parent.toggleClass('is-open');
+        }
+    });
+
+    // follow nav button
+    followLinkBtn.on('click', function(e) {
+        e.preventDefault(e);
+        var $this = $(this)
+            $parent = $this.parent();
+        if ($parent.hasClass('is-open')) {
+            subnavCons.fadeOut('slow');
+            $parent.removeClass('is-open');
+        } else {
+            subnavCons.fadeOut('slow');
+            mainNavCon.find('.is-open').removeClass('is-open');
+            $('.follow-links').fadeToggle('slow');
+            $parent.toggleClass('is-open');
+        }
+    });
+
+    // customer care nav button
+    customerCareLinkBtn.on('click', function(e) {
+        e.preventDefault(e);
+        var $this = $(this)
+            $parent = $this.parent();
+        if ($parent.hasClass('is-open')) {
+            subnavCons.fadeOut('slow');
+            $parent.removeClass('is-open');
+        } else {
+            subnavCons.fadeOut('slow');
+            mainNavCon.find('.is-open').removeClass('is-open');
+            $('.customer-care-links').fadeToggle('slow');
+            $parent.toggleClass('is-open');
+        }
+    });
+
+})(jQuery, window)
+
+
+// layout 
+
+$(window).load(function(){
+
+    // get the window width to see what we're deailing with
+    var win_width = $(window).width(),
+        full_scale = 325, // how big should the photo be? 
+        og_padding_width = 425,
+        begin_reduce_width = 1020,
+        last_item_index = 0,
+        curr_elem_image,
+        elem_width = 744,
+        elem_height = 450; // padding factor
+
+
+    // if the window is less than arbitrary size
+    // shrink all the sizes
+    if (win_width < begin_reduce_width) {
+        full_scale = full_scale / begin_reduce_width * win_width;
+        og_padding_width = og_padding_width / begin_reduce_width * win_width;
+    }
+
+    // Randomize image sizes
+    $('.container').find('.element').each(function(){
+        var $image = $(this).find('img');
+
+        // scale images
+        // on smaller screens the images will get smaller
+        // the window width check above 
+        var scale_factor = 1,
+            img_scale;
+
+        switch ($(this).attr('data-category')) {
+          
+            case 'rings':
+                scale_factor = .35;
+                img_scale = scale_factor * full_scale;
+                $image.css('width', img_scale + 'px');
+                break;
+            
+            case 'hoops':
+                scale_factor = .53;
+                img_scale = scale_factor * full_scale;
+                $image.css('width', img_scale + 'px');
+                break;
+
+            case 'bracelets':
+                scale_factor = .55;
+                img_scale = scale_factor * full_scale;
+                $image.css('width', img_scale + 'px');
+                break;
+
+            case 'pendants':
+                scale_factor = 1;
+                img_scale = scale_factor * full_scale;
+                $image.css('width', img_scale + 'px');
+                break;
+
+            case 'studs':
+                scale_factor = .29;
+                img_scale = scale_factor * full_scale;
+                $image.css('width', img_scale + 'px');
+                break;
+
+            default:
+                scale_factor = 1;
+                img_scale = scale_factor * full_scale;
+                $image.css('width', img_scale + 'px');
+                break;
+        }
+
+        
+        var image_width = $image.width(),
+            image_height = $image.height(),
+            image_padding_x = Math.round((og_padding_width-image_width)*Math.random()/25)*25,
+            image_padding = Math.round((og_padding_width-image_width)*Math.random()/25)*25;
+            
+        // special case for first image
+        if ($(this).index() === 0) {
+            image_padding_x = (200 - img_scale);
+        }
+
+        // special case for second image
+        if ($(this).index() === 1) {
+            image_padding_x = (og_padding_width - img_scale);
+        }
+        
+        // protect against negative padding
+        if (image_padding_x < 0) image_padding_x = 0;
+
+        // Ensure padding will bring image up to a multiple of 25px for grid regularity
+        image_padding_x = Math.round((image_padding_x + image_width)/25)*25 - image_width;
+        var image_padding_y = Math.round((image_padding_x + image_height)/25)*25 - image_height;
+
+
+        if ($(this).attr('data-category') == 'pendants') {
+            // Since we're only adding half of the y-padding, round to nearest 50 to maintain 25px steps
+            image_padding_y = Math.round((image_padding_x + image_height)/50)*50 - image_height; 
+            $(this).css({
+                'height':(image_height + (image_padding_y/2))+'px',
+                'width':(image_width + image_padding_x)+'px'
+            });
+            $image.css({
+                'margin-left':(image_padding_x/2)+'px',
+                'margin-top':0
+            });
+        } else {
+            $(this).css({
+                'height':(image_height + image_padding_y)+'px',
+                'width':(image_width + image_padding_x)+'px'
+            });
+            $image.css({
+                'margin-left':(image_padding_x/2)+'px',
+                'margin-bottom':(image_padding_y/2)+'px',
+                'margin-top':(image_padding_y/2)+'px'
+            });
+        }
+
+        last_item_index = $(this).index() + 1;
+        
+    });
+
+    $('.animation').css('margin-top','0');
+    
+    $('.container').isotope({
+          itemSelector : '.element',
+          layoutMode: 'spineAlign',
+          spineAlign: {
+            gutterWidth: 0
+          }
+        },
+        function() {
+            $('.container').hide().removeClass('invisible').fadeIn();
+        }
+    );
+
+
+   
+
+    // grab product shopify json api
+    function getProduct(product) { 
+        return $.ajax({
+            url: '/products/' + product + '.js',
+            dataType: 'json'
+        });
+    }
+
+    function expand_element(target) {
+        var  expanded = $('.element.expanded');
+        contract_element(expanded);
+        target.addClass('expanded');
+        // console.log('expanding element '+target.attr('id'));
+        var left_shift = 0;
+        if (target.hasClass('right-column')) {
+            // console.log('current right position: '+target.attr('data-x'));
+            var container_shift = (($('.container').width() - elem_width) / 2) - target.attr('data-x');
+        } else {
+            // console.log('current left position: '+target.attr('data-x'));
+            var container_shift =  elem_width + (($('.container').width() - elem_width) / 2) - target.attr('data-x') - target.attr('data-width');
+            left_shift = target.attr('data-width') - elem_width;
+        }
+        // console.log('shifting container by: '+container_shift);
+        // var container_width = $(window).width()+Math.abs(container_shift);
+        // console.log('new container width: '+container_width);
+
+
+        // get y-pos and height of previous element, and calculate how much the target element needs to move down
+        var prev_element_y       = target.prev().attr('data-y'),
+            current_y            = parseInt(target.attr('data-y')),
+            next_element_y       = target.next().attr('data-y'),
+            prev_element_h       = parseInt(target.prev().attr('data-height')),
+            target_downshift;
+
+            if (isNaN(prev_element_h)) {
+                target_downshift     = elem_height + 4;
+            } else {
+                target_downshift     = prev_element_h - (current_y - prev_element_y) + 4;    
+            }
+            
+            var restofgrid_downshift = elem_height - (next_element_y - current_y) + target_downshift + 4;
+
+
+
+        // console.log('current y: '+current_y+' next y: '+next_element_y);
+        // console.log('prev_element_y: '+prev_element_y+' prev_element_h: '+prev_element_h+' downshift: '+target_downshift);
+        // console.log('rest of grid downshift: '+restofgrid_downshift);
+
+
+        // Move all subsequent elements down by the amount that the expanded element grows vertically
+        var height_shift = elem_height - target.attr('data-height') + restofgrid_downshift;
+        target.nextAll().css('top',restofgrid_downshift+'px');
+
+        // Expand the actual element, and adjust margins of inner image
+        //target.css({'width':'1000px','height':'500px','left':left_shift+'px'});
+        if (target.attr('data-category') == 'pendants') {
+            var image_margin_top = 0;
+        } else {
+            var image_margin_top = (elem_height - target.find('img').height()) / 2;
+        }
+        var image_margin_bottom = (elem_height - target.find('img').height()) / 2;
+        var image_margin_sides = (elem_width - target.find('img').width()) / 2;
+        left_shift = ($('.container').width() - elem_width)/2 - target.attr('data-x');
+      
+
+        var product_handle = target.attr('data-product');
+        var template = Handlebars.templates['product.source'];
+    
+        target.css({
+                'top':target_downshift+'px',
+                'left':left_shift+'px',
+                'width': elem_width + 'px',
+                'height': elem_height + 'px'
+            });
+        // todo: scroll top not working in firefox
+        $('body').animate({scrollTop : (current_y + target_downshift) - 100},200);
+        setTimeout(doAfter, 400);
+        function doAfter() {
+            $.when(
+                getProduct(product_handle)
+
+            ).done(
+              function(/*placeholder,*/ data) {
+                var context = data;
+                var html    = template(context);
+                $(html).appendTo(target);
+
+                var prod = target.find('.product');
+
+                prod.hide().css('visibility', 'visible').fadeIn();
+
+                var $productOptions = target.find('.product-options-images'),
+                    $variImages     = $productOptions.find('img'),
+                    $variLinks      = $productOptions.find('a'),
+                    $variants       = target.find('#product-select'),
+                    $mainImage      = target.find('.collection-view-img'),
+                    $materialTitle  = target.find('.selected-material')
+                    $shareBtn       = target.find('.social-share-btn'),
+                    $shareCon       = target.find('.social-share-con'),
+                    $biggerImgBtn   = target.find('.bigger-image-btn'),
+                    $smallerImgBtn  = target.find('.smaller-image-btn'),
+                    pattern         = /(_m_)(.*)(?=\.(gif|jpg|jpeg|tiff|png))/,
+                    firstImageSrc   = $($variImages[0]).attr('src');
+                 
+                var file = firstImageSrc.match(pattern);
+                if (file) {
+                    var currentVari = file[2].split('_').join('-');
+                    currentVari = currentVari.toLowerCase();
+                    $variants.find('option:selected').attr('selected', false);
+                    var t = $variants.find('.' + currentVari);
+                    $(t).attr('selected', true);
+                    $materialTitle.text($(t).attr('data-title'));
+                }
+                
+
+                $shareBtn.on('click', function(e){
+                    e.preventDefault();
+                    $shareCon.toggleClass('is-open');
+                });
+
+                $biggerImgBtn.on('click', function(e){
+                    e.preventDefault();
+                });
+
+                $smallerImgBtn.on('click', function(e){
+                    e.preventDefault();
+                });
+
+                $variLinks.on('click', function(e){
+                    e.preventDefault();
+                    var $this = $(this),
+                        earl = $this.attr('href'),
+                        currImg = $this.find('img'),
+                        imgSrc = currImg.attr('src');
+                        
+                        $productOptions.find('.active').removeClass('active');
+                        currImg.parent().parent().addClass('active');
+                        
+                        var file = imgSrc.match(pattern);
+                        if (file) {
+                            var currentVari = file[2].split('_').join('-');
+                            currentVari = currentVari.toLowerCase();
+                            $variants.find('option:selected').attr('selected', false);
+                            var t = $variants.find('.' + currentVari);
+                            $(t).attr('selected', true);
+                            $materialTitle.text($(t).attr('data-title'));
+                        }
+
+                        $mainImage.attr('src', earl);
+
+                });
+
+                if (data.images.length > 3) {
+                    var $flexy = target.find('.flexslider'),
+                    $prevBtn = target.find('.product-slider-prev'),
+                    $nextBtn = target.find('.product-slider-next');
+
+                    $flexy.imagesLoaded(function(){
+
+                        console.log('images loaded');
+
+                        $flexy.flexslider({
+                            controlNav: false,
+                            directionNav: false,
+                            slideshow: false,
+                            animation: 'slide'
+                        });
+
+                        $prevBtn.on('click', function(e){
+                            e.preventDefault();
+                            $flexy.flexslider('previous');
+                        });
+
+                        $nextBtn.on('click', function(e){
+                            e.preventDefault();
+                            $flexy.flexslider('next');
+                        });
+                    });
+
+                }
+            });
+        }
+
+        // Adjust scroll to the top of the expanded element
+        var element_ypos = target.css("-webkit-transform").toString().replace(")","").split(',');
+
+        target.find('img').animate({
+            'margin-top':image_margin_top+'px',
+            'margin-right':(image_margin_sides+150)+'px',
+            'margin-bottom':image_margin_bottom+'px',
+            'margin-left':(image_margin_sides-150)+'px'
+        },200, function(){
+         
+            // moved scroll to top function
+        });
+    }
+
+    function contract_element(target) {
+        target.removeClass('expanded product');
+        target.find('article').remove();
+        target.append(curr_elem_image);
+        
+        // $('.container').css({'left':'0','width': $(window).width()+'px'});
+        $('.element').css('top','0');
+        target.css({'width':target.attr('data-width')+'px','height':target.attr('data-height')+'px','left':'0'});
+
+        // Adjust margins of inner image
+        if (target.attr('data-category') == 'pendants') {
+            var image_margin_top = 0;
+        } else {
+            var image_margin_top = (target.attr('data-height') - target.find('img').height()) / 2;
+        }
+        var image_margin_bottom = (target.attr('data-height') - target.find('img').height()) / 2;
+        var image_margin_sides = (target.attr('data-width') - target.find('img').width()) / 2;
+        target.find('img').css({
+            'margin-top':image_margin_top+'px',
+            'margin-right':image_margin_sides+'px',
+            'margin-bottom':image_margin_bottom+'px',
+            'margin-left':image_margin_sides+'px'
+        });
+    }
+
+
+    // open the next item
+    $('.container').on('click', '.product-next-btn', function(e){
+        e.preventDefault();
+        var $element_container = $(this).parent().parent(),
+            current_index = parseInt($element_container.attr('data-index'), 10),
+            next_index,
+            $next_item;
+
+        if(current_index === last_item_index) {
+            next_index = 1;
+        } else {
+            next_index = current_index + 1;
+        }
+
+        // grab next item
+        $next_item = $('#elem' + next_index);
+        
+        contract_element($element_container);
+        expand_element($next_item);
+    });
+
+    // open the next item
+    $('.container').on('click', '.product-prev-btn', function(e){
+        e.preventDefault();
+        var $element_container = $(this).parent().parent(),
+            current_index = parseInt($element_container.attr('data-index'), 10),
+            prev_index,
+            $prev_item;
+
+        console.log("last item index: " + last_item_index);
+        if(current_index === 1) {
+            prev_index = last_item_index;
+        } else {
+            prev_index = current_index - 1;
+        }
+
+        // grab next item
+        $prev_item = $('#elem' + prev_index);
+        
+        contract_element($element_container); // close current elem
+        expand_element($prev_item); // open prev elem
+    });
+
+    // close button to close open elements
+    $('.container').on('click', '.product-close-btn', function(e){
+        e.preventDefault();
+        var $element_container = $(this).parent().parent();
+        contract_element($element_container);
+    });
+
+    // elements expand on click
+    $('.element').on('click', function(e){
+        var $this = $(this);
+        if($this.hasClass('expanded')) {
+            // do nothing
+        } else {
+            expand_element($(this));    
+        }
+    });
+
+});

@@ -1,0 +1,11 @@
+{% paginate collection.products by 250 %}
+    {% for product in collection.products %}
+        <div id='elem{{ forloop.index }}' class='element isotope-item' data-index='{{ forloop.index }}' data-category="{{ product.type | handleize }}" data-product="{{ product.handle }}">
+            <img class="{{ product.type | handleize }} collection-view-img" src="{{ product.featured_image | product_img_url: 'large' }}">
+            <div class="collection-product-title-price">
+				<h2 class="collection-product-title">{{ product.title}}</h2>
+				<h3 class="collection-product-price">{{ product.price | money | remove: '.00' }}</h3>
+            </div>
+        </div>
+    {% endfor %}
+{% endpaginate %}

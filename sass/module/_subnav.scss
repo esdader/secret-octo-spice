@@ -1,0 +1,70 @@
+.subnav {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: 11px;
+	letter-spacing: 1px;
+	line-height: 1.6;
+	font-weight: 300;
+	color: rgb(220, 221, 222);
+	text-transform: lowercase;
+}
+.subnav li {
+	text-align: right;
+}
+.subnav a {
+	color: rgb(220, 221, 222);
+	text-decoration: none;
+	font-weight: 300;
+}
+
+.subnav a:hover,
+.subnav a.active {
+	color: rgb(77, 77, 79);
+	font-weight: 400;
+}
+
+.subnav-con {
+	position: absolute;
+	display: none;
+	right: 23px;
+	width: 90px;
+}
+
+.shop-links {
+	top: -2px;
+}
+
+.info-links {
+	top: 84px;
+}
+
+.follow-links {
+	top: 169px;
+}
+
+.customer-care-links {
+	top: 287px;
+}
+
+.shop-links-open .subnav-con.shop-links,
+.info-links-open .subnav-con.info-links,
+.customer-care-links-open .subnav-con.customer-care-links {
+	display: block;
+}
+
+/* sub collections subnav */
+
+.vertical-rail {
+	display: block;
+	float: right;
+	width: 4px;
+	height: 34px;
+	background: rgb(77,77,79);
+}
+
+.sub-collections-nav.subnav {
+	margin-top: -2px;
+	padding-right: 10px;
+	letter-spacing: 0;
+}

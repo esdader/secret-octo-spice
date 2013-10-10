@@ -1,0 +1,15 @@
+.open-search-btn {
+	display: block;
+	z-index: 9999;
+	width: 20px;
+	height: 19px;
+	background: siu("s.svg") no-repeat -7px -7px;
+	background-size: 600px 162px;
+}
+
+.no-svg .open-search-btn {
+	background: siu("s.png") no-repeat -7px -7px;
+}
+.open-search-btn:hover {
+	background-position: -7px -36px;
+}

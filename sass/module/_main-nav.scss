@@ -1,0 +1,117 @@
+.main-nav-btn {
+	position: fixed;
+	display: block;
+	right: 41px;
+	top: 85px;
+	z-index: 9999;
+	width: 17px;
+	height: 17px;
+	background: siu("s.svg") no-repeat -60px -7px;
+	background-size: 600px 162px;
+}
+
+.no-svg .main-nav-btn {
+	background: siu("s.png") no-repeat -60px -7px;
+}
+
+.main-nav-container {
+	z-index: 9999;
+}
+
+.main-nav-btn:hover {
+	background-position: -60px -37px;
+}
+
+
+.open-main-nav .main-nav-btn {
+	background-position: -36px -7px;
+}
+
+.open-main-nav .main-nav-btn:hover {
+	background-position: -36px -37px;
+}
+
+
+.main-nav {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	text-align: right;
+}
+
+.main-nav li {
+	width: 17px;
+	margin-bottom: 54px;
+	text-align: right;
+	
+}
+
+.shop-link-btn {
+	display: block;
+	width: 17px;
+	height: 35px;
+	background: siu("s.svg") no-repeat -539px -7px;
+	background-size: 600px 162px;
+}
+
+.no-svg .shop-link-btn {
+	background: siu("s.png") no-repeat -539px -7px;
+}
+
+.shop-link-btn:hover,
+.is-open .shop-link-btn {
+	background-position: -378px -7px;
+}
+ 
+.info-link-btn {
+	display: block;
+	width: 17px;
+	height: 31px;
+	background: siu("s.svg") no-repeat -503px -7px;
+	background-size: 600px 162px;
+}
+
+.no-svg .info-link-btn {
+	background: siu("s.png") no-repeat -503px -7px;
+}
+
+
+.info-link-btn:hover,
+.is-open .info-link-btn{
+	background-position: -342px -7px;
+}
+ 
+.follow-link-btn {
+	display: block;
+	width: 17px;
+	height: 64px;
+	background: siu("s2.svg") no-repeat -523px -7px;
+	background-size: 613px 162px;
+}
+
+.no-svg .follow-link-btn {
+	background: siu("s2.png") no-repeat -523px -7px;
+}
+
+.follow-link-btn:hover,
+.is-open .follow-link-btn {
+	background-position: -312px -7px;
+}
+
+.customer-care-link-btn {
+	display: block;
+	width: 17px;
+	height: 110px;
+	background: siu("s.svg") no-repeat -443px -7px;
+	background-size: 600px 162px;
+}
+
+.no-svg .customer-care-link-btn {
+	background: siu("s.png") no-repeat -443px -7px;
+}
+
+.customer-care-link-btn:hover,
+.is-open .customer-care-link-btn {
+	background-position: -282px -7px;
+}

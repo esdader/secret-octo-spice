@@ -1,0 +1,94 @@
+.social-share-con {
+	position: static;
+	margin-top: 14px;
+}
+.social-share-btn {
+	position: static;
+	font-size: 11px;
+	line-height: 15px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: rgb(77, 77, 79);
+	text-decoration: none;
+}
+
+.social-share {
+	position: static;
+	height: 15px;
+	width: 120px;
+	display: none;
+	vertical-align: middle;
+	margin: 0 0 0 12px;
+	padding: 0;
+	list-style: none;
+}
+
+.social-share-btn:hover .social-share {
+	display: inline-block;
+}
+.social-share-con:hover .social-share {
+	display: inline-block;
+}
+
+.is-open .social-share {
+	position: static;
+	display: inline-block;
+}
+
+.social-share li {
+	position: static;
+	float: left;
+	height: 15px;
+	margin-right: 3px;
+}
+
+.social-share li a {
+	position: static;
+}
+
+.facebook {
+	position: static;
+	display: block;
+	width: 14px;
+	height: 15px;
+	background: siu("s2.svg") no-repeat -336px -119px;
+}
+
+.no-svg .facebook {
+	background: siu("s2.png") no-repeat -336px -119px;	
+}
+
+.facebook:hover {
+	background-position: -336px -139px;
+}
+
+.twitter {
+	position: static;
+	display: block;
+	width: 23px;
+	height: 15px;
+	background: siu("s2.svg") no-repeat -352px -119px;
+}
+
+.no-svg .twitter {
+	background: siu("s2.png") no-repeat -352px -119px;
+}
+.twitter:hover {
+	background-position: -352px -139px;	
+}
+
+.pinterest {
+	position: static;
+	display: block;
+	width: 16px;
+	height: 15px;
+	background: siu("s2.svg") no-repeat -398px -119px;
+}
+
+.no-svg .pinterest {
+	background: siu("s2.png") no-repeat -398px -119px;
+}
+
+.pinterest:hover {
+	background-position: -398px -139px;
+}

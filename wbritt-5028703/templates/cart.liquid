@@ -1,0 +1,73 @@
+{% if cart.item_count > 0 %}
+    <div class="int-section cart-section">
+        <form action="/cart" method="post">
+            <div class="cart-items">
+                {% for item in cart.items %}
+                    <div class="cart-row">
+                        <div class="cart-item-img">
+                            {% if item.product.variants.size > 1 %}
+                                {% capture vari_title %}_m_{{ item.variant.title | replace: ' ', '_' }}{% endcapture %}
+                                {% for image in item.product.images %}
+                                    {% capture image_test %}{{ image.src }}{% endcapture %}
+                                    {% if image_test contains vari_title %}
+                                        <a href="/products/{{ item.product.handle }}"><img src="{{ image.src | product_img_url: 'compact' }}" alt="{{ item.title }}" /></a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <a href="/products/{{ item.product.handle }}"><img src="{{ item.product.featured_image.src | product_img_url: 'compact' }}" alt="{{ item.title }}" /></a>
+                            {% endif %}
+                        </div>
+                        <div class="cart-item-title-variant">
+                            <p class="cart-item-title">
+                                <a href="/products/{{ item.product.handle }}">{{ item.product.title }}</a>
+                            </p>
+                            <p class="cart-item-variant">
+                                <a href="/products/{{ item.product.handle }}">{{ item.variant.title }}</a>
+                            </p>
+                        </div>
+                        <div class="cart-item-price-qty">
+                            <p class="cart-item-line-price">
+                                {{ item.price | money | remove: '.00' }}
+                            </p>
+                            <p class="cart-item-qty">
+                                Quantity: <input type="text" name="updates[]" id="updates_{{ item.id }}" class="cart-item-qty-field" value="{{ item.quantity }}" />  
+                            </p>
+                        </div>
+                        <div class="cart-item-update-remove">
+                            <p class="cart-item-update">
+                                <input type="submit" name="update" value="Update" class="cart-update-item-btn" /> 
+                            </p>
+                            <p class="cart-item-remove">
+                                <a href="/cart/change?line={{ forloop.index }}&quantity=0" class="cart-item-remove-btn ir">Remove</a>
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="cart-totals-row">
+                    <div class="cart-item-return-policy">
+                        <a href="/pages/returns" class="alt-link-btn">Return Policy</a>
+                    </div>
+                    <div class="cart-empty-cell">
+                        
+                    </div>
+                    <div class="cart-item-subtotal-title">
+                        <h2>Subtotal</h2>
+                    </div>
+                    <div class="cart-item-subtotal">
+                        <p>
+                            {{ cart.total_price | money | remove: '.00' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-shop-checkout clearfix">
+                <a href="/" class="cart-continue-btn alt-link-btn">Continue Shopping</a>
+                <input type="submit" name="checkout" class="cart-checkout-btn" value="Check out" />
+            </div>
+        </form>
+    </div>
+{% else %}
+    <article class="int-section empty-cart">
+        <p>Your shopping cart is empty.</p>
+    </article>
+{% endif %}

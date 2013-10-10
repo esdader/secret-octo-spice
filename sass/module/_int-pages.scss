@@ -1,0 +1,59 @@
+.int-section {
+	width: 742px;
+	min-height: 394px;
+	margin: 0 auto;
+	padding: 88px 110px;
+	background: rgb(243, 243, 243);
+	font-size: 10px;
+	line-height: 1.6;
+	letter-spacing: 1px;
+	color: rgb(78, 78, 80);
+
+}
+
+.int-section {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		text-transform: uppercase;
+		font-weight: 500;
+		letter-spacing: 1px;
+	}
+
+	a {
+		color: rgb(78, 78, 80);
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+/* interior centered content  */
+.int-center-sub {
+	margin-bottom: 20px;
+	text-align: center;
+
+	h2 {
+		margin-bottom: .25em;
+	}
+}
+
+/* about page */
+.about-section {
+	width: 742px;
+	height: 397px;
+	padding: 0;
+	background: rgb(243, 243, 243) siu("about_bg.jpg") no-repeat center 31px;
+}
+
+.about-content {
+	width: 400px;
+	margin: 0 auto;
+	padding: 238px 0 0;
+	text-align: center;
+}

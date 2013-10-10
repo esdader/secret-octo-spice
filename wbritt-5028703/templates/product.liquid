@@ -1,0 +1,115 @@
+{% assign col_title = 'all' %}
+{% for p in product.collections %}
+    {% if p.handle == 'necklaces' %}
+        {% assign col_title = 'necklaces' %}
+    {% elsif p.handle == 'bracelets' %}
+        {% assign col_title = 'bracelets' %}
+    {% elsif p.handle == 'rings' %}
+        {% assign col_title = 'rings' %}
+    {% elsif p.handle == 'earrings' %}
+        {% assign col_title = 'earrings' %}
+    {% endif %}
+{% endfor %}
+{% for product_link in collections[col_title]products %}
+  {% if product_link.handle == product.handle %}
+    {% if forloop.first %}
+      {% assign curNum = forloop.index0 %}
+      {% assign prevNum = collections[col_title]products.size | minus: 1 %}
+      {% assign nextNum =  curNum | plus: 1 %}
+      {% assign next_link = collections[col_title]products[nextNum].url %}
+      {% assign prev_link = collections[col_title]products[prevNum].url %}
+    {% elsif forloop.last %}
+      {% assign curNum = forloop.index0 %}
+      {% assign nextNum = curNum | minus: 1 %}
+      {% assign prev_link = collections[col_title]products[nextNum].url %}
+      {% assign next_link = collections[col_title]products[0].url %}
+    {% else %}
+      {% assign curNum = forloop.index0 %}
+      {% assign prevNum = curNum | plus: 1 %}
+      {% assign nextNum = curNum | minus: 1 %}
+      {% assign prev_link = collections[col_title]products[nextNum].url %}
+      {% assign next_link = collections[col_title]products[prevNum].url %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+<article class="product product-{{ product.type | handleize }}">
+    <form action="/cart/add" method="post" enctype="multipart/form-data">
+        <section class="product-images">
+            <div class="product-main-image-con">
+                <img src="{{ product.featured_image | product_img_url: 'large' }}" class="product-main-image">     
+            </div>
+            <div class="magnify-btns-holder">
+                <a href="#increase-image-size" class="bigger-image-btn ir">Increase image size</a>
+                <a href="#decrease-image-size" class="smaller-image-btn ir">Decrease image size</a>
+            </div>
+        </section>
+        <section class="product-information">
+            <div class="product-details">
+                <h1 class="product-title">{{ product.title }}</h1>
+                <h2 class="product-price">{{ product.price | money | remove: '.00' }}</h2>
+                <h3 class="selected-material">
+                    {% for variant in product.variants | limit: 1 %}
+                        {{ variant.title }}
+                    {% endfor %}
+                </h3>
+                <div class="product-description">
+                    <p>
+                        Urdsf ipicab invel ipsum explias quunt il ium re necto consequi ipsumque volupic te cum ipsae omnia natur, omnist, vel idion pe
+                    </p>
+                </div>
+                <div class="product-options clearfix">
+                    <h2 class="product-options-title">Select Material</h2>
+                    {% if product.images.size > 3 %}
+                        <div class="product-options-images flexslider">
+                            <ul class="slides">
+                                {% for image in product.images %}
+                                    {% cycle 'group1': '<li>', '', '' %}
+                                        <div class="thmb-holder {% if forloop.first %} active{% endif %}">
+                                            <a href="{{ image.src | product_img_url: 'large' }}" title="{{ image.alt | escape }}">
+                                                <img src="{{ image.src | product_img_url: 'large' }}" alt="{{ image.alt | escape }}"/>
+                                            </a>
+                                        </div>
+                                    {% cycle 'group2': '', '', '</li>' %}
+                                {% endfor %}
+                                {% capture modulo %}{{ product.images.size | divided_by: 3 }}{% endcapture %}
+                                {% if modulo contains '.' %}
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <a href="#previous-slide" class="product-slider-prev ir">Previous</a>
+                        <a href="#next-slide" class="product-slider-next ir">Next</a>
+                    {% else %}
+                        <ul class="product-options-images">
+                            {% for image in product.images %}
+                                <li{% if forloop.first %} class="active"{% endif %}>
+                                    <a href="{{ image.src | product_img_url: 'large' }}" title="{{ image.alt | escape }}">
+                                        <img src="{{ image.src | product_img_url: 'large' }}" alt="{{ image.alt | escape }}"/>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %} 
+                </div>
+                <input type="submit" name="add" id="add" class="add-to-cart-btn" value="Add to cart">
+                <div class="social-share-con">
+                   <a href="#open-share" class="social-share-btn">Share</a>
+                    <ul class="social-share">
+                        <li><a href="#facebook" class="facebook ir">Facebook</a></li>
+                        <li><a href="#twitter" class="twitter ir">Twitter</a></li>
+                        <li><a href="#pinterest" class="pinterest ir">Pinterest</a></li>
+                    </ul> 
+                </div>
+            </div>
+            <select id="product-select" name="id" class="hidden">
+               {% for variant in product.variants %}
+                 <option value="{{ variant.id }}" class="{{ variant.title | handleize }}" data-title="{{ variant.title | downcase }}">{{ variant.title }} - {{ variant.price | money }}</option>
+               {% endfor %}
+           </select>
+        </section>
+    </form>
+    <a href="#close" class="product-close-btn ir">Close Product</a>
+    <a href="{{ prev_link }}" class="product-prev-btn ir">Previous Product</a>
+    <a href="{{ next_link }}" class="product-next-btn ir">Next Product</a>
+</article>
