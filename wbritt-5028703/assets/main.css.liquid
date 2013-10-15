@@ -379,6 +379,7 @@ body {
 }
 
 .container {
+  min-width: 900px;
   margin: 0 130px;
   padding: 5px;
   margin-bottom: 20px;
@@ -392,21 +393,23 @@ body {
 
 .cart-container {
   position: fixed;
-  right: 37px;
+  left: 20px;
   top: 36px;
+  z-index: 999;
   width: 40px;
   text-align: right;
 }
 
 .search-container {
   position: fixed;
-  left: 36px;
-  top: 36px;
+  right: 36px;
+  top: 35px;
+  z-index: 999;
 }
 
 .main-nav-container {
   position: fixed;
-  right: 37px;
+  left: 31px;
   top: 150px;
 }
 
@@ -414,11 +417,10 @@ body {
   display: none;
 }
 
-.sub-collections-con {
+.tertiary-subnav-con {
   position: fixed;
-  left: 9px;
+  right: 38px;
   top: 150px;
-  width: 120px;
 }
 
 /*==============================/
@@ -437,21 +439,25 @@ body {
 
 .cart-link {
   display: block;
-  z-index: 9999;
+  z-index: 999;
   width: 17px;
   height: 33px;
-  background: url({{'s.svg' | asset_url}}) no-repeat -577px -7px;
-  background-size: 600px 162px;
+  background: url({{'s3.svg' | asset_url}}) no-repeat -417px -7px;
+  background-size: 443px 162px;
   float: right;
 }
 
 .no-svg .cart-link {
-  background: url({{'s.png' | asset_url}}) no-repeat -577px -7px;
+  background: url({{'s3.png' | asset_url}}) no-repeat -417px -7px;
+}
+
+.homepage .cart-link {
+  background-position: -378px -51px;
 }
 
 .cart-container:hover .cart-link,
 .cart-link:hover {
-  background-position: -577px -51px;
+  background-position: -417px -51px;
 }
 
 .cart-count {
@@ -462,8 +468,17 @@ body {
   text-decoration: none;
 }
 
+.homepage .cart-count {
+  color: #fff;
+}
+
 .cart-container:hover .cart-count,
 .cart-count:hover {
+  color: #4d4d4f;
+}
+
+.homepage .cart-container:hover .cart-count,
+.homepage .cart-count:hover {
   color: #4d4d4f;
 }
 
@@ -473,17 +488,21 @@ body {
 .main-nav-btn {
   position: fixed;
   display: block;
-  right: 41px;
+  left: 38px;
   top: 85px;
   z-index: 9999;
   width: 17px;
   height: 17px;
-  background: url({{'s.svg' | asset_url}}) no-repeat -60px -7px;
-  background-size: 600px 162px;
+  background: url({{'s2.svg' | asset_url}}) no-repeat -60px -6px;
+  background-size: 613px 162px;
 }
 
 .no-svg .main-nav-btn {
-  background: url({{'s.png' | asset_url}}) no-repeat -60px -7px;
+  background: url({{'s2.png' | asset_url}}) no-repeat -60px -6px;
+}
+
+.homepage .main-nav-btn {
+  background-position: -60px -51px;
 }
 
 .main-nav-container {
@@ -491,15 +510,20 @@ body {
 }
 
 .main-nav-btn:hover {
-  background-position: -60px -37px;
+  background-position: -60px -27px;
 }
 
 .open-main-nav .main-nav-btn {
-  background-position: -36px -7px;
+  background-position: -36px -6px;
 }
 
+.open-main-nav.homepage .main-nav-btn {
+  background-position: -36px -51px;
+}
+
+.open-main-nav.homepage .main-nav-btn:hover,
 .open-main-nav .main-nav-btn:hover {
-  background-position: -36px -37px;
+  background-position: -36px -27px;
 }
 
 .main-nav {
@@ -512,81 +536,86 @@ body {
 .main-nav li {
   width: 17px;
   margin-bottom: 54px;
-  text-align: right;
+  text-align: left;
 }
 
 .shop-link-btn {
   display: block;
   width: 17px;
   height: 35px;
-  background: url({{'s.svg' | asset_url}}) no-repeat -539px -7px;
-  background-size: 600px 162px;
+  background: url({{'s3.svg' | asset_url}}) no-repeat -386px -7px;
+  background-size: 443px 162px;
+  border-left: 4px solid transparent;
 }
 
 .no-svg .shop-link-btn {
-  background: url({{'s.png' | asset_url}}) no-repeat -539px -7px;
+  background: url({{'s3.png' | asset_url}}) no-repeat -386px -7px;
 }
 
 .shop-link-btn:hover,
 .is-open .shop-link-btn {
-  background-position: -378px -7px;
+  border-right: 4px solid #4d4d4f;
 }
 
 .info-link-btn {
   display: block;
   width: 17px;
   height: 31px;
-  background: url({{'s.svg' | asset_url}}) no-repeat -503px -7px;
-  background-size: 600px 162px;
+  background: url({{'s3.svg' | asset_url}}) no-repeat -351px -7px;
+  background-size: 443px 162px;
+  border-right: 4px solid transparent;
 }
 
 .no-svg .info-link-btn {
-  background: url({{'s.png' | asset_url}}) no-repeat -503px -7px;
+  background: url({{'s3.png' | asset_url}}) no-repeat -351px -7px;
 }
 
 .info-link-btn:hover,
 .is-open .info-link-btn {
-  background-position: -342px -7px;
+  border-right: 4px solid #4d4d4f;
 }
 
 .follow-link-btn {
   display: block;
   width: 17px;
   height: 64px;
-  background: url({{'s2.svg' | asset_url}}) no-repeat -523px -7px;
-  background-size: 613px 162px;
+  background: url({{'s3.svg' | asset_url}}) no-repeat -320px -7px;
+  background-size: 443px 162px;
+  border-right: 4px solid transparent;
 }
 
 .no-svg .follow-link-btn {
-  background: url({{'s2.png' | asset_url}}) no-repeat -523px -7px;
+  background: url({{'s3.png' | asset_url}}) no-repeat -320px -7px;
 }
 
 .follow-link-btn:hover,
 .is-open .follow-link-btn {
-  background-position: -312px -7px;
+  border-right: 4px solid #4d4d4f;
 }
 
 .customer-care-link-btn {
   display: block;
   width: 17px;
   height: 110px;
-  background: url({{'s.svg' | asset_url}}) no-repeat -443px -7px;
-  background-size: 600px 162px;
+  background: url({{'s3.svg' | asset_url}}) no-repeat -290px -7px;
+  background-size: 443px 162px;
+  border-right: 4px solid transparent;
 }
 
 .no-svg .customer-care-link-btn {
-  background: url({{'s.png' | asset_url}}) no-repeat -443px -7px;
+  background: url({{'s3.png' | asset_url}}) no-repeat -290px -7px;
 }
 
 .customer-care-link-btn:hover,
 .is-open .customer-care-link-btn {
-  background-position: -282px -7px;
+  border-right: 4px solid #4d4d4f;
 }
 
 /* 
  * sub nav 
 */
 .subnav {
+  min-width: 70px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -599,7 +628,7 @@ body {
 }
 
 .subnav li {
-  text-align: right;
+  text-align: left;
 }
 
 .subnav a {
@@ -608,6 +637,8 @@ body {
   font-weight: 300;
 }
 
+.mood-nav-active .subnav .moodboard,
+.about-nav-active .subnav .about,
 .subnav a:hover,
 .subnav a.active {
   color: #4d4d4f;
@@ -617,12 +648,11 @@ body {
 .subnav-con {
   position: absolute;
   display: none;
-  right: 23px;
-  width: 90px;
+  left: 23px;
 }
 
 .shop-links {
-  top: -2px;
+  top: -5px;
 }
 
 .info-links {
@@ -652,10 +682,14 @@ body {
   background: #4d4d4f;
 }
 
-.sub-collections-nav.subnav {
-  margin-top: -2px;
+.tertiary-subnav.subnav {
+  margin-top: -5px;
   padding-right: 10px;
   letter-spacing: 0;
+}
+
+.tertiary-subnav li {
+  text-align: right;
 }
 
 /* 
@@ -664,18 +698,22 @@ body {
 .open-search-btn {
   display: block;
   z-index: 9999;
-  width: 20px;
+  width: 21px;
   height: 19px;
-  background: url({{'s.svg' | asset_url}}) no-repeat -7px -7px;
-  background-size: 600px 162px;
+  background: url({{'s3.svg' | asset_url}}) no-repeat -7px -6px;
+  background-size: 443px 162px;
 }
 
 .no-svg .open-search-btn {
-  background: url({{'s.png' | asset_url}}) no-repeat -7px -7px;
+  background: url({{'s3.png' | asset_url}}) no-repeat -7px -6px;
+}
+
+.homepage .open-search-btn {
+  background-position: -7px -49px;
 }
 
 .open-search-btn:hover {
-  background-position: -7px -36px;
+  background-position: -7px -26px;
 }
 
 /* 
@@ -847,7 +885,8 @@ body {
   left: 0;
   z-index: 999;
   width: 100%;
-  padding: 0 0 30px;
+  padding: 8px 24px 8px;
+  background: #4d4d4f;
 }
 
 .element:hover .collection-product-title-price {
@@ -861,7 +900,7 @@ body {
 .collection-product-title,
 .collection-product-price {
   position: static;
-  color: #4d4d4f;
+  color: #fff;
   font-weight: 500;
   text-align: center;
   font-size: 10px;
@@ -1090,6 +1129,7 @@ body {
   font-size: 10px;
   line-height: 1.4;
   letter-spacing: 1px;
+  text-transform: lowercase;
 }
 
 .product-description p,
@@ -1592,6 +1632,134 @@ body {
 
 /*
  * Flexslider -- including changes for product page slider
+*/
+/*
+ * jQuery FlexSlider v2.2.0
+ * http://www.woothemes.com/flexslider/
+ *
+ * Copyright 2012 WooThemes
+ * Free to use under the GPLv2 license.
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Contributing author: Tyler Smith (@mbmufffin)
+ */
+/* Browser Resets
+*********************************/
+.flex-container a:active,
+.flexslider a:active,
+.flex-container a:focus,
+.flexslider a:focus {
+  outline: none;
+}
+
+.slides,
+.flex-control-nav,
+.flex-direction-nav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* FlexSlider Necessary Styles
+*********************************/
+.flexslider {
+  margin: 0;
+  padding: 0;
+}
+
+.flexslider .slides > li {
+  display: none;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Hide the slides before the JS is loaded. Avoids image jumping */
+.flexslider .slides img {
+  width: 100%;
+  display: block;
+}
+
+.flex-pauseplay span {
+  text-transform: capitalize;
+}
+
+/* Clearfix for the .slides element */
+.slides:after {
+  content: "\0020";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+html[xmlns] .slides {
+  display: block;
+}
+
+* html .slides {
+  height: 1%;
+}
+
+/* No JavaScript Fallback */
+/* If you are not using another script, such as Modernizr, make sure you
+ * include js that eliminates this class on page load */
+.no-js .slides > li:first-child {
+  display: block;
+}
+
+/* FlexSlider Default Theme
+*********************************/
+.flexslider {
+  margin: 0;
+  position: relative;
+  zoom: 1;
+}
+
+.flex-viewport {
+  max-height: 2000px;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.loading .flex-viewport {
+  max-height: 300px;
+}
+
+.flexslider .slides {
+  zoom: 1;
+}
+
+.carousel li {
+  margin-right: 5px;
+}
+
+/* Direction Nav */
+.flex-direction-nav {
+  *height: 0;
+}
+
+.flex-direction-nav a {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0;
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  overflow: hidden;
+  opacity: 0;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  transition: all .3s ease;
+}
+
+/*
+ * Fullscreen images on homepage
 */
 /*
  * jQuery FlexSlider v2.2.0

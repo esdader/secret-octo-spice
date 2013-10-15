@@ -54,9 +54,7 @@
                     {% endfor %}
                 </h3>
                 <div class="product-description">
-                    <p>
-                        Urdsf ipicab invel ipsum explias quunt il ium re necto consequi ipsumque volupic te cum ipsae omnia natur, omnist, vel idion pe
-                    </p>
+                    {{ product.description }}
                 </div>
                 <div class="product-options clearfix">
                     <h2 class="product-options-title">Select Material</h2>
@@ -96,9 +94,9 @@
                 <div class="social-share-con">
                    <a href="#open-share" class="social-share-btn">Share</a>
                     <ul class="social-share">
-                        <li><a href="#facebook" class="facebook ir">Facebook</a></li>
-                        <li><a href="#twitter" class="twitter ir">Twitter</a></li>
-                        <li><a href="#pinterest" class="pinterest ir">Pinterest</a></li>
+                        <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]={{shop.url }}{{ product.url }}&p[images][0]=http:{{ product.featured_image | product_img_url: 'large' | replace: '\\', '//' }}&p[title]={{ product.title | HtmlEncode }}&p[summary]={{ product.description  | replace: ' ', '%20' }}" class="facebook ir" target="_blank" >Facebook</a></li>
+                        <li><a href="http://twitter.com/home?status={{ product.title | replace: ' ', '%20' }}%0A{{ shop.url }}{{ product.url}}" class="twitter ir" target="_blank">Twitter</a></li>
+                        <li><a href="http://www.pinterest.com/pin/create/button/?url={{ shop.url }}{{ product.url }}&media={{ product.featured_image | product_img_url: 'large' | replace: '\\', 'http://' }}&description={{ product.description | replace: ' ', '%20' }}" class="pinterest ir" target="_blank">Pinterest</a></li>
                     </ul> 
                 </div>
             </div>

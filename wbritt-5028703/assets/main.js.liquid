@@ -91,7 +91,7 @@ $(window).load(function(){
     var win_width = $(window).width(),
         full_scale = 325, // how big should the photo be? 
         og_padding_width = 425,
-        begin_reduce_width = 1020,
+        begin_reduce_width = 100, //1020,
         last_item_index = 0,
         curr_elem_image,
         elem_width = 744,
@@ -117,6 +117,12 @@ $(window).load(function(){
 
         switch ($(this).attr('data-category')) {
           
+            case 'special-75':
+                scale_factor = .75;
+                img_scale = scale_factor * full_scale;
+                $image.css('width', img_scale + 'px');
+                break;
+
             case 'rings':
                 scale_factor = .35;
                 img_scale = scale_factor * full_scale;
@@ -334,6 +340,16 @@ $(window).load(function(){
                     var t = $variants.find('.' + currentVari);
                     $(t).attr('selected', true);
                     $materialTitle.text($(t).attr('data-title'));
+
+                }
+
+                var mat = $materialTitle.text();
+                mat = mat.trim();
+                if (mat === '') {
+                    var tmp = $variants.find('option');
+                    console.log($(tmp[0]));
+                    $(tmp[0]).attr('selected', true);
+                    $materialTitle.text($(tmp[0]).attr('data-title'));
                 }
                 
 

@@ -1,15 +1,19 @@
 .open-search-btn {
 	display: block;
 	z-index: 9999;
-	width: 20px;
+	width: 21px;
 	height: 19px;
-	background: siu("s.svg") no-repeat -7px -7px;
-	background-size: 600px 162px;
+	background: siu("s3.svg") no-repeat -7px -6px;
+	background-size: 443px 162px;
+}
+.no-svg .open-search-btn {
+	background: siu("s3.png") no-repeat -7px -6px;
 }
 
-.no-svg .open-search-btn {
-	background: siu("s.png") no-repeat -7px -7px;
+.homepage .open-search-btn {
+	background-position: -7px -49px;
 }
+
 .open-search-btn:hover {
-	background-position: -7px -36px;
+	background-position: -7px -26px;
 }

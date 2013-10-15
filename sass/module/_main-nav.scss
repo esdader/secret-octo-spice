@@ -1,17 +1,21 @@
 .main-nav-btn {
 	position: fixed;
 	display: block;
-	right: 41px;
+	left: 38px;
 	top: 85px;
 	z-index: 9999;
 	width: 17px;
 	height: 17px;
-	background: siu("s.svg") no-repeat -60px -7px;
-	background-size: 600px 162px;
+	background: siu("s2.svg") no-repeat -60px -6px;
+	background-size: 613px 162px;
 }
 
 .no-svg .main-nav-btn {
-	background: siu("s.png") no-repeat -60px -7px;
+	background: siu("s2.png") no-repeat -60px -6px;
+}
+
+.homepage .main-nav-btn {
+	background-position: -60px -51px;
 }
 
 .main-nav-container {
@@ -19,17 +23,23 @@
 }
 
 .main-nav-btn:hover {
-	background-position: -60px -37px;
+	background-position: -60px -27px;
 }
-
 
 .open-main-nav .main-nav-btn {
-	background-position: -36px -7px;
+	background-position: -36px -6px;
 }
 
-.open-main-nav .main-nav-btn:hover {
-	background-position: -36px -37px;
+.open-main-nav.homepage .main-nav-btn {
+	background-position: -36px -51px;
 }
+
+.open-main-nav.homepage .main-nav-btn:hover,
+.open-main-nav .main-nav-btn:hover {
+	background-position: -36px -27px;
+}
+
+
 
 
 .main-nav {
@@ -43,7 +53,7 @@
 .main-nav li {
 	width: 17px;
 	margin-bottom: 54px;
-	text-align: right;
+	text-align: left;
 	
 }
 
@@ -51,67 +61,71 @@
 	display: block;
 	width: 17px;
 	height: 35px;
-	background: siu("s.svg") no-repeat -539px -7px;
-	background-size: 600px 162px;
+	background: siu("s3.svg") no-repeat -386px -7px;
+	background-size: 443px 162px;
+	border-left: 4px solid transparent;
 }
 
 .no-svg .shop-link-btn {
-	background: siu("s.png") no-repeat -539px -7px;
+	background: siu("s3.png") no-repeat -386px -7px;
 }
 
 .shop-link-btn:hover,
 .is-open .shop-link-btn {
-	background-position: -378px -7px;
+	border-right: 4px solid rgb(77, 77, 79);
 }
  
 .info-link-btn {
 	display: block;
 	width: 17px;
 	height: 31px;
-	background: siu("s.svg") no-repeat -503px -7px;
-	background-size: 600px 162px;
+	background: siu("s3.svg") no-repeat -351px -7px;
+	background-size: 443px 162px;
+	border-right: 4px solid transparent;
 }
 
 .no-svg .info-link-btn {
-	background: siu("s.png") no-repeat -503px -7px;
+	background: siu("s3.png") no-repeat -351px -7px;
 }
 
 
 .info-link-btn:hover,
 .is-open .info-link-btn{
-	background-position: -342px -7px;
+	border-right: 4px solid rgb(77, 77, 79);
 }
  
 .follow-link-btn {
 	display: block;
 	width: 17px;
 	height: 64px;
-	background: siu("s2.svg") no-repeat -523px -7px;
-	background-size: 613px 162px;
+	background: siu("s3.svg") no-repeat -320px -7px;
+	background-size: 443px 162px;
+	border-right: 4px solid transparent;
 }
 
 .no-svg .follow-link-btn {
-	background: siu("s2.png") no-repeat -523px -7px;
+	background: siu("s3.png") no-repeat -320px -7px;
 }
 
 .follow-link-btn:hover,
 .is-open .follow-link-btn {
-	background-position: -312px -7px;
+	border-right: 4px solid rgb(77, 77, 79);
 }
 
 .customer-care-link-btn {
 	display: block;
 	width: 17px;
 	height: 110px;
-	background: siu("s.svg") no-repeat -443px -7px;
-	background-size: 600px 162px;
+	background: siu("s3.svg") no-repeat -290px -7px;
+	background-size: 443px 162px;
+	border-right: 4px solid transparent;
 }
 
 .no-svg .customer-care-link-btn {
-	background: siu("s.png") no-repeat -443px -7px;
+	background: siu("s3.png") no-repeat -290px -7px;
 }
 
 .customer-care-link-btn:hover,
 .is-open .customer-care-link-btn {
-	background-position: -282px -7px;
+	border-right: 4px solid rgb(77, 77, 79);
 }

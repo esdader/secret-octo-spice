@@ -1482,7 +1482,7 @@
         props[( isColA ? 'colA' : 'colB' )] = (isColA ? props.colB : props.colA);
 
         // Shift vertical gutter by between 100 and 300 pixels
-        var gutterShift = (Math.floor(Math.random()*5)*40)+100;
+        var gutterShift = (Math.floor(Math.random()*6)*25)+100;
         gutterX += (gutterX > centerX) ? -gutterShift : gutterShift;
 
         // check to see if the current item is too big for the space defined by the new vertical gutter
