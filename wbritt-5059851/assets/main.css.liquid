@@ -387,8 +387,9 @@ body {
 }
 
 .wrapper {
-  margin: 94px 130px 0;
-  padding: 0 5px 5px;
+  width: 100%;
+  margin: 94px 0 0;
+  padding: 0 154px 2em;
 }
 
 .cart-container {
@@ -404,7 +405,9 @@ body {
   position: fixed;
   right: 36px;
   top: 35px;
+  width: 140px;
   z-index: 999;
+  overflow: hidden;
 }
 
 .main-nav-container {
@@ -697,6 +700,7 @@ body {
 */
 .open-search-btn {
   display: block;
+  float: right;
   z-index: 9999;
   width: 21px;
   height: 19px;
@@ -714,6 +718,37 @@ body {
 
 .open-search-btn:hover {
   background-position: -7px -26px;
+}
+
+.search-box {
+  position: absolute;
+  left: -140px;
+  top: 0;
+  width: 106px;
+  -webkit-transition: left 400ms ease-out;
+  -moz-transition: left 400ms ease-out;
+  -o-transition: left 400ms ease-out;
+  transition: left 400ms ease-out;
+}
+
+.search-box.search-showing {
+  left: 0;
+}
+
+#search-field {
+  width: 106px;
+  float: left;
+  padding: 3px 0;
+  margin-right: 4px;
+  border: none;
+  border-bottom: 1px solid #dcddde;
+  color: #dcddde;
+  background: none;
+  font-size: 10px;
+  line-height: 1;
+  text-transform: lowercase;
+  font-weight: 300;
+  letter-spacing: 1px;
 }
 
 /* 
@@ -841,6 +876,29 @@ body {
 }
 
 .element img.animation {
+  z-index: 9;
+}
+
+.element.expanded .product-main-image-con img {
+  position: static;
+}
+
+.element.expanded .product-main-image-con img.rings,
+.element.expanded .product-main-image-con img.rings.animation,
+.element.expanded .product-main-image-con img.necklaces,
+.element.expanded .product-main-image-con img.hoops,
+.element.expanded .product-main-image-con img.earrings,
+.element.expanded .product-main-image-con img.studs,
+.element.expanded .product-main-image-con img.pendants,
+.element.expanded .product-main-image-con img.special,
+.element.expanded .product-main-image-con img.bracelets,
+.element.expanded .product-main-iamge-con img.bracelets.animation {
+  position: static;
+  width: 100%;
+  height: auto;
+}
+
+.element.expanded .product-main-image-con img.animation {
   z-index: 9;
 }
 
@@ -1067,7 +1125,8 @@ body {
 }
 
 .element.expanded .product-main-image {
-  visibility: hidden;
+  display: none;
+  position: static;
 }
 
 .product-information {
@@ -1108,6 +1167,7 @@ body {
   font-size: 11px;
   line-height: 1;
   font-weight: 300;
+  text-transform: uppercase;
 }
 
 .selected-material {
@@ -1148,7 +1208,7 @@ body {
 .product-options {
   position: relative;
   width: 100%;
-  height: 102px;
+  min-height: 110px;
   overflow: hidden;
   margin-top: 16px;
   padding: 0 0 12px 0;
@@ -1267,6 +1327,61 @@ body {
   width: 9px;
   height: 19px;
   background: url({{'car_arrows.png' | asset_url}}) no-repeat -214px 0;
+}
+
+/* product sizes */
+.product-sizes-con {
+  position: static;
+  clear: both;
+  padding-top: 4px;
+  margin-bottom: -10px;
+  border-top: 1px solid #4d4d4f;
+}
+
+.product-sizes-title {
+  position: static;
+  margin: 12px 0 0 0;
+  color: #4d4d4f;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.product-sizes {
+  position: static;
+  display: inline-block;
+  margin: 0 0 0 12px;
+  padding: 0;
+  list-style: none;
+  vertical-align: middle;
+}
+
+.product-sizes li {
+  position: static;
+  width: 14px;
+  height: 16px;
+  margin-left: 12px;
+  vertical-align: middle;
+  float: left;
+  color: #4d4d4f;
+  text-align: center;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.product-sizes li:first-child {
+  margin-left: 0;
+}
+
+.product-sizes .selected-size {
+  background: #4d4d4f;
+  color: #fff;
 }
 
 .add-to-cart-btn {
@@ -1395,6 +1510,8 @@ body {
  * cart 
 */
 .int-section.cart-section {
+  width: 100%;
+  min-height: 583px;
   padding: 75px 39px 0;
 }
 
@@ -1423,7 +1540,8 @@ body {
 
 .cart-item-title-variant {
   display: table-cell;
-  width: 29.81928%;
+  width: 33.58434%;
+  padding-right: 12px;
   vertical-align: middle;
 }
 
@@ -1439,6 +1557,7 @@ body {
 
 .cart-item-price-qty {
   display: table-cell;
+  width: 21.23494%;
   padding-right: 3.31325%;
   vertical-align: middle;
 }
@@ -1543,6 +1662,7 @@ body {
 .cart-checkout-btn {
   float: right;
   margin-right: 3.31325%;
+  padding: 4px 6px 2px;
   border: 1px solid #4d4d4f;
   background: #4d4d4f;
   border-radius: 0;
@@ -1550,7 +1670,7 @@ body {
   font-size: 10px;
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1;
   color: #fff;
   letter-spacing: 1px;
 }
@@ -1615,19 +1735,61 @@ body {
   margin-bottom: .25em;
 }
 
+/* shared interior classes */
+.interior-full-page-image {
+  width: 100%;
+  height: auto;
+}
+
 /* about page */
 .about-section {
-  width: 742px;
-  height: 397px;
+  position: relative;
+  width: 100%;
+  max-width: 2000px;
+  margin: 0 auto;
   padding: 0;
-  background: #f3f3f3 url({{'about_bg.jpg' | asset_url}}) no-repeat center 31px;
 }
 
 .about-content {
+  position: absolute;
+  left: 50%;
+  margin-left: -200px;
   width: 400px;
-  margin: 0 auto;
-  padding: 238px 0 0;
+  top: 53%;
   text-align: center;
+}
+
+/* stockists page */
+.stockist-section {
+  position: relative;
+  width: 100%;
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.stockist-content {
+  position: absolute;
+  left: 16.84636%;
+  top: 34.36426%;
+  text-align: center;
+}
+
+/* moodboard pages */
+.moodboard-section {
+  width: 100%;
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 0;
+}
+.moodboard-section img {
+  width: 100%;
+  height: auto;
+}
+.moodboard-section p,
+.moodboard-section div {
+  padding: 0;
+  margin: 0;
 }
 
 /*
@@ -1761,129 +1923,49 @@ html[xmlns] .slides {
 /*
  * Fullscreen images on homepage
 */
-/*
- * jQuery FlexSlider v2.2.0
- * http://www.woothemes.com/flexslider/
- *
- * Copyright 2012 WooThemes
- * Free to use under the GPLv2 license.
- * http://www.gnu.org/licenses/gpl-2.0.html
- *
- * Contributing author: Tyler Smith (@mbmufffin)
- */
-/* Browser Resets
-*********************************/
-.flex-container a:active,
-.flexslider a:active,
-.flex-container a:focus,
-.flexslider a:focus {
-  outline: none;
-}
-
-.slides,
-.flex-control-nav,
-.flex-direction-nav {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* FlexSlider Necessary Styles
-*********************************/
-.flexslider {
-  margin: 0;
-  padding: 0;
-}
-
-.flexslider .slides > li {
-  display: none;
-  -webkit-backface-visibility: hidden;
-}
-
-/* Hide the slides before the JS is loaded. Avoids image jumping */
-.flexslider .slides img {
+.homepage-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   width: 100%;
-  display: block;
+  height: 100%;
 }
 
-.flex-pauseplay span {
-  text-transform: capitalize;
+.homepage-container .flexslider {
+  width: 100%;
+  height: 100%;
 }
 
-/* Clearfix for the .slides element */
-.slides:after {
-  content: "\0020";
-  display: block;
-  clear: both;
-  visibility: hidden;
-  line-height: 0;
-  height: 0;
+.flexslider a {
+  width: 100%;
+  height: 100%;
+  text-align: center;
 }
 
-html[xmlns] .slides {
-  display: block;
+.flexslider img {
+  min-height: 100%;
+  min-width: 100%;
+  max-width: 10000%;
 }
 
-* html .slides {
-  height: 1%;
+.homepage-container .flexslider .slides li {
+  width: 100%;
+  height: 100%;
+  text-align: center;
 }
 
-/* No JavaScript Fallback */
-/* If you are not using another script, such as Modernizr, make sure you
- * include js that eliminates this class on page load */
-.no-js .slides > li:first-child {
-  display: block;
+.homepage-container .flexslider .slides {
+  width: 100%;
+  height: 100%;
 }
 
-/* FlexSlider Default Theme
-*********************************/
-.flexslider {
-  margin: 0;
-  position: relative;
-  zoom: 1;
-}
-
-.flex-viewport {
-  max-height: 2000px;
-  -webkit-transition: all 1s ease;
-  -moz-transition: all 1s ease;
-  -o-transition: all 1s ease;
-  transition: all 1s ease;
-}
-
-.loading .flex-viewport {
-  max-height: 300px;
-}
-
-.flexslider .slides {
-  zoom: 1;
-}
-
-.carousel li {
-  margin-right: 5px;
-}
-
-/* Direction Nav */
-.flex-direction-nav {
-  *height: 0;
-}
-
-.flex-direction-nav a {
-  display: block;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0;
-  position: absolute;
-  top: 50%;
-  z-index: 10;
+.slide-holder .slide-holder {
   overflow: hidden;
-  opacity: 0;
-  cursor: pointer;
-  color: rgba(0, 0, 0, 0.8);
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
-  -webkit-transition: all .3s ease;
-  -moz-transition: all .3s ease;
-  transition: all .3s ease;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 /*==============================/

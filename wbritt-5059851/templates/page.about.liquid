@@ -1,4 +1,7 @@
 <article class="int-section about-section">
+	{% if settings.show_about_image %}
+		<img class="interior-full-page-image" src="{{ 'about_image.jpg' | asset_url }}" alt="">
+	{% endif %}
 	<div class="about-content">
 		{{ page.content }}
 	</div>

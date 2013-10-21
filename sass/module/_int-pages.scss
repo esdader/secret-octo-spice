@@ -43,17 +43,63 @@
 	}
 }
 
+/* shared interior classes */
+
+.interior-full-page-image {
+	width: 100%;
+	height: auto;
+}
+
 /* about page */
 .about-section {
-	width: 742px;
-	height: 397px;
+	position: relative;
+	width: 100%;
+	max-width: 2000px;
+	margin: 0 auto;
 	padding: 0;
-	background: rgb(243, 243, 243) siu("about_bg.jpg") no-repeat center 31px;
 }
 
 .about-content {
+	position: absolute;
+	left: 50%;
+	margin-left: -200px;
 	width: 400px;
-	margin: 0 auto;
-	padding: 238px 0 0;
+	top: 53%;
 	text-align: center;
+}
+
+/* stockists page */
+.stockist-section {
+	position: relative;
+	width: 100%;
+	max-width: 2000px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.stockist-content {
+	position: absolute;
+	left: 125 / 742 * 100%;
+	top: 200 / 582 * 100%;
+	text-align: center;
+}
+
+/* moodboard pages */
+.moodboard-section {
+	width: 100%;
+	max-width: 2000px;
+	margin: 0 auto;
+	padding: 0;
+
+	img {
+		width: 100%;
+		height: auto;
+	}
+
+	p,
+
+	div {
+		padding: 0;
+		margin: 0;
+	}
 }

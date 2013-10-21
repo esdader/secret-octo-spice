@@ -1,0 +1,354 @@
+(function($, window){
+
+    var $productOptions = $('.product-options-images-container'),
+        $variants       = $('#product-select'),
+        $options        = $variants.find('option'),
+        $mainImage      = $('.product-main-image'),
+        $materialTitle  = $('.selected-material'),
+        $shareBtn       = $('.social-share-btn'),
+        $shareCon       = $('.social-share-con'),
+        $biggerImgBtn   = $('.bigger-image-btn'),
+        $smallerImgBtn  = $('.smaller-image-btn'),
+        $unsortedImages = $('.images-holder-container').find('img'),
+        target          = $('article'),
+        $price          = target.find('.product-price')
+        selectSize      = false;
+
+    // sort the images into the correct grouping 
+    // after that add them back to where they need to go
+    var variPattern = /(?:_var_)([0-9])*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+        altPattern  = /(?:_var_)([0-9])*(?:_alt)(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+        pattern     = /(_m_)(.*)(?=\.(gif|jpg|jpeg|tiff|png))/,
+        flexyLinks = '',
+        out,
+        cl,
+        variImages,
+        altImages;
+
+    variImages = $.map($unsortedImages, function(n, i){
+
+        var f = n.src.match(variPattern);
+        if (f) return n;
+    });
+
+    altImages = $.map($unsortedImages, function(n, i){
+        var f = n.src.match(altPattern);
+        if (f) return n;
+    });
+
+    // for the vari images let's get them into place
+    // process all variant images
+    var l = variImages.length,
+        imgEarl;
+
+    if (l > 3) {
+        out  = '<div class="product-options-images flexslider">';
+        out  += '<ul class="slides">';
+        for (var i=0; i<l; i++) {
+            if ((i % 3) === 0) {
+                out += '<li>';
+            }
+            if (i !== 0) {
+                cl = 'thmb-holder';
+            } else {
+                cl = 'thmb-holder active';
+            }
+
+            out += '<div class="' + cl + '">';
+            
+            imgEarl = variImages[i].src;
+            imgEarl = imgEarl.replace('_small.', '_large.');
+            out += '<a href="' + imgEarl + '" title="">';
+            out += '<img src="' + variImages[i].src + '" alt=""/>';
+            out += '</a></div>';
+
+            if (((i + 1) % 3) === 0 ) {
+                out += '</li>'
+            }
+
+            if (i === (l - 1)) {
+                if (((i + 1) % 3) !== 0) {
+                    out += '</li>'
+                }
+            }
+        }
+        
+        out += '</ul></div>';
+
+        flexyLinks += '<a href="#previous-slide" class="product-slider-prev ir">Previous</a>';
+        flexyLinks += '<a href="#next-slide" class="product-slider-next ir">Next</a>';
+
+    } else {
+        out  = '<ul class="product-options-images">';
+        if (l > 0) {
+            for (var i=0; i<l; i++) {
+                out += '<li';
+                if (i ===0 ) {
+                    out += ' class="active"';
+                } 
+                imgEarl = variImages[i].src;
+                imgEarl = imgEarl.replace('_small.', '_large.');
+                out += '><a href="' + imgEarl + '" title="">';
+                out += '<img src="' + variImages[i].src + '" alt="" />';
+                out += '</a></li>';    
+            }
+        } else {
+            if ($unsortedImages.length < 3) {
+                l = $unsortedImages.length;
+            } else {
+                l = 3;
+            }
+            
+            for (var i=0; i<l; i++) {
+                out += '<li';
+                if (i ===0 ) {
+                    out += ' class="active"';
+                } 
+                imgEarl = variImages[i].src;
+                imgEarl = imgEarl.replace('_small.', '_large.');
+                out += '><a href="' + imgEarl + '" title="">';
+                out += '<img src="' + $unsortedImages[i].src + '" alt="" />';
+                out += '</a></li>';    
+            }
+        }
+        out += '</ul>';
+    }
+
+    $productOptions.append(out);
+    $productOptions.after(flexyLinks);
+
+    l = altImages.length;
+
+    if (l > 0) {
+        out = '<div class="alternative-images hidden">';
+        for (i = 0; i<l; i++) {
+            out += '<img src="' + altImages[i].src + '" alt=""/>';
+        }
+        out += '</div>';    
+        
+        $productOptions.append(out);
+    }
+
+    var $variImages = $productOptions.find('img'),
+        firstImageSrc = $($variImages[0]).attr('src');
+
+    // check if product sizes are present
+    if ($('.product-sizes-con').length > 0) { 
+        selectSize = true;
+    }
+
+    // make sure everything is working as it should for the first image
+    if (firstImageSrc) {
+        var file = firstImageSrc.match(pattern);
+        if (file) {
+            var currentVari = file[2].split('_').join('-');
+            currentVari = currentVari.toLowerCase();
+            $variants.find('option:selected').attr('selected', false);
+            var t = $variants.find('.' + currentVari);
+            $(t).attr('selected', true);
+            $materialTitle.text($(t).attr('data-title'));
+
+        }
+
+        var file2 = firstImageSrc.match(variPattern);
+
+        if (file2) {
+            var variPos      = parseInt(file2[1]) - 1,
+                cv           = $options[variPos],
+                $currentVari = $(cv);
+
+            $variants.find('option:selected').attr('selected', false);
+            $currentVari.attr('selected', true);
+            $materialTitle.text($currentVari.attr('data-title'));
+
+            if ($currentVari.attr('data-available') === 'true') {
+                $('#add').removeAttr('disabled');
+                var txt = $currentVari.attr('data-price');
+                $price.text(txt);
+            } else {
+                $('#add').attr('disabled', true);
+                $price.text('Item unavailable');
+            }
+         
+            // if sizes are available find 'em and show 'em
+            // TODO: this should be a function as the same code is used again below
+            if (selectSize) {
+                var variClass = $currentVari.attr('class'),
+                sizes = [];
+
+                $('.' + variClass).each(function(i){
+                    sizes.push({
+                        'theSize' : $(this).attr('data-size'),
+                        'val'   : $(this).attr('value')
+                    });
+                });
+            
+                sizes.sort(function (a, b) {
+                    if (a.theSize > b.theSize)
+                        return 1;
+                    if (a.theSize < b.theSize)
+                        return -1;
+                    // a must be equal to b
+                    return 0;
+                });
+                var html = '';
+                for(var i=0, l=sizes.length; i<l; i++) {
+                    if (i === 0) {
+                        html += '<li data-value="' + sizes[i].val + '" class="selected-size">' + sizes[i].theSize + '</li>';    
+                    } else {
+                        html += '<li data-value="' + sizes[i].val + '">' + sizes[i].theSize + '</li>';    
+                    }
+                }
+
+                var $productSizes = $(target.find('.product-sizes'));
+                $productSizes.empty();
+                $productSizes.append(html);
+
+                var val = $(sizes[0]).attr('data-value');
+                $variants.find('option:selected').attr('selected', false);
+                $variants.find('option[value="' + val + '"]').attr('selected', true);
+            }   
+
+        }
+        
+    }
+
+    $shareBtn.on('click', function(e){
+        e.preventDefault();
+        $shareCon.toggleClass('is-open');
+    });
+
+    $biggerImgBtn.on('click', function(e){
+        e.preventDefault();
+    });
+
+    $smallerImgBtn.on('click', function(e){
+        e.preventDefault();
+    });
+
+    $productOptions.on('click', 'a', function(e){
+        e.preventDefault();
+        var $this = $(this),
+            earl = $this.attr('href'),
+            currImg = $this.find('img'),
+            imgSrc = currImg.attr('src');
+            
+            $productOptions.find('.active').removeClass('active');
+            currImg.parent().parent().addClass('active');
+            
+            var file = imgSrc.match(pattern);
+            if (file) {
+                var currentVari = file[2].split('_').join('-');
+                currentVari = currentVari.toLowerCase();
+                $variants.find('option:selected').attr('selected', false);
+                var t = $variants.find('.' + currentVari);
+                $(t).attr('selected', true);
+                $materialTitle.text($(t).attr('data-title'));
+            }
+
+            var file2 = imgSrc.match(variPattern);
+
+            if (file2) {
+                var variPos = parseInt(file2[1]) - 1,
+                    currentVari = $options[variPos],
+                    $currentVari = $(currentVari);
+
+                $variants.find('option:selected').attr('selected', false);
+                $currentVari.attr('selected', true);
+                $materialTitle.text($currentVari.attr('data-title'));
+
+                if ($currentVari.attr('data-available') === 'true') {
+                    $('#add').removeAttr('disabled');
+                    var txt = $currentVari.attr('data-price');
+                    $price.text(txt);
+                } else {
+                    $('#add').attr('disabled', true);
+                    $price.text('Item unavailable');
+                }
+            }
+
+            $mainImage.attr('src', earl);
+
+            // if sizes are available find 'em and show 'em
+            // TODO: this should be a function as the same code is used again above
+            if (selectSize) {
+                var variClass = $(currentVari).attr('class'),
+                sizes = [];
+
+                $('.' + variClass).each(function(i){
+
+                    sizes.push({
+                        'theSize' : $(this).attr('data-size'),
+                        'val'   : $(this).attr('value')
+                    });
+                });
+            
+                sizes.sort(function (a, b) {
+                    if (a.theSize > b.theSize)
+                        return 1;
+                    if (a.theSize < b.theSize)
+                        return -1;
+                    // a must be equal to b
+                    return 0;
+                });
+                var html = '';
+                for(var i=0, l=sizes.length; i<l; i++) {
+                    if (i === 0) {
+                        html += '<li data-value="' + sizes[i].val + '" class="selected-size">' + sizes[i].theSize + '</li>';    
+                    } else {
+                        html += '<li data-value="' + sizes[i].val + '">' + sizes[i].theSize + '</li>';    
+                    }
+                }
+
+                var $productSizes = $(target.find('.product-sizes'));
+                $productSizes.empty();
+                $productSizes.append(html);
+
+                var val = $(sizes[0]).attr('data-value');
+                $variants.find('option:selected').attr('selected', false);
+                $variants.find('option[value="' + val + '"]').attr('selected', true);
+            }
+
+
+    });
+
+    // if sizes are available, track their click events
+    if(selectSize) {
+        var $productSizes = $(target.find('.product-sizes'));
+        $productSizes.on('click', 'li', function(e){
+            e.preventDefault();
+            var $this = $(this);
+            $productSizes.find('.selected-size').removeClass('selected-size');
+            $this.addClass('selected-size');
+            var val = $this.attr('data-value');
+            $variants.find('option:selected').attr('selected', false);
+            $variants.find('option[value="' + val + '"]').attr('selected', true);
+        });
+    }
+
+    $(window).load(function() {
+        var $flexy = $('.flexslider'),
+            $prevBtn = $('.product-slider-prev'),
+            $nextBtn = $('.product-slider-next');
+
+        $('.flexslider').flexslider({
+            controlNav: false,
+            directionNav: false,
+            slideshow: false,
+            animation: 'slide',
+            slideshowSpeed: 3000
+        });
+
+        $prevBtn.on('click', function(e){
+            e.preventDefault();
+            $flexy.flexslider('previous');
+        });
+
+        $nextBtn.on('click', function(e){
+            e.preventDefault();
+            $flexy.flexslider('next');
+        });
+
+    });
+
+})(jQuery, window)

@@ -98,6 +98,19 @@ $full_scale: 300px;
 .element img.bracelets, .element img.bracelets.animation { width: $full_scale * .55; height:auto;}
 .element img.animation { z-index:9; }
 
+.element.expanded .product-main-image-con img { position: static;}
+.element.expanded .product-main-image-con img.rings, 
+.element.expanded .product-main-image-con img.rings.animation,
+.element.expanded .product-main-image-con img.necklaces, 
+.element.expanded .product-main-image-con img.hoops,
+.element.expanded .product-main-image-con img.earrings,
+.element.expanded .product-main-image-con img.studs,
+.element.expanded .product-main-image-con img.pendants,
+.element.expanded .product-main-image-con img.special,
+.element.expanded .product-main-image-con img.bracelets, 
+.element.expanded .product-main-iamge-con img.bracelets.animation { position: static; width: 100%; height:auto;}
+.element.expanded .product-main-image-con img.animation { z-index:9; }
+
 .product-data-left { top:70px; left:0; width:150px; height: 360px; background:url('product-left.png') no-repeat; background-size: 100% 100%;}
 .product-data-right { top:70px; right:-2px; width:369px; height: 360px; background:url('product-right.png') no-repeat; background-size: 100% 100%;}
 

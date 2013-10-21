@@ -7,7 +7,9 @@
         infoLinkBtn         = $('.info-link-btn'),
         followLinkBtn       = $('.follow-link-btn'),
         customerCareLinkBtn = $('.customer-care-link-btn'),
-        subnavCons          = $('.subnav-con');
+        subnavCons          = $('.subnav-con'),
+        searchBtn           = $('.open-search-btn'),
+        searchBox           = $('.search-box');
 
     // main nav open button
     mainNavBtn.on('click', function(e){
@@ -78,6 +80,12 @@
             $('.customer-care-links').fadeToggle('slow');
             $parent.toggleClass('is-open');
         }
+    });
+
+    // open search box
+    searchBtn.on('click', function(e){
+        e.preventDefault();
+        searchBox.toggleClass('search-showing');
     });
 
 })(jQuery, window)
@@ -160,11 +168,18 @@ $(window).load(function(){
                 break;
         }
 
-        
+        if ($(this).index() > 0) {
+          var padding_counterfactor = Math.max(0,(og_padding_width - $(this).prev().width()) / (og_padding_width / 2));
+          //console.log('counterfactor: '+padding_counterfactor);
+        } else {
+          var padding_counterfactor = 0;
+        }
+
         var image_width = $image.width(),
             image_height = $image.height(),
-            image_padding_x = Math.round((og_padding_width-image_width)*Math.random()/25)*25,
+            image_padding_x = 25+Math.round((og_padding_width-image_width)*Math.random()*padding_counterfactor/25)*25,
             image_padding = Math.round((og_padding_width-image_width)*Math.random()/25)*25;
+
             
         // special case for first image
         if ($(this).index() === 0) {
@@ -176,12 +191,13 @@ $(window).load(function(){
             image_padding_x = (og_padding_width - img_scale);
         }
         
+        // Ensure padding will bring image up to a multiple of 25px for grid regularity
+        image_padding_x = Math.round((image_padding_x + image_width)/25)*25 - image_width;
+
         // protect against negative padding
         if (image_padding_x < 0) image_padding_x = 0;
 
-        // Ensure padding will bring image up to a multiple of 25px for grid regularity
-        image_padding_x = Math.round((image_padding_x + image_width)/25)*25 - image_width;
-        var image_padding_y = Math.round((image_padding_x + image_height)/25)*25 - image_height;
+          var image_padding_y = Math.round((image_padding_x + image_height)/25)*25 - image_height;
 
 
         if ($(this).attr('data-category') == 'pendants') {
@@ -283,13 +299,54 @@ $(window).load(function(){
 
         // Expand the actual element, and adjust margins of inner image
         //target.css({'width':'1000px','height':'500px','left':left_shift+'px'});
+
+        //create new version of this that animates to larger sized final image
+        //
+        // if (target.attr('data-category') == 'pendants') {
+        //     var image_margin_top = 0;
+        // } else {
+        //     var image_margin_top = (elem_height - target.find('img').height()) / 2;
+        // }
+        // var image_margin_bottom = (elem_height - target.find('img').height()) / 2;
+        // var image_margin_sides = (elem_width - target.find('img').width()) / 2;
+        // left_shift = ($('.container').width() - elem_width)/2 - target.attr('data-x');
+
+        var img_cache = target.find('img'),
+            image_new_width,
+            image_new_height,
+            product_image_left_offset;
+        
+        // keep copy of current width and height
+        target.attr({
+            'data-image-width': img_cache.width(),
+            'data-image-height': img_cache.height()
+        });
+
+        if (target.attr('data-category') === 'pendants') {
+            image_new_width = 288;
+            product_image_left_offset = 120;
+        } else {
+            image_new_width = 268;
+            product_image_left_offset = 130;
+        }
+
+        var image_new_height = image_new_width / img_cache.width() * img_cache.height();
+
+        // check if image is too tall, 
+        // if so cap it at elem height and then shrink width proportionally
+        if (image_new_height > elem_height) {
+            image_new_width = elem_height / image_new_height * image_new_width;
+            image_new_height = elem_height;
+        }
+
         if (target.attr('data-category') == 'pendants') {
             var image_margin_top = 0;
         } else {
-            var image_margin_top = (elem_height - target.find('img').height()) / 2;
+            var image_margin_top = (elem_height - image_new_height) / 2;
         }
-        var image_margin_bottom = (elem_height - target.find('img').height()) / 2;
-        var image_margin_sides = (elem_width - target.find('img').width()) / 2;
+        var image_margin_bottom = (elem_height - image_new_height) / 2;
+        var image_margin_left = product_image_left_offset;
+        var image_margin_right = elem_width - image_new_width - image_margin_left;
         left_shift = ($('.container').width() - elem_width)/2 - target.attr('data-x');
       
 
@@ -310,7 +367,7 @@ $(window).load(function(){
                 getProduct(product_handle)
 
             ).done(
-              function(/*placeholder,*/ data) {
+              function(data) {
                 var context = data;
                 var html    = template(context);
                 $(html).appendTo(target);
@@ -319,35 +376,124 @@ $(window).load(function(){
 
                 prod.hide().css('visibility', 'visible').fadeIn();
 
-                var $productOptions = target.find('.product-options-images'),
-                    $variImages     = $productOptions.find('img'),
-                    $variLinks      = $productOptions.find('a'),
-                    $variants       = target.find('#product-select'),
-                    $mainImage      = target.find('.collection-view-img'),
-                    $materialTitle  = target.find('.selected-material')
-                    $shareBtn       = target.find('.social-share-btn'),
-                    $shareCon       = target.find('.social-share-con'),
-                    $biggerImgBtn   = target.find('.bigger-image-btn'),
-                    $smallerImgBtn  = target.find('.smaller-image-btn'),
-                    pattern         = /(_m_)(.*)(?=\.(gif|jpg|jpeg|tiff|png))/,
-                    firstImageSrc   = $($variImages[0]).attr('src');
-                 
-                var file = firstImageSrc.match(pattern);
-                if (file) {
-                    var currentVari = file[2].split('_').join('-');
-                    currentVari = currentVari.toLowerCase();
-                    $variants.find('option:selected').attr('selected', false);
-                    var t = $variants.find('.' + currentVari);
-                    $(t).attr('selected', true);
-                    $materialTitle.text($(t).attr('data-title'));
+                var $productOptions  = target.find('.product-options-images'),
+                    $variImages      = $productOptions.find('img'),
+                    $variLinks       = $productOptions.find('a'),
+                    $variants        = target.find('#product-select'),
+                    $options         = $variants.find('option'),
+                    $mainImage       = target.find('.collection-view-img'),
+                    $materialTitle   = target.find('.selected-material')
+                    $shareBtn        = target.find('.social-share-btn'),
+                    $shareCon        = target.find('.social-share-con'),
+                    $biggerImgBtn    = target.find('.bigger-image-btn'),
+                    $smallerImgBtn   = target.find('.smaller-image-btn'),
+                    $price           = target.find('.product-price'),
+                    pattern          = /(_m_)(.*)(?=\.(gif|jpg|jpeg|tiff|png))/,
+                    variPattern      = /(?:_var_)([0-9])*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+                    altPattern       = /(?:_var_)([0-9])*(?:_alt)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+                    firstImageSrc    = $($variImages[0]).attr('src'),
+                    selectSize       = false;
 
+
+                    // hide the collection view image
+                    // and show the product image
+                    //$mainImage.appendTo($('.product-main-image-con')).removeAttr('style');
+
+                    if ($('.product-sizes-con').length > 0) { 
+                        selectSize = true;
+                    }
+
+                    // captures variant number and excludes alternative views
+                    // _var_xx.extension ex: _var_1.jpg
+                    // (?:_var_)([0-9])*(?:\.(?:gif|jpg|jpeg|tiff|png))
+
+                    // captures any alternative view associated with current variant
+                    // _var_xx_alt.extension ex: _var_1_alt.jpg
+                    // (?:_var_)([0-9])*(?:_alt)(?:\.(?:gif|jpg|jpeg|tiff|png))
+                if (firstImageSrc) {
+                    var file = firstImageSrc.match(pattern);
+                    if (file) {
+                        var currentVari = file[2].split('_').join('-');
+                        currentVari = currentVari.toLowerCase();
+                        $variants.find('option:selected').attr('selected', false);
+                        var t = $variants.find('.' + currentVari);
+                        $(t).attr('selected', true);
+                        $materialTitle.text($(t).attr('data-title'));
+
+                    }
+
+                    var file2 = firstImageSrc.match(variPattern);
+
+                    if(selectSize && !file2) {
+                        $('.product-sizes-con').hide();
+                    }
+
+                    if (file2) {
+                        var variPos      = parseInt(file2[1]) - 1,
+                            cv           = $options[variPos],
+                            $currentVari = $(cv);
+
+                        $variants.find('option:selected').attr('selected', false);
+                        $currentVari.attr('selected', true);
+                        $materialTitle.text($currentVari.attr('data-title'));
+
+                        if ($currentVari.attr('data-available') === 'true') {
+                            $('#add').removeAttr('disabled');
+                            var txt ='$' + $currentVari.attr('data-price');
+                            $price.text(txt);
+                        } else {
+                            $('#add').attr('disabled', true);
+                            $price.text('Item unavailable');
+                        }
+                     
+                        // if sizes are available find 'em and show 'em
+                        // TODO: this should be a function as the same code is used again below
+                        if (selectSize) {
+                            var variClass = $currentVari.attr('class'),
+                            sizes = [];
+
+                            $('.' + variClass).each(function(i){
+                                sizes.push({
+                                    'theSize' : $(this).attr('data-size'),
+                                    'val'   : $(this).attr('value')
+                                });
+                            });
+                        
+                            sizes.sort(function (a, b) {
+                                if (a.theSize > b.theSize)
+                                    return 1;
+                                if (a.theSize < b.theSize)
+                                    return -1;
+                                // a must be equal to b
+                                return 0;
+                            });
+                            var html = '';
+                            for(var i=0, l=sizes.length; i<l; i++) {
+                                if (i === 0) {
+                                    html += '<li data-value="' + sizes[i].val + '" class="selected-size">' + sizes[i].theSize + '</li>';    
+                                } else {
+                                    html += '<li data-value="' + sizes[i].val + '">' + sizes[i].theSize + '</li>';    
+                                }
+                            }
+
+                            var $productSizes = $(target.find('.product-sizes'));
+                            $productSizes.empty();
+                            $productSizes.append(html);
+
+                            var val = $(sizes[0]).attr('data-value');
+                            $variants.find('option:selected').attr('selected', false);
+                            $variants.find('option[value="' + val + '"]').attr('selected', true);
+                        }   
+    
+                    }
+                    
                 }
+                
 
                 var mat = $materialTitle.text();
                 mat = mat.trim();
                 if (mat === '') {
                     var tmp = $variants.find('option');
-                    console.log($(tmp[0]));
                     $(tmp[0]).attr('selected', true);
                     $materialTitle.text($(tmp[0]).attr('data-title'));
                 }
@@ -386,18 +532,94 @@ $(window).load(function(){
                             $materialTitle.text($(t).attr('data-title'));
                         }
 
+                        var file2 = imgSrc.match(variPattern);
+
+                        if (file2) {
+                            var variPos      = parseInt(file2[1]) - 1,
+                                currentVari  = $options[variPos],
+                                $currentVari = $(currentVari);
+
+                            $variants.find('option:selected').attr('selected', false);
+                            $currentVari.attr('selected', true);
+                            $materialTitle.text($currentVari.attr('data-title'));
+
+                            if ($currentVari.attr('data-available') === 'true') {
+                                $('#add').removeAttr('disabled');
+                                var txt ='$' + $currentVari.attr('data-price');
+                                $price.text(txt);
+                            } else {
+                                $('#add').attr('disabled', true);
+                                $price.text('Item unavailable');
+                            }
+                            
+                            
+                        }
+
                         $mainImage.attr('src', earl);
 
-                });
+                        // if sizes are available find 'em and show 'em
+                        // TODO: this should be a function as the same code is used again above
+                        if (selectSize) {
+                            var variClass = $(currentVari).attr('class'),
+                            sizes = [];
 
+                            $('.' + variClass).each(function(i){
+
+                                sizes.push({
+                                    'theSize' : $(this).attr('data-size'),
+                                    'val'   : $(this).attr('value')
+                                });
+                            });
+                        
+                            sizes.sort(function (a, b) {
+                                if (a.theSize > b.theSize)
+                                    return 1;
+                                if (a.theSize < b.theSize)
+                                    return -1;
+                                // a must be equal to b
+                                return 0;
+                            });
+                            var html = '';
+                            for(var i=0, l=sizes.length; i<l; i++) {
+                                if (i === 0) {
+                                    html += '<li data-value="' + sizes[i].val + '" class="selected-size">' + sizes[i].theSize + '</li>';    
+                                } else {
+                                    html += '<li data-value="' + sizes[i].val + '">' + sizes[i].theSize + '</li>';    
+                                }
+                            }
+
+                            var $productSizes = $(target.find('.product-sizes'));
+                            $productSizes.empty();
+                            $productSizes.append(html);
+
+                            var val = $(sizes[0]).attr('data-value');
+                            $variants.find('option:selected').attr('selected', false);
+                            $variants.find('option[value="' + val + '"]').attr('selected', true);
+                        }
+
+                });
+                
+                // if sizes are available, track their click events
+                if(selectSize) {
+                    var $productSizes = $(target.find('.product-sizes'));
+                    $productSizes.on('click', 'li', function(e){
+                        e.preventDefault();
+                        var $this = $(this);
+                        $productSizes.find('.selected-size').removeClass('selected-size');
+                        $this.addClass('selected-size');
+                        var val = $this.attr('data-value');
+                        $variants.find('option:selected').attr('selected', false);
+                        $variants.find('option[value="' + val + '"]').attr('selected', true);
+                    });
+                }
+                
+                // more than three images, track click on UI for flexslider
                 if (data.images.length > 3) {
                     var $flexy = target.find('.flexslider'),
                     $prevBtn = target.find('.product-slider-prev'),
                     $nextBtn = target.find('.product-slider-next');
 
                     $flexy.imagesLoaded(function(){
-
-                        console.log('images loaded');
 
                         $flexy.flexslider({
                             controlNav: false,
@@ -426,19 +648,23 @@ $(window).load(function(){
 
         target.find('img').animate({
             'margin-top':image_margin_top+'px',
-            'margin-right':(image_margin_sides+150)+'px',
+            'margin-right':image_margin_right+'px',
             'margin-bottom':image_margin_bottom+'px',
-            'margin-left':(image_margin_sides-150)+'px'
+            'margin-left':image_margin_left+'px',
+            'width': image_new_width+'px',
+            'height': image_new_height+'px'
         },200, function(){
-         
-            // moved scroll to top function
+         // $(this).wrap('<div class="test"></div>');
         });
     }
 
     function contract_element(target) {
         target.removeClass('expanded product');
         target.find('article').remove();
-        target.append(curr_elem_image);
+        //target.append(curr_elem_image);
+
+        var og_image_width  = target.attr('data-image-width'),
+            og_image_height = target.attr('data-image-height');
         
         // $('.container').css({'left':'0','width': $(window).width()+'px'});
         $('.element').css('top','0');
@@ -448,15 +674,17 @@ $(window).load(function(){
         if (target.attr('data-category') == 'pendants') {
             var image_margin_top = 0;
         } else {
-            var image_margin_top = (target.attr('data-height') - target.find('img').height()) / 2;
+            var image_margin_top = (target.attr('data-height') - og_image_height) / 2;
         }
-        var image_margin_bottom = (target.attr('data-height') - target.find('img').height()) / 2;
-        var image_margin_sides = (target.attr('data-width') - target.find('img').width()) / 2;
+        var image_margin_bottom = (target.attr('data-height') - og_image_height) / 2;
+        var image_margin_sides = (target.attr('data-width') - og_image_width) / 2;
         target.find('img').css({
             'margin-top':image_margin_top+'px',
             'margin-right':image_margin_sides+'px',
             'margin-bottom':image_margin_bottom+'px',
-            'margin-left':image_margin_sides+'px'
+            'margin-left':image_margin_sides+'px',
+            'width': og_image_width,
+            'height': og_image_height
         });
     }
 
@@ -490,7 +718,6 @@ $(window).load(function(){
             prev_index,
             $prev_item;
 
-        console.log("last item index: " + last_item_index);
         if(current_index === 1) {
             prev_index = last_item_index;
         } else {

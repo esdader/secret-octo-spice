@@ -1,0 +1,8 @@
+<article class="int-section stockist-section">
+	{% if settings.show_stockists_image %}
+		<img class="interior-full-page-image" src="{{ 'stockists_image.jpg' | asset_url }}" alt="">
+	{% endif %}
+	<div class="stockist-content">
+		{{ page.content }}
+	</div>
+</article>

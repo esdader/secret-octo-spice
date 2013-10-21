@@ -1,4 +1,6 @@
 .int-section.cart-section {
+	width: 100%;
+	min-height: 583px;
 	padding: 75px 39px 0;
 }
 
@@ -28,7 +30,8 @@
 
 .cart-item-title-variant {
 	display: table-cell;
-	width: 198  / 664 * 100%;
+	width: 223  / 664 * 100%;
+	padding-right: 12px;
 	vertical-align: middle;
 }
 
@@ -44,6 +47,7 @@
 
 .cart-item-price-qty {
 	display: table-cell;
+	width: 141 / 664 * 100%;
 	padding-right: 22 / 664 * 100%;
 	vertical-align: middle;
 }
@@ -150,6 +154,7 @@ $left-padding: 22 / 664 * 100%;
 .cart-checkout-btn {
 	float: right;
 	margin-right: 22 / 664 * 100%;
+	padding: 4px 6px 2px;
 	border: 1px solid rgb(77, 77, 79);
 	background: rgb(77, 77, 79);
 	border-radius: 0;
@@ -157,7 +162,7 @@ $left-padding: 22 / 664 * 100%;
 	font-size: 10px;
 	font-family: $font-family;
 	font-weight: 500;
-	line-height: 1.2;
+	line-height: 1;
 	color: #fff;
 	letter-spacing: 1px;
 

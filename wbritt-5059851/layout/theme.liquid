@@ -45,20 +45,7 @@
     {% comment %} assign show_about_nav = true {% endcomment %}
 {% endif %}
 
-<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}customer-care-links-open{% endif %}{% if template contains 'info' or template contains 'about' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
-{% if template == 'index' %}
-    <div class="homepage-container">
-        <div class="flexslider">
-            <ul class="slides">
-                <li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'wbritt_big_block_statement.jpg' | asset_url }}" alt=""></a></li>
-                <li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'wbritt_cog_braceletes.jpg' | asset_url }}" alt=""></a></li>
-                <li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'wbritt_large_pulley_pendant.jpg' | asset_url }}" alt=""></a></li>
-                <li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'wbriit_big_block_necklace.jpg' | asset_url }}" alt=""></a></li>
-                <li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'wbritt_braceletes.jpg' | asset_url }}" alt=""></a></li>
-            </ul>
-        </div>
-    </div>
-{% endif %}
+<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'about'  or template contains 'moodboard' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
     {% if template != 'index' %}
         <a href="/" class="main-logo"><img src="{{ 'logo.svg' | asset_url }}" id="main-logo" alt="Wbritt logo" /></a>
         <script>
@@ -109,16 +96,17 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="subnav-con customer-care-links">
-            <ul class="subnav">
-                {% for link in linklists.customer-care.links %}
-                    <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %}>{{ link.title }}</a></li> 
-                {% endfor %}
-            </ul>
-        </div>
     </div>
 
     <div class="search-container">
+        <div class="search-box">
+            <form action="/search" method="get" class="search-form" role="search">
+            <input type="hidden" name="type" value="product" />
+            <label for="search-field" class="visuallyhidden">Search</label>
+            <input name="q" type="text" id="search-field" placeholder="Search" />
+            <input type="submit" id="search-submit" value="Search" class="visuallyhidden" />
+        </form>
+        </div>
         <a href="#open-search" class="open-search-btn ir">Open search</a>
     </div>
     {% if template contains 'collection' %}
@@ -164,7 +152,9 @@
         </div>
     {% endif %}
 
-    {% if template contains 'collection' or template == 'index' %}
+    {% if template contains 'collection' %}
+        <div class="container invisible">
+    {% elsif template contains 'search' and search.search.results_count > 0 %}
         <div class="container invisible">
     {% elsif template contains 'product' %}
         <div class="product-page">
@@ -185,84 +175,7 @@
     {{ 'main.js' | asset_url | script_tag }}
 
     {% if template contains 'product' %}
-        <script>
-            var $productOptions = $('.product-options-images'),
-                $variImages     = $productOptions.find('img'),
-                $variLinks      = $productOptions.find('a'),
-                $variants       = $('#product-select'),
-                $mainImage      = $('.product-main-image'),
-                $materialTitle  = $('.selected-material'),
-                $shareBtn       = $('.social-share-btn'),
-                $shareCon       = $('.social-share-con'),
-                $biggerImgBtn   = $('.bigger-image-btn'),
-                $smallerImgBtn  = $('.smaller-image-btn');
-
-            $shareBtn.on('click', function(e){
-                e.preventDefault();
-                $shareCon.toggleClass('is-open');
-            });
-
-            $biggerImgBtn.on('click', function(e){
-                e.preventDefault();
-            });
-
-            $smallerImgBtn.on('click', function(e){
-                e.preventDefault();
-            });
-
-            $variLinks.on('click', function(e){
-                e.preventDefault();
-                var $this = $(this),
-                    earl = $this.attr('href'),
-                    currImg = $this.find('img'),
-                    imgSrc = currImg.attr('src'),
-                    pattern = /(_m_)(.*)(?=_large\.(gif|jpg|jpeg|tiff|png))/;
-                    
-                    $productOptions.find('.active').removeClass('active');
-                    currImg.parent().parent().addClass('active');
-
-                    var file = imgSrc.match(pattern);
-                    if (file) {
-                        var currentVari = file[2].split('_').join('-');
-                        currentVari = currentVari.toLowerCase();
-                        $variants.find('option:selected').attr('selected', false);
-                        var t = $variants.find('.' + currentVari);
-                        $(t).attr('selected', true);
-                        $materialTitle.text($(t).attr('data-title'));
-                    }
-
-
-                    $mainImage.attr('src', earl);
-
-
-            });
-            
-            $(window).load(function() {
-                var $flexy = $('.flexslider'),
-                    $prevBtn = $('.product-slider-prev'),
-                    $nextBtn = $('.product-slider-next');
-
-                $('.flexslider').flexslider({
-                    controlNav: true,
-                    directionNav: false,
-                    slideshow: false,
-                    animation: 'slide'
-                });
-
-                $prevBtn.on('click', function(e){
-                    e.preventDefault();
-                    $flexy.flexslider('previous');
-                });
-
-                $nextBtn.on('click', function(e){
-                    e.preventDefault();
-                    $flexy.flexslider('next');
-                });
-
-            });
-
-        </script>
-
+        {{ 'product.js' | asset_url | script_tag }}
     {% endif  %}
     {% if template == 'index' %}
         <script>
@@ -307,7 +220,7 @@
                         
                         if (aspectRatio > photoRatio) {
 
-                            self.slideImage.css({
+                            slideImage.css({
                                 'margin-left' : '0',
                                 'margin-top' : '-' + topOffset + 'px',
                                 'width' : winWidth+'px',
@@ -355,7 +268,8 @@
                 })(jQuery, window);
 
                 $('.flexslider').flexslider({
-                    controlNav: false,               //Boolean: Create navigation for paging control of each clide? Note: Leave true for manualControls usage
+                    controlNav: false,
+                    slideshowSpeed: 3000, 
                     directionNav: false 
                 });
             });

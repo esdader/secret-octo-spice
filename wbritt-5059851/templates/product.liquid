@@ -49,46 +49,27 @@
                 <h1 class="product-title">{{ product.title }}</h1>
                 <h2 class="product-price">{{ product.price | money | remove: '.00' }}</h2>
                 <h3 class="selected-material">
-                    {% for variant in product.variants | limit: 1 %}
-                        {{ variant.title }}
-                    {% endfor %}
+                    {{ product.variants[0].option1 }}
                 </h3>
                 <div class="product-description">
                     {{ product.description }}
                 </div>
                 <div class="product-options clearfix">
                     <h2 class="product-options-title">Select Material</h2>
-                    {% if product.images.size > 3 %}
-                        <div class="product-options-images flexslider">
-                            <ul class="slides">
-                                {% for image in product.images %}
-                                    {% cycle 'group1': '<li>', '', '' %}
-                                        <div class="thmb-holder {% if forloop.first %} active{% endif %}">
-                                            <a href="{{ image.src | product_img_url: 'large' }}" title="{{ image.alt | escape }}">
-                                                <img src="{{ image.src | product_img_url: 'large' }}" alt="{{ image.alt | escape }}"/>
-                                            </a>
-                                        </div>
-                                    {% cycle 'group2': '', '', '</li>' %}
-                                {% endfor %}
-                                {% capture modulo %}{{ product.images.size | divided_by: 3 }}{% endcapture %}
-                                {% if modulo contains '.' %}
-                                    </li>
-                                {% endif %}
-                            </ul>
+                    <div class="images-holder-container hidden">
+                        {% for image in product.images %}
+                            <img src="{{ image.src | product_img_url: 'small' }}" alt="{{ image.alt | escape }}"/>
+                        {% endfor %}
+                    </div>
+                    <div class="product-options-images-container">
+                        
+                    </div>
+                    {% if product.options.size > 1 %}
+                        <div class="product-sizes-con">
+                            <span class="product-sizes-title">Select a size</span> 
+                            <ul class="product-sizes"></ul>
                         </div>
-                        <a href="#previous-slide" class="product-slider-prev ir">Previous</a>
-                        <a href="#next-slide" class="product-slider-next ir">Next</a>
-                    {% else %}
-                        <ul class="product-options-images">
-                            {% for image in product.images %}
-                                <li{% if forloop.first %} class="active"{% endif %}>
-                                    <a href="{{ image.src | product_img_url: 'large' }}" title="{{ image.alt | escape }}">
-                                        <img src="{{ image.src | product_img_url: 'large' }}" alt="{{ image.alt | escape }}"/>
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %} 
+                    {% endif %}
                 </div>
                 <input type="submit" name="add" id="add" class="add-to-cart-btn" value="Add to cart">
                 <div class="social-share-con">
@@ -102,7 +83,12 @@
             </div>
             <select id="product-select" name="id" class="hidden">
                {% for variant in product.variants %}
-                 <option value="{{ variant.id }}" class="{{ variant.title | handleize }}" data-title="{{ variant.title | downcase }}">{{ variant.title }} - {{ variant.price | money }}</option>
+                 <option value="{{ variant.id }}" class="{{ variant.option1 | handleize }}" 
+                    data-title="{{ variant.option1 | downcase }}"
+                    data-price="{{variant.price | money | remove: '.00' }}"
+                    data-size="{{ variant.option2 }}"
+                    data-available="{{ variant.available }}"
+                    >{{ variant.title }} - {{ variant.price | money }}</option>
                {% endfor %}
            </select>
         </section>

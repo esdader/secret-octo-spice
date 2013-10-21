@@ -6,13 +6,37 @@
                     <div class="cart-row">
                         <div class="cart-item-img">
                             {% if item.product.variants.size > 1 %}
-                                {% capture vari_title %}_m_{{ item.variant.title | replace: ' ', '_' }}{% endcapture %}
-                                {% for image in item.product.images %}
-                                    {% capture image_test %}{{ image.src }}{% endcapture %}
-                                    {% if image_test contains vari_title %}
-                                        <a href="/products/{{ item.product.handle }}"><img src="{{ image.src | product_img_url: 'compact' }}" alt="{{ item.title }}" /></a>
+                                {% assign found_vari = false %}
+                                {% for v in item.product.variants %}
+                                    {% if v.title == item.variant.title %}
+                                        {% assign vari_pos = forloop.index %}
                                     {% endif %}
                                 {% endfor %}
+                                {% capture vari_end %}_vari_{{ vari_pos }}.{% endcapture%}
+                                {% for image in item.product.images %}
+                                    {% capture image_test %}{{ image.src }}{% endcapture %}
+                                    {% if image_test contains  vari_end %}
+                                        <a href="/products/{{ item.product.handle }}"><img src="{{ image.src | product_img_url: 'compact' }}" alt="{{ item.title }}" /></a>
+                                        {% assign found_vari = true %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if item.variant.option2 and found_vari == false %}
+                                    {% for v in item.product.variants %}
+                                        {% if v.option1 == item.variant.option1 %}
+                                            {% capture vari_end %}_vari_{{ forloop.index }}.{% endcapture%}
+                                            {% for image in item.product.images %}
+                                                {% capture image_test %}{{ image.src }}{% endcapture %}
+                                                {% if image_test contains  vari_end %}
+                                                    <a href="/products/{{ item.product.handle }}"><img src="{{ image.src | product_img_url: 'compact' }}" alt="{{ item.title }}" /></a>
+                                                    {% assign found_vari = true %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                {% if found_vari == false %}
+                                    <a href="/products/{{ item.product.handle }}"><img src="{{ item.product.featured_image.src | product_img_url: 'compact' }}" alt="{{ item.title }}" /></a>
+                                {% endif %}
                             {% else %}
                                 <a href="/products/{{ item.product.handle }}"><img src="{{ item.product.featured_image.src | product_img_url: 'compact' }}" alt="{{ item.title }}" /></a>
                             {% endif %}

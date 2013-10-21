@@ -158,7 +158,8 @@
 
 
 .element.expanded .product-main-image {
-	visibility: hidden;
+	display: none;
+	position: static;
 }
 
 .product-information {
@@ -201,6 +202,7 @@ $divider-line: rgb(77, 77, 79);
 	font-size: 11px;
 	line-height: 1;
 	font-weight: 300;
+	text-transform: uppercase;
 }
 
 .selected-material {
@@ -244,7 +246,7 @@ $divider-line: rgb(77, 77, 79);
 .product-options {
 	position: relative;
 	width: 100%;
-	height: 102px;
+	min-height: 110px;
 	overflow: hidden;
 	margin-top: 16px;
 	padding: 0 0 12px 0;
@@ -279,10 +281,6 @@ $divider-line: rgb(77, 77, 79);
 .product-options-images .flex-viewport {
 	height: 73px;
 }
-// .product-options-images .slides {
-// 	display: inline-block;
-// 	width: 180px;
-// }
 
 .product-options-images li {
 	position: static;
@@ -367,6 +365,62 @@ $divider-line: rgb(77, 77, 79);
 	width: 9px;
 	height: 19px;
 	background: siu('car_arrows.png') no-repeat -214px 0;
+}
+
+/* product sizes */
+
+.product-sizes-con {
+	position: static;
+	clear: both;
+	padding-top: 4px;
+	margin-bottom: -10px;
+	border-top: 1px solid rgb(77,77, 79);
+}
+
+.product-sizes-title {
+	position: static;
+	margin: 12px 0 0 0;
+	color: rgb(77, 77, 79);
+	font-size: 11px;
+	line-height: 1;
+	font-weight: 300;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.product-sizes {
+	position: static;
+	display: inline-block;
+	margin: 0 0 0 12px;
+	padding: 0;
+	list-style: none;
+	vertical-align: middle;
+}
+
+.product-sizes li {
+	position: static;
+	width: 14px;
+	height: 16px;
+	margin-left: 12px;
+	vertical-align: middle;
+	float: left;
+	color: rgb(77, 77, 79);
+	text-align: center;
+	font-size: 11px;
+	line-height: 16px;
+	font-weight: 300;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	cursor: pointer;
+}
+
+.product-sizes li:first-child {
+	margin-left: 0;
+}
+
+.product-sizes .selected-size {
+	background: rgb(77, 77, 79);
+	color: #fff;
 }
 
 .add-to-cart-btn {

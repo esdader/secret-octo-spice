@@ -1,0 +1,21 @@
+<div class="homepage-container">
+    <div class="flexslider">
+        <ul class="slides">
+			{% if settings.show_homepage_slide_1 %}
+				<li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'homepage_1.jpg' | asset_url }}" alt=""></a></li>
+			{% endif %}
+			{% if settings.show_homepage_slide_2 %}
+				<li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'homepage_2.jpg' | asset_url }}" alt=""></a></li>
+			{% endif %}
+			{% if settings.show_homepage_slide_3 %}
+				<li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'homepage_3.jpg' | asset_url }}" alt=""></a></li>
+			{% endif %}
+			{% if settings.show_homepage_slide_4 %}
+				<li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'homepage_4.jpg' | asset_url }}" alt=""></a></li>
+			{% endif %}
+			{% if settings.show_homepage_slide_5 %}
+				<li class="slide-holder"><a href="/collections/view-all"><img class="slide-image" src="{{ 'homepage_5.jpg' | asset_url }}" alt=""></a></li>
+			{% endif %}
+        </ul>
+    </div>
+</div>

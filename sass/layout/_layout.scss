@@ -18,9 +18,12 @@ body {
 }
 
 .wrapper {
-	margin: 94px 130px 0;
-  	padding: 0 5px 5px;
+	width: 100%;
+	margin: 94px 0 0;
+	padding: 0 154px 2em;
 }
+
+
 
 .cart-container {
 	position: fixed;
@@ -35,7 +38,9 @@ body {
 	position: fixed;
 	right: 36px;
 	top: 35px;
+	width: 140px;
 	z-index: 999;
+	overflow: hidden;
 }
 
 .main-nav-container {
