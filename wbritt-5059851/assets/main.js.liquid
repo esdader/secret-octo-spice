@@ -190,9 +190,11 @@ $(window).load(function(){
         if ($(this).index() === 1) {
             image_padding_x = (og_padding_width - img_scale);
         }
-        
+       
         // Ensure padding will bring image up to a multiple of 25px for grid regularity
-        image_padding_x = Math.round((image_padding_x + image_width)/25)*25 - image_width;
+        // Also, cap it at 200 px to avoid really big padding for the smallest items;
+        image_padding_x = Math.min(200,Math.round((image_padding_x + image_width)/25)*25 - image_width);
+        //image_padding_x = Math.round((image_padding_x + image_width)/25)*25 - image_width;
 
         // protect against negative padding
         if (image_padding_x < 0) image_padding_x = 0;
@@ -272,19 +274,29 @@ $(window).load(function(){
 
 
         // get y-pos and height of previous element, and calculate how much the target element needs to move down
+        // get y-pos and height of previous element, and calculate how much the target element needs to move down
         var prev_element_y       = target.prev().attr('data-y'),
+            prev2_element_y       = target.prev().prev().attr('data-y'),
             current_y            = parseInt(target.attr('data-y')),
             next_element_y       = target.next().attr('data-y'),
             prev_element_h       = parseInt(target.prev().attr('data-height')),
+            prev2_element_h       = parseInt(target.prev().prev().attr('data-height')),
             target_downshift;
-
+      
+            if (prev2_element_y == undefined) {
+                prev2_element_y = prev_element_y;
+                prev2_element_h = prev_element_h;
+            }
+    
             if (isNaN(prev_element_h)) {
                 target_downshift     = elem_height + 4;
             } else {
-                target_downshift     = prev_element_h - (current_y - prev_element_y) + 4;    
+                target_downshift     = Math.max((prev_element_h - (current_y - prev_element_y)),(prev2_element_h - (current_y - prev2_element_y))) + 4;    
+                //target_downshift     = prev_element_h - (current_y - prev_element_y) + 4;    
             }
             
-            var restofgrid_downshift = elem_height - (next_element_y - current_y) + target_downshift + 4;
+        var restofgrid_downshift = elem_height - (next_element_y - current_y) + target_downshift + 4;
+
 
 
 
@@ -360,7 +372,7 @@ $(window).load(function(){
                 'height': elem_height + 'px'
             });
         // todo: scroll top not working in firefox
-        $('body').animate({scrollTop : (current_y + target_downshift) - 100},200);
+        $('body, html').animate({scrollTop : (current_y + target_downshift) - 100},200);
         setTimeout(doAfter, 400);
         function doAfter() {
             $.when(
@@ -644,7 +656,7 @@ $(window).load(function(){
         }
 
         // Adjust scroll to the top of the expanded element
-        var element_ypos = target.css("-webkit-transform").toString().replace(")","").split(',');
+        // var element_ypos = target.css("-webkit-transform").toString().replace(")","").split(',');
 
         target.find('img').animate({
             'margin-top':image_margin_top+'px',

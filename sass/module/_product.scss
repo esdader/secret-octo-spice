@@ -203,6 +203,7 @@ $divider-line: rgb(77, 77, 79);
 	line-height: 1;
 	font-weight: 300;
 	text-transform: uppercase;
+	letter-spacing: 1px;
 }
 
 .selected-material {
@@ -373,7 +374,7 @@ $divider-line: rgb(77, 77, 79);
 	position: static;
 	clear: both;
 	padding-top: 4px;
-	margin-bottom: -10px;
+	margin-bottom: -7px;
 	border-top: 1px solid rgb(77,77, 79);
 }
 

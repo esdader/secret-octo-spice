@@ -7,6 +7,10 @@ body, #main, #container, #header, #footer {
   color: rgb(77, 77, 79);
 }
 
+#footer {
+  text-transform: uppercase;
+}
+
 /* Undo overview background and borders */
 #main #overview {
   background: rgb(243, 243, 243);
@@ -31,11 +35,11 @@ h4,
 h5,
 h6 {
   font-weight: normal !important;
-  letter-spacing: 3px;
+  letter-spacing: 1px;
 }
 label {
   font-weight: normal !important;
-  letter-spacing: 3px;
+  letter-spacing: 1px;
 }
 #header > h1{
   text-align:center;
@@ -66,7 +70,7 @@ label {
 #main #overview {
   border-top: 1px solid rgb(77, 77, 79);
   border-bottom: 1px solid rgb(77, 77, 79);
-  padding: 10px 0;
+  padding: 10px 13px;
 }
 
 #products > h2 {
@@ -75,7 +79,7 @@ label {
 
 #products td {
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
-  font-size: 12px;
+  font-size: 10px;
   color: rgb(77, 77, 79);
   vertical-align: middle;
   padding: 10px 0;
@@ -85,12 +89,15 @@ label {
 }
 
 #products .plist-line-price,
-#products .plisthead {
+#products .plisthead,
+#products .plist-variant-title,
+#products .plist-line-price {
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
-  font-size: 12px;
+  font-size: 10px;
   line-height: 2;
   color: rgb(77, 77, 79);
   font-weight: normal;
+  text-transform: uppercase;
 }
 
 #products .plisthead {
@@ -104,15 +111,17 @@ label {
 }
 #cost {
   display: block;
-  width: 280px;
-  height: 47px;
-  font-size: 11px;
-  line-height: 47px;
+  width: 86px;
+  height: 16px;
+  margin: 30px auto 0;
+  padding-top: 3px;
+  font-size: 10px;
+  line-height: 16px;
   color: #fff;
   background: rgb(77, 77, 79);
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
   font-weight: normal;
-  letter-spacing: 3px;
+  letter-spacing: 1px;
 }
 #cost, #order-num {
   text-shadow: none !important;
@@ -121,12 +130,13 @@ label {
 #shipping_span,
 #steps {
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
-  font-size: 12px;
+  font-size: 10px;
   line-height: 1.5;
   color: rgb(77, 77, 79);
   margin: 0;
   padding: 0;
   font-style: normal;
+  text-transform: uppercase;
 }
 
 #cost #steps {
@@ -138,7 +148,7 @@ label {
 }
 
 #email {
-  padding: 20px 0;
+  padding: 20px 13px;
   border-bottom: 1px solid rgb(77, 77, 79);
   background: none !important;
   border: none;
@@ -147,29 +157,45 @@ label {
 #email label {
   margin-bottom: 10px;
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
-  font-size: 12px;
+  font-size: 10px;
   line-height: 1.5;
   color: rgb(77, 77, 79);
   text-transform: uppercase;
-  letter-spacing: 3px;
+  letter-spacing: 1px;
   font-weight: normal;
 }
 
 #content .group {
   background: none !important;
   border: none;
+  padding: 0;
+  margin: 0;
 }
 
 #content .group h3 {
-  padding: 20px 0 10px;
+  padding: 12px 13px 10px;
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
-  font-size: 12px;
-  line-height: 1.6;
+  font-size: 10px;
+  line-height: 1.2;
   text-transform: uppercase;
   color: rgb(77, 77, 79);
   text-align: left;
-  border-bottom: none;
+  border-bottom: 1px solid rgb(77, 77, 79);
   border-top: 1px solid rgb(77, 77, 79);
+}
+
+#discounts .group h3 {
+  border-top: none;
+}
+
+#discounts-body {
+  padding: 0 13px;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: rgb(77, 77, 79);
+  text-align: left;
 }
 
 #addresses {
@@ -188,12 +214,12 @@ label {
 
 #addresses td {
   width: 303px;
-  padding-right: 0;
+  padding-right: 13px;
 }
 
 #addresses .lbl {
   width: 160px;
-  padding: 0;
+  padding: 0 0 0 13px;
   vertical-align: middle;
 }
 
@@ -202,9 +228,17 @@ label {
   width: 298px;
 }
 
+.form ul.inline {
+  padding-left: 13px;
+}
+
+#shipping-toggle {
+  margin-left: 13px;
+}
+
 .address-notification {
   background: none;
-  border-color: rgb(77, 77, 79);
+  border: none;
   text-transform: uppercase;
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
   font-size: 10px;
@@ -215,19 +249,18 @@ label {
   background: none;
   border-top: 1px solid rgb(77, 77, 79);
   border-bottom: none;
-  padding: 20px 0 30px 0;
+  margin-top: 10px;
+  padding: 20px 13px 30px;
 }
 #complete-purchase,
 #commit-button {
-  width: 200px;
-  height: 34px;
-  padding: 0 5px;
+  padding: 2px 5px 0;
   border: 1px solid rgb(77, 77, 79);
   background: rgb(77, 77, 79);
   text-transform: uppercase;
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
   font-size: 10px;
-  line-height: 34px;
+  line-height: 1.7;
   letter-spacing: 1px;
   color: #fff;
   font-weight: normal !important;
@@ -235,7 +268,7 @@ label {
 }
 #buttons #complete-purchase,
 #buttons #commit-button {
-  padding: 0 5px;
+  padding: 2px 5px 0;
 }
 
 #complete-purchase:hover,
@@ -259,8 +292,15 @@ label {
 }
 
 #payment .group h3 {
-  border-top: none;
+  border-top: 1px solid rgb(77, 77, 79);
   padding: 0;
+  margin-top: 20px;
+  line-height: 1.2;
+  padding: 12px 13px 10px;
+}
+
+#payment .group p {
+  padding-left: 13px;
 }
 
 #main p {
@@ -275,7 +315,11 @@ label {
 }
 
 #payment-method .group h3 {
-  padding-bottom: 0;
+  padding: 12px 13px 10px;
+}
+
+#payment-method .group p {
+  padding-left: 13px;
 }
 
 #payment-method table {
@@ -305,6 +349,10 @@ label {
 
 #marketing-box {
   padding: 0;
+}
+
+#marketing-box .sst {
+  padding-left: 13px;
 }
 
 input[type="text"],

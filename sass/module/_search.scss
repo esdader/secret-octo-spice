@@ -49,3 +49,7 @@
 	font-weight: 300;
 	letter-spacing: 1px;
 }
+
+#search-field:focus {
+	outline: none;
+}

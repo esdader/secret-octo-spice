@@ -618,7 +618,7 @@ body {
  * sub nav 
 */
 .subnav {
-  min-width: 70px;
+  min-width: 80px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -749,6 +749,10 @@ body {
   text-transform: lowercase;
   font-weight: 300;
   letter-spacing: 1px;
+}
+
+#search-field:focus {
+  outline: none;
 }
 
 /* 
@@ -1168,6 +1172,7 @@ body {
   line-height: 1;
   font-weight: 300;
   text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .selected-material {
@@ -1334,7 +1339,7 @@ body {
   position: static;
   clear: both;
   padding-top: 4px;
-  margin-bottom: -10px;
+  margin-bottom: -7px;
   border-top: 1px solid #4d4d4f;
 }
 
@@ -1697,8 +1702,9 @@ body {
  * Interior pages
 */
 .int-section {
-  width: 742px;
-  min-height: 394px;
+  /* width: 742px; */
+  width: 100%;
+  min-height: 583px;
   margin: 0 auto;
   padding: 88px 110px;
   background: #f3f3f3;

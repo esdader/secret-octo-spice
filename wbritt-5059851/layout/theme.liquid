@@ -45,7 +45,7 @@
     {% comment %} assign show_about_nav = true {% endcomment %}
 {% endif %}
 
-<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'about'  or template contains 'moodboard' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
+<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'about'  or template contains 'moodboard' or template contains 'stockist' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
     {% if template != 'index' %}
         <a href="/" class="main-logo"><img src="{{ 'logo.svg' | asset_url }}" id="main-logo" alt="Wbritt logo" /></a>
         <script>
@@ -70,9 +70,8 @@
         <nav>
             <ul class="main-nav">
                 <li class="l-shop-link{% if template contains 'collection' or template contains 'product' %} is-open{% endif %}"><a href="#open-shop-links" class="shop-link-btn ir">Shop</a></li>
-                <li class="l-info-link{% if template contains 'info' or template contains 'about' %} is-open{% endif %}"><a href="#open-info-links" class="info-link-btn ir">Info</a></li>
+                <li class="l-info-link{% if template contains 'info' or template contains 'about'  or template contains 'stockist' %} is-open{% endif %}"><a href="#open-info-links" class="info-link-btn ir">Info</a></li>
                 <li class="l-follow-link"><a href="#open-follow-links" class="follow-link-btn ir">Follow</a></li>
-                <li class="l-customer-care-link{% if template contains 'customer-care' %} is-open{% endif %}"><a href="#open-customer-care-links" class="customer-care-link-btn ir">Customer Care</a></li>
             </ul>
         </nav>
         <div class="subnav-con shop-links">
@@ -103,7 +102,7 @@
             <form action="/search" method="get" class="search-form" role="search">
             <input type="hidden" name="type" value="product" />
             <label for="search-field" class="visuallyhidden">Search</label>
-            <input name="q" type="text" id="search-field" placeholder="Search" />
+            <input name="q" type="text" id="search-field" placeholder="Search" autocomplete="off" />
             <input type="submit" id="search-submit" value="Search" class="visuallyhidden" />
         </form>
         </div>
@@ -154,7 +153,7 @@
 
     {% if template contains 'collection' %}
         <div class="container invisible">
-    {% elsif template contains 'search' and search.search.results_count > 0 %}
+    {% elsif template contains 'search' and search.results_count > 0 %}
         <div class="container invisible">
     {% elsif template contains 'product' %}
         <div class="product-page">
