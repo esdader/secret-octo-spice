@@ -2,10 +2,10 @@
 
 # Set this to the root of your project when deployed:
 http_path = "/"
-css_dir = "wbritt-5059851/assets"
+css_dir = "wbritt-5119486/assets"
 sass_dir = "sass"
-images_dir = "wbritt-5059851/assets"
-javascripts_dir = "wbritt-5059851/assets"
+images_dir = "wbritt-5119486/assets"
+javascripts_dir = "wbritt-5119486/assets"
 
 output_style = :expanded
 line_comments = false
