@@ -432,33 +432,11 @@ $(window).load(function(){
                     firstImageSrc    = $($variImages[0]).attr('src'),
                     selectSize       = false;
 
+                if ($('.product-sizes-con').length > 0) { 
+                    selectSize = true;
+                }
 
-                    // hide the collection view image
-                    // and show the product image
-                    //$mainImage.appendTo($('.product-main-image-con')).removeAttr('style');
-
-                    if ($('.product-sizes-con').length > 0) { 
-                        selectSize = true;
-                    }
-
-                    // captures variant number and excludes alternative views
-                    // _var_xx.extension ex: _var_1.jpg
-                    // (?:_var_)([0-9])*(?:\.(?:gif|jpg|jpeg|tiff|png))
-
-                    // captures any alternative view associated with current variant
-                    // _var_xx_alt.extension ex: _var_1_alt.jpg
-                    // (?:_var_)([0-9])*(?:_alt)(?:\.(?:gif|jpg|jpeg|tiff|png))
                 if (firstImageSrc) {
-                    var file = firstImageSrc.match(pattern);
-                    if (file) {
-                        var currentVari = file[2].split('_').join('-');
-                        currentVari = currentVari.toLowerCase();
-                        $variants.find('option:selected').attr('selected', false);
-                        var t = $variants.find('.' + currentVari);
-                        $(t).attr('selected', true);
-                        $materialTitle.text($(t).attr('data-title'));
-
-                    }
 
                     var file2 = firstImageSrc.match(variPattern);
 
