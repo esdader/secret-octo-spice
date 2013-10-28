@@ -1,6 +1,7 @@
 .open-search-btn {
+	position: fixed;
 	display: block;
-	float: right;
+	right: 36px;
 	z-index: 9999;
 	width: 21px;
 	height: 19px;
@@ -41,13 +42,29 @@
 	margin-right: 4px;
 	border: none;
 	border-bottom: 1px solid rgb(220, 221, 222);
-	color: rgb(220, 221, 222);
+	color: rgb(77, 77, 79);
 	background: none;
-	font-size: 10px;
+	font-size: 11px;
 	line-height: 1;
 	text-transform: lowercase;
 	font-weight: 300;
 	letter-spacing: 1px;
+}
+
+::-webkit-input-placeholder {
+   color: rgb(77, 77, 79);
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: rgb(77, 77, 79);
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: red;  
+}
+
+:-ms-input-placeholder {  
+   color: rgb(77, 77, 79); 
 }
 
 #search-field:focus {

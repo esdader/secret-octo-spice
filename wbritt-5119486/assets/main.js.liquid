@@ -88,6 +88,24 @@
         searchBox.toggleClass('search-showing');
     });
 
+
+    // some page specific JS
+
+    var $about = $('.about-section');
+
+    if ($about.length > 0) {
+        // var available_height = $(window).height() - parseInt($('.wrapper').css('margin-top'));
+        // $('body').css({
+        //     'height' : available_height + 'px',
+        //     'overflow' : 'hidden'
+        // });
+        $('body').css({
+            'overflow' : 'hidden',
+            'height' : '100%'
+        })
+    }
+
+
 })(jQuery, window)
 
 
@@ -96,14 +114,16 @@
 $(window).load(function(){
 
     // get the window width to see what we're deailing with
-    var win_width = $(window).width(),
-        full_scale = 325, // how big should the photo be? 
-        og_padding_width = 425,
+    var win_width          = $(window).width(),
+        full_scale         = 325, // how big should the photo be? 
+        og_padding_width   = 425,
         begin_reduce_width = 100, //1020,
-        last_item_index = 0,
+        last_item_index    = 0,
         curr_elem_image,
-        elem_width = 744,
-        elem_height = 450; // padding factor
+        elem_width         = 744,
+        elem_height        = 450,
+        collectionImg      = {}, // collection image state before opening product
+        productImg         = {}; // product image state before using image enlarger
 
 
     // if the window is less than arbitrary size
@@ -126,7 +146,7 @@ $(window).load(function(){
         switch ($(this).attr('data-category')) {
           
             case 'special-75':
-                scale_factor = .75;
+                scale_factor = .85;
                 img_scale = scale_factor * full_scale;
                 $image.css('width', img_scale + 'px');
                 break;
@@ -144,7 +164,7 @@ $(window).load(function(){
                 break;
 
             case 'bracelets':
-                scale_factor = .55;
+                scale_factor = .70;
                 img_scale = scale_factor * full_scale;
                 $image.css('width', img_scale + 'px');
                 break;
@@ -162,7 +182,7 @@ $(window).load(function(){
                 break;
 
             default:
-                scale_factor = 1;
+                scale_factor = 1.3;
                 img_scale = scale_factor * full_scale;
                 $image.css('width', img_scale + 'px');
                 break;
@@ -193,18 +213,19 @@ $(window).load(function(){
        
         // Ensure padding will bring image up to a multiple of 25px for grid regularity
         // Also, cap it at 200 px to avoid really big padding for the smallest items;
-        image_padding_x = Math.min(200,Math.round((image_padding_x + image_width)/25)*25 - image_width);
-        //image_padding_x = Math.round((image_padding_x + image_width)/25)*25 - image_width;
+      	image_padding_x = Math.min(200,image_padding_x);
+        //image_padding_x = Math.min(200,Math.round((image_padding_x + image_width)/25)*25 - image_width);
+        image_padding_x = Math.round((image_padding_x + image_width)/25)*25 - image_width - 4;
 
         // protect against negative padding
         if (image_padding_x < 0) image_padding_x = 0;
 
-          var image_padding_y = Math.round((image_padding_x + image_height)/25)*25 - image_height;
+        var image_padding_y = Math.round((image_padding_x + image_height)/25)*25 - image_height - 4;
 
 
         if ($(this).attr('data-category') == 'pendants') {
             // Since we're only adding half of the y-padding, round to nearest 50 to maintain 25px steps
-            image_padding_y = Math.round((image_padding_x + image_height)/50)*50 - image_height; 
+            image_padding_y = Math.round((image_padding_x + image_height)/50)*50 - image_height - 8; 
             $(this).css({
                 'height':(image_height + (image_padding_y/2))+'px',
                 'width':(image_width + image_padding_x)+'px'
@@ -224,6 +245,7 @@ $(window).load(function(){
                 'margin-top':(image_padding_y/2)+'px'
             });
         }
+      console.log("item: "+$(this).index()+" pad-x: "+image_padding_x+" pad-y: "+image_padding_y);
 
         last_item_index = $(this).index() + 1;
         
@@ -258,6 +280,9 @@ $(window).load(function(){
         var  expanded = $('.element.expanded');
         contract_element(expanded);
         target.addClass('expanded');
+        if(target.attr('data-category') === 'pendants') {
+            target.addClass('pendants-viewer');
+        }
         // console.log('expanding element '+target.attr('id'));
         var left_shift = 0;
         if (target.hasClass('right-column')) {
@@ -271,7 +296,6 @@ $(window).load(function(){
         // console.log('shifting container by: '+container_shift);
         // var container_width = $(window).width()+Math.abs(container_shift);
         // console.log('new container width: '+container_width);
-
 
         // get y-pos and height of previous element, and calculate how much the target element needs to move down
         // get y-pos and height of previous element, and calculate how much the target element needs to move down
@@ -323,16 +347,14 @@ $(window).load(function(){
         // var image_margin_sides = (elem_width - target.find('img').width()) / 2;
         // left_shift = ($('.container').width() - elem_width)/2 - target.attr('data-x');
 
-        var img_cache = target.find('img'),
+        var img_cache = target.find('.collection-view-img'),
             image_new_width,
             image_new_height,
             product_image_left_offset;
         
         // keep copy of current width and height
-        target.attr({
-            'data-image-width': img_cache.width(),
-            'data-image-height': img_cache.height()
-        });
+        collectionImg.curWidth = img_cache.width();
+        collectionImg.curHeight = img_cache.height();
 
         if (target.attr('data-category') === 'pendants') {
             image_new_width = 288;
@@ -342,7 +364,7 @@ $(window).load(function(){
             product_image_left_offset = 130;
         }
 
-        var image_new_height = image_new_width / img_cache.width() * img_cache.height();
+        var image_new_height = image_new_width / collectionImg.curWidth * collectionImg.curHeight;
 
         // check if image is too tall, 
         // if so cap it at elem height and then shrink width proportionally
@@ -386,7 +408,11 @@ $(window).load(function(){
 
                 var prod = target.find('.product');
 
-                prod.hide().css('visibility', 'visible').fadeIn();
+                // doing it this way seems to cause 
+                // flash on main product image
+                // prod.hide().css('visibility', 'visible').fadeIn();
+                prod.css('visibility', 'visible'); // no fadeIn no flash
+                
 
                 var $productOptions  = target.find('.product-options-images'),
                     $variImages      = $productOptions.find('img'),
@@ -401,8 +427,8 @@ $(window).load(function(){
                     $smallerImgBtn   = target.find('.smaller-image-btn'),
                     $price           = target.find('.product-price'),
                     pattern          = /(_m_)(.*)(?=\.(gif|jpg|jpeg|tiff|png))/,
-                    variPattern      = /(?:_var_)([0-9])*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
-                    altPattern       = /(?:_var_)([0-9])*(?:_alt)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+                    variPattern      = /(?:_vari?_)([0-9])*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+                    altPattern       = /(?:_vari?_)([0-9])*(?:_alt)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
                     firstImageSrc    = $($variImages[0]).attr('src'),
                     selectSize       = false;
 
@@ -451,8 +477,13 @@ $(window).load(function(){
 
                         if ($currentVari.attr('data-available') === 'true') {
                             $('#add').removeAttr('disabled');
-                            var txt ='$' + $currentVari.attr('data-price');
-                            $price.text(txt);
+                            if (parseInt($currentVari.attr('data-qty')) < 1 ) {
+                                $price.text('Pre Order');
+                            } else {
+                                var txt ='$' + $currentVari.attr('data-price');
+                                $price.text(txt);  
+                            }
+                            
                         } else {
                             $('#add').attr('disabled', true);
                             $price.text('Item unavailable');
@@ -492,7 +523,7 @@ $(window).load(function(){
                             $productSizes.empty();
                             $productSizes.append(html);
 
-                            var val = $(sizes[0]).attr('data-value');
+                            var val = sizes[0].val;
                             $variants.find('option:selected').attr('selected', false);
                             $variants.find('option[value="' + val + '"]').attr('selected', true);
                         }   
@@ -516,12 +547,92 @@ $(window).load(function(){
                     $shareCon.toggleClass('is-open');
                 });
 
+                // image enlarger
                 $biggerImgBtn.on('click', function(e){
                     e.preventDefault();
+
+                    var current_increase = img_cache.width() / productImg.cur_width + .25,
+                        $img_viewer = target.find('.image-viewer'),
+                        max_increase = 2;
+
+                    if ( current_increase <= max_increase ) {
+                        var enlarged_width  = current_increase * productImg.cur_width,
+                            enlarged_height = current_increase * productImg.cur_height,
+                            curr_left       = ($img_viewer.width() - img_cache.width()) / 2,
+                            curr_top        = ($img_viewer.height() - img_cache.height()) / 2,
+                            enlarged_left   = ($img_viewer.width() - enlarged_width) / 2,
+                            enlarged_top    = ($img_viewer.height() - enlarged_height) / 2;
+
+                        enlarged_left = (enlarged_left - curr_left) + parseInt(img_cache.css('left'));
+                        
+                        if(img_cache.hasClass('pendants')) {
+                            if (parseInt(img_cache.css('top')) === 0 ) {
+                                enlarged_top = 0;
+                            } else {
+                                enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));    
+                            }
+                        } else {
+                            enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));    
+                        }
+
+                        img_cache.animate({
+                            'width'  : enlarged_width + 'px',
+                            'height' : enlarged_height + 'px',
+                            'left'   : enlarged_left + 'px',
+                            'top'    : enlarged_top + 'px'
+                        });   
+                    }
+
+                    if (productImg.isDraggable === false) {
+                        $('.image-viewer')
+                            .on('mouseenter', function(e){
+                                img_cache.draggable();
+                                productImg.isDraggable = true;
+                            })
+                            .on('mouseleave', function(e){
+                                img_cache.draggable('destroy');
+                            });
+                    }
+                    
                 });
 
                 $smallerImgBtn.on('click', function(e){
                     e.preventDefault();
+
+                    var current_decrease = img_cache.width() / productImg.cur_width - .25,
+                        $img_viewer = target.find('.image-viewer'),
+                        max_decrease = 1;
+
+                    if ( current_decrease >= max_decrease ) {
+                        var enlarged_width  = current_decrease * productImg.cur_width,
+                            enlarged_height = current_decrease * productImg.cur_height,
+                            curr_left       = ($img_viewer.width() - img_cache.width()) / 2,
+                            curr_top        = ($img_viewer.height() - img_cache.height()) / 2,
+                            enlarged_left   = ($img_viewer.width() - enlarged_width) / 2,
+                            enlarged_top    = ($img_viewer.height() - enlarged_height) / 2;
+
+                        enlarged_left = (enlarged_left - curr_left) + parseInt(img_cache.css('left'));
+                        enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+
+                        if(img_cache.hasClass('pendants')) {
+                            if (parseInt(img_cache.css('top')) === 0 ) {
+                                enlarged_top = 0;
+                            } else {
+                                enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));    
+                            }
+                        } else {
+                            enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));    
+                        }
+
+                        img_cache.animate({
+                            'width'  : enlarged_width + 'px',
+                            'height' : enlarged_height + 'px',
+                            'left'   : enlarged_left + 'px',
+                            'top'    : enlarged_top + 'px'
+                        });
+                        
+                    }
+
                 });
 
                 $variLinks.on('click', function(e){
@@ -557,8 +668,13 @@ $(window).load(function(){
 
                             if ($currentVari.attr('data-available') === 'true') {
                                 $('#add').removeAttr('disabled');
-                                var txt ='$' + $currentVari.attr('data-price');
-                                $price.text(txt);
+                                if (parseInt($currentVari.attr('data-qty')) < 1 ) {
+                                    $price.text('Pre Order');
+                                } else {
+                                    var txt ='$' + $currentVari.attr('data-price');
+                                    $price.text(txt);  
+                                }
+                                
                             } else {
                                 $('#add').attr('disabled', true);
                                 $price.text('Item unavailable');
@@ -604,7 +720,7 @@ $(window).load(function(){
                             $productSizes.empty();
                             $productSizes.append(html);
 
-                            var val = $(sizes[0]).attr('data-value');
+                            var val = sizes[0].val;
                             $variants.find('option:selected').attr('selected', false);
                             $variants.find('option[value="' + val + '"]').attr('selected', true);
                         }
@@ -658,7 +774,7 @@ $(window).load(function(){
         // Adjust scroll to the top of the expanded element
         // var element_ypos = target.css("-webkit-transform").toString().replace(")","").split(',');
 
-        target.find('img').animate({
+        img_cache.animate({
             'margin-top':image_margin_top+'px',
             'margin-right':image_margin_right+'px',
             'margin-bottom':image_margin_bottom+'px',
@@ -666,17 +782,47 @@ $(window).load(function(){
             'width': image_new_width+'px',
             'height': image_new_height+'px'
         },200, function(){
-         // $(this).wrap('<div class="test"></div>');
+            var $this = $(this),
+                viewer_img_top = 0,
+                viewer_img_left = 0;
+        
+            // set product view main image state
+            productImg.margin_top    = image_margin_top;
+            productImg.margin_right  = image_margin_right;
+            productImg.margin_bottom = image_margin_bottom;
+            productImg.margin_left   = image_margin_left;
+            productImg.cur_width     = image_new_width;
+            productImg.cur_height    = image_new_height;
+            productImg.orginal_image = img_cache.attr('src');
+            productImg.isDraggable   = false;
+
+            // wrap image in viewer and then position it
+            $this.wrap('<div class="image-viewer"></div>');
+            var $img_viewer = target.find('.image-viewer');
+            $this.removeAttr('style');
+
+            // if it's not at the top set a height diff than zero
+            if (image_margin_top > 0) {
+                viewer_img_top = ($img_viewer.height() - image_new_height) / 2;
+            }
+
+            // get left position
+            viewer_img_left = ($img_viewer.width() - image_new_width) / 2;
+
+
+            $this.css({
+                'width'  : image_new_width + 'px',
+                'height' : image_new_height + 'px',
+                'left'   : viewer_img_left + 'px',
+                'top'    : viewer_img_top + 'px'
+            });
         });
     }
 
     function contract_element(target) {
         target.removeClass('expanded product');
         target.find('article').remove();
-        //target.append(curr_elem_image);
-
-        var og_image_width  = target.attr('data-image-width'),
-            og_image_height = target.attr('data-image-height');
+        var img_cache = target.find('.collection-view-img');
         
         // $('.container').css({'left':'0','width': $(window).width()+'px'});
         $('.element').css('top','0');
@@ -686,20 +832,33 @@ $(window).load(function(){
         if (target.attr('data-category') == 'pendants') {
             var image_margin_top = 0;
         } else {
-            var image_margin_top = (target.attr('data-height') - og_image_height) / 2;
+            var image_margin_top = (target.attr('data-height') - collectionImg.curHeight) / 2;
         }
-        var image_margin_bottom = (target.attr('data-height') - og_image_height) / 2;
-        var image_margin_sides = (target.attr('data-width') - og_image_width) / 2;
-        target.find('img').css({
-            'margin-top':image_margin_top+'px',
-            'margin-right':image_margin_sides+'px',
-            'margin-bottom':image_margin_bottom+'px',
-            'margin-left':image_margin_sides+'px',
-            'width': og_image_width,
-            'height': og_image_height
-        });
-    }
+        var image_margin_bottom = (target.attr('data-height') - collectionImg.curHeight) / 2;
+        var image_margin_sides = (target.attr('data-width') - collectionImg.curWidth) / 2;
 
+        // remove the image-viewer
+        // set the image back to where it started, then animate it back to collection
+        img_cache
+            .unwrap()
+            .removeAttr('style')
+            .css({
+                'margin-top'    : productImg.margin_top +'px',
+                'margin-right'  : productImg.margin_right +'px',
+                'margin-bottom' : productImg.margin_bottom +'px',
+                'margin-left'   : productImg.margin_left +'px',
+                'width'         : productImg.cur_width,
+                'height'        : productImg.cur_height,
+            })
+            .animate({
+                'margin-top':image_margin_top+'px',
+                'margin-right':image_margin_sides+'px',
+                'margin-bottom':image_margin_bottom+'px',
+                'margin-left':image_margin_sides+'px',
+                'width': collectionImg.curWidth,
+                'height': collectionImg.curHeight
+            });
+    }
 
     // open the next item
     $('.container').on('click', '.product-next-btn', function(e){

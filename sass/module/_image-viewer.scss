@@ -1,0 +1,19 @@
+.image-viewer {
+	position: absolute;
+	left: 93px;
+	top: 5em;
+	z-index: 999;
+	width: 337px;
+	height: 307px;
+	overflow: hidden;
+	text-align: center;
+
+	img {
+		position: absolute;
+	}
+}
+
+.pendants-viewer .image-viewer {
+	top: 0;
+	height: 100%;
+}

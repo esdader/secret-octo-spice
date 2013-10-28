@@ -42,7 +42,7 @@ button,
 input,
 select,
 textarea {
-    font-family: sans-serif;
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif;;
 }
 
 body {
@@ -50,7 +50,7 @@ body {
 }
 
 a:focus {
-    outline: thin dotted;
+    outline: none;
 }
 
 a:active,
@@ -226,7 +226,8 @@ textarea {
     font-size: 100%; 
     margin: 0; 
     vertical-align: baseline; 
-    *vertical-align: middle; 
+    *vertical-align: middle;
+    outline: none !important;
 }
 
 button,

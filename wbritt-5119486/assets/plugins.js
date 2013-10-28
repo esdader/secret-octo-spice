@@ -1455,7 +1455,8 @@
         makeHgutter = false,
         availableWidth = 0,
         wideItem = false,
-        gutterX = Math.round(this.element.width() * 0.4),
+        //gutterX = Math.round(this.element.width() * 0.4),
+        gutterX = Math.round(this.element.width() * (0.35 + (0.15 * ($($elems[0]).width()/$($elems[1]).width())))),
         centerX = Math.round(this.element.width() / 2);        
 
     for (var i=0;i<$elems.length;i++) {

@@ -48,6 +48,7 @@ Handlebars.registerHelper('parseVariant', function(){
         out += matClass + '" data-title="' + v[i]['option' + materialPos ] + '"';
         out += ' data-price="' + v[i].price.toString().slice(0, -2) + '"';
         out += ' data-available="' + v[i].available + '"';
+        out += ' data-qty="' + v[i].inventory_quantity + '"';
         if(useSize === true) out += 'data-size="' + v[i]['option' + sizePos ] + '"';
         out += '>' + v[i].title + ' - $' + v[i].price.toString().slice(0, -2) + '</option>';
     }
@@ -80,8 +81,8 @@ Handlebars.registerHelper('buildEarls', function(options){
 });
 
 Handlebars.registerHelper('buildCarousel', function(options){
-    var variPattern = /(?:_var_)([0-9])*(?:\.(?:gif|jpg|jpeg|tiff|png))/,
-        altPattern  = /(?:_var_)([0-9])*(?:_alt)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+    var variPattern = /(?:_vari?_)([0-9])*(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+        altPattern  = /(?:_vari?_)([0-9])*(?:_alt)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
         out,
         cl,
         variImages,

@@ -45,7 +45,7 @@
     {% comment %} assign show_about_nav = true {% endcomment %}
 {% endif %}
 
-<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'about'  or template contains 'moodboard' or template contains 'stockist' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
+<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'about'  or template contains 'moodboard' or template contains 'stockist' or template contains 'contact' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
     {% if template != 'index' %}
         <a href="/" class="main-logo"><img src="{{ 'logo.svg' | asset_url }}" id="main-logo" alt="Wbritt logo" /></a>
         <script>
@@ -70,7 +70,7 @@
         <nav>
             <ul class="main-nav">
                 <li class="l-shop-link{% if template contains 'collection' or template contains 'product' %} is-open{% endif %}"><a href="#open-shop-links" class="shop-link-btn ir">Shop</a></li>
-                <li class="l-info-link{% if template contains 'info' or template contains 'about'  or template contains 'stockist' %} is-open{% endif %}"><a href="#open-info-links" class="info-link-btn ir">Info</a></li>
+                <li class="l-info-link{% if template contains 'info' or template contains 'about' or template contains 'contact' or template contains 'moodboard'  or template contains 'stockist' %} is-open{% endif %}"><a href="#open-info-links" class="info-link-btn ir">Info</a></li>
                 <li class="l-follow-link"><a href="#open-follow-links" class="follow-link-btn ir">Follow</a></li>
             </ul>
         </nav>
@@ -126,7 +126,7 @@
     {% endif %}
 
     {% if show_mood_nav == true %}
-        <div class="tertiary-subnav-con">
+        <div class="tertiary-subnav-con info-tertiary">
             <div class="vertical-rail"> </div>
             <nav>
                 <ul class="tertiary-subnav subnav">
@@ -139,7 +139,7 @@
     {% endif %}
 
     {% if show_about_nav == true %}
-        <div class="tertiary-subnav-con">
+        <div class="tertiary-subnav-con info-tertiary">
             <div class="vertical-rail"> </div>
             <nav>
                 <ul class="tertiary-subnav subnav">
@@ -167,6 +167,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="{{ "jquery-1.10.2.min.js" | asset_url }}"><\/script>')</script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script>window.jQuery.ui || document.write('<script src="{{ "jquery-ui-1.10.3.custom.min.js" | asset_url }}"><\/script>')</script>
     {{ 'plugins.js' | asset_url | script_tag }}
     {{ 'handlebars.runtime.js' | asset_url | script_tag }}
     {{ 'handlebars_helpers.js' | asset_url | script_tag }}
@@ -176,6 +177,67 @@
     {% if template contains 'product' %}
         {{ 'product.js' | asset_url | script_tag }}
     {% endif  %}
+    {% if template contains 'lookbook' %}
+        {{ 'jquery.royalslider.min.js' | asset_url | script_tag }}
+        <script>
+
+        var available_height = $(window).height() - parseInt($('.wrapper').css('margin-top')) - 16, // 16 gives breathing room on bottom
+            available_width = 900 / 603 * available_height, // photo width / photo height
+            $lookbook = $('.lookbook-section');
+
+
+            
+        $lookbook.css({
+            'height' : available_height + 'px',
+            'width' : available_width + 'px'
+        }).removeClass('invisible');
+
+
+
+            jQuery(document).ready(function($) {
+                $('.royalSlider').royalSlider({
+                    arrowsNav: false,
+                    slidesSpacing: 0,
+                    usePreloader: false,
+                    loop: false,
+                    keyboardNavEnabled: true,
+                    controlsInside: false,
+                    imageScaleMode: 'fill',
+                    arrowsNavAutoHide: false,
+                    autoScaleSlider: true, 
+                    autoScaleSliderWidth: 900,     
+                    autoScaleSliderHeight: 603,
+                    controlNavigation: 'none',
+                    thumbsFitInViewport: false,
+                    navigateByClick: false,
+                    startSlideId: 0,
+                    autoPlay: false,
+                    transitionType:'move',
+                    globalCaption: false,
+                    /* size of all images http://help.dimsemenov.com/kb/royalslider-jquery-plugin-faq/adding-width-and-height-properties-to-images */
+                    imgWidth: 900,
+                    imgHeight: 603,
+                    imageScalePadding: 0
+
+                });
+
+                var $prev   = $('.product-prev-btn'),
+                    $next   = $('.product-next-btn'),
+                    $slider = $('.royalSlider').data('royalSlider');
+
+                $prev.on('click', function(e){
+                    e.preventDefault();
+                    $slider.prev();
+                });
+
+                $next.on('click', function(e){
+                    e.preventDefault();
+                    $slider.next();
+                });
+;
+            });
+        </script>
+    {% endif %}
     {% if template == 'index' %}
         <script>
             $(window).load(function() {
