@@ -478,7 +478,7 @@ $(window).load(function(){
                         if ($currentVari.attr('data-available') === 'true') {
                             $('#add').removeAttr('disabled');
                             if (parseInt($currentVari.attr('data-qty')) < 1 ) {
-                                $price.text('Pre Order');
+                                $price.text('$' + $currentVari.attr('data-price') + ' Pre Order');
                             } else {
                                 var txt ='$' + $currentVari.attr('data-price');
                                 $price.text(txt);  
@@ -669,7 +669,7 @@ $(window).load(function(){
                             if ($currentVari.attr('data-available') === 'true') {
                                 $('#add').removeAttr('disabled');
                                 if (parseInt($currentVari.attr('data-qty')) < 1 ) {
-                                    $price.text('Pre Order');
+                                    $price.text('$' + $currentVari.attr('data-price') + ' Pre Order');
                                 } else {
                                     var txt ='$' + $currentVari.attr('data-price');
                                     $price.text(txt);  
