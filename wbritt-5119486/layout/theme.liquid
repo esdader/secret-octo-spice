@@ -35,6 +35,16 @@
     {% assign show_mood_nav = true %}
 {% endif %}
 
+{% assign show_lookbook_nav = false %}
+{% for link in linklists.lookbook-sub-pages.links %}
+    {% if link.active %}
+        {% assign show_lookbook_nav = true %}
+    {% endif %}
+{% endfor %}
+{% if page.handle == 'lookbook' %}
+    {% assign show_mood_nav = true %}
+{% endif %}
+
 {% assign show_about_nav = false %}
 {% for link in linklists.about-sub-pages.links %}
     {% if link.active %}
@@ -45,7 +55,7 @@
     {% comment %} assign show_about_nav = true {% endcomment %}
 {% endif %}
 
-<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'press' or template contains 'about'  or template contains 'moodboard' or template contains 'stockist' or template contains 'contact' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
+<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'press' or template contains 'about'  or template contains 'moodboard' or template contains 'stockist' or template contains 'contact' or template contains 'lookbook' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
     {% if template != 'index' %}
         <a href="/" class="main-logo"><img src="{{ 'logo.svg' | asset_url }}" id="main-logo" alt="Wbritt logo" /></a>
         <script>
@@ -70,7 +80,7 @@
         <nav>
             <ul class="main-nav">
                 <li class="l-shop-link{% if template contains 'collection' or template contains 'product' %} is-open{% endif %}"><a href="#open-shop-links" class="shop-link-btn ir">Shop</a></li>
-                <li class="l-info-link{% if template contains 'info' or template contains 'about' or template contains 'contact' or template contains 'moodboard'  or template contains 'stockist' %} is-open{% endif %}"><a href="#open-info-links" class="info-link-btn ir">Info</a></li>
+                <li class="l-info-link{% if template contains 'info' or template contains 'about' or template contains 'contact' or template contains 'moodboard'  or template contains 'stockist' or template contains 'press' or template contains 'lookbook' %} is-open{% endif %}"><a href="#open-info-links" class="info-link-btn ir">Info</a></li>
                 <li class="l-follow-link"><a href="#open-follow-links" class="follow-link-btn ir">Follow</a></li>
             </ul>
         </nav>
@@ -144,6 +154,19 @@
             <nav>
                 <ul class="tertiary-subnav subnav">
                     {% for link in linklists.about-sub-pages.links %}
+                        <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %}>{{ link.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+
+    {% if show_lookbook_nav == true %}
+        <div class="tertiary-subnav-con info-tertiary">
+            <div class="vertical-rail"> </div>
+            <nav>
+                <ul class="tertiary-subnav subnav">
+                    {% for link in linklists.lookbook-sub-pages.links %}
                         <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %}>{{ link.title }}</a></li>
                     {% endfor %}
                 </ul>

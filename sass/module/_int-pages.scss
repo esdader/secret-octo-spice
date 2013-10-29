@@ -172,6 +172,19 @@
 	text-align: right;
 }
 
+.press-nav .subnav {
+	padding-right: 10px;
+	margin-top: -5px;
+}
+
+.press-nav a {
+	font-size: 11px;
+	letter-spacing: normal;
+	line-height: 1.6;
+	font-weight: 300;
+	text-transform: lowercase;
+}
+
 .press-section {
 	position: relative;
 	padding: 90px 84px 27px;
@@ -208,5 +221,18 @@
 }
 
 .press-product-link {
-	text-transform: lowercase;
+	border: 1px solid rgb(243, 243, 243);
+	background: none;
+	text-transform: uppercase;
+	font-family: $font-family;
+	letter-spacing: 1px;
+	line-height: 1;
+	padding: 5px 6px 2px;	
+}
+
+.int-section .press-product-link:hover {
+	background: rgb(77, 77, 79);
+	border: 1px solid rgb(77, 77, 79);
+	color: #fff;
+	text-decoration: none;
 }
