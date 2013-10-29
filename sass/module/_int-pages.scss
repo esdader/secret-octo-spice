@@ -175,6 +175,8 @@
 .press-section {
 	position: relative;
 	padding: 90px 84px 27px;
+	overflow: hidden;
+	min-height: inherit;
 }
 
 .main-press-img {
