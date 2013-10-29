@@ -79,9 +79,16 @@
 	width: 100%;
 	max-width: 2000px;
 	min-height: inherit;
+	overflow: hidden;
 	margin: 0 auto;
 	padding: 0;
 	overflow: hidden;
+}
+
+.contact-section .interior-full-page-image {
+	width: auto;
+	height: 100%;
+	float: left;
 }
 
 .contact-content {
@@ -99,8 +106,16 @@
 	width: 100%;
 	max-width: 2000px;
 	min-width: inherit;
+	min-height: inherit;
+	overflow: hidden;
 	margin: 0 auto;
 	padding: 0;
+}
+
+.stockist-section .interior-full-page-image {
+	width: auto;
+	height: 100%;
+	float: right;
 }
 
 .stockist-content {
