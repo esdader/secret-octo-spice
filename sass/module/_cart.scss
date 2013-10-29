@@ -82,6 +82,10 @@
 	border: 1px solid rgb(243, 243, 243);
 	background: none;
 	text-transform: uppercase;
+	font-family: $font-family;
+	letter-spacing: 1px;
+	line-height: 1;
+	padding-top: 5px;
 }
 
 .cart-update-item-btn:hover {
