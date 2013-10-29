@@ -45,7 +45,7 @@
     {% comment %} assign show_about_nav = true {% endcomment %}
 {% endif %}
 
-<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'about'  or template contains 'moodboard' or template contains 'stockist' or template contains 'contact' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
+<body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'press' or template contains 'about'  or template contains 'moodboard' or template contains 'stockist' or template contains 'contact' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
     {% if template != 'index' %}
         <a href="/" class="main-logo"><img src="{{ 'logo.svg' | asset_url }}" id="main-logo" alt="Wbritt logo" /></a>
         <script>
@@ -172,11 +172,15 @@
     {{ 'handlebars.runtime.js' | asset_url | script_tag }}
     {{ 'handlebars_helpers.js' | asset_url | script_tag }}
     {{ 'product.handlebars.js' | asset_url | script_tag }}
+    {% if template contains 'press' %}
+        {{ 'enhance.jquery.js' | asset_url | script_tag }}
+    {% endif %}
     {{ 'main.js' | asset_url | script_tag }}
 
     {% if template contains 'product' %}
         {{ 'product.js' | asset_url | script_tag }}
     {% endif  %}
+    
     {% if template contains 'lookbook' %}
         {{ 'jquery.royalslider.min.js' | asset_url | script_tag }}
         <script>

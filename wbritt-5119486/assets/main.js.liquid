@@ -105,6 +105,129 @@
         })
     }
 
+    //  press section
+    var $press = $('.press-section');
+
+    if ($press.length > 0) {
+        var $pressLinks      = $('.press-nav').find('a'),
+            $mainImageHolder = $('.main-press-img'),
+            $pressTitle      = $('.press-title'),
+            $pressDate       = $('.press-date'),
+            $pressProduct    = $('.press-product-link'),
+            $prevBtn         = $('.product-prev-btn'),
+            $nextBtn         = $('.product-next-btn'),
+            currArticleIndex = 0;
+
+        // lets set the image size to match the screen size
+        var availableHeight = $(window).height() - parseInt($('.wrapper').css('margin-top')) - parseInt($press.css('padding-top')) - parseInt($press.css('padding-bottom')) - $pressTitle.outerHeight() - $pressDate.outerHeight() - $pressProduct.outerHeight() - 32;
+
+        var pressHeight = $(window).height() - parseInt($('.wrapper').css('margin-top')) - 32;
+
+        $press.css('height', pressHeight + 'px');
+
+        var html = '<img src="' + $pressLinks[0].href +'">';
+        $mainImageHolder.append(html);
+        var $mainImage = $mainImageHolder.find('img');
+        $mainImage.css({
+            'max-height': availableHeight + 'px',
+            width: 'auto',
+            'max-width': '100%'
+        });
+        $mainImageHolder.zoom({
+            'url' : $pressLinks[0].href
+        });
+        var currLink = $($pressLinks[0]);
+        currLink.addClass('active');
+
+        $pressTitle.text(currLink.attr('data-title'));
+        $pressDate.text(currLink.attr('data-pub-date'));
+        
+        prProduct = currLink.attr('data-product-link');
+
+        if (prProduct) {
+            if(prProduct !== '') {
+                $pressProduct.attr('href', prProduct);
+            }
+            $pressProduct.removeClass('invisible');
+        }
+
+        // show the page
+        $press.removeClass('invisible');
+
+        function findPrevLink() {
+            var prevIndex;
+
+            if (currArticleIndex === 0) {
+                prevIndex  = $pressLinks.length - 1;
+            } else {
+                prevIndex = currArticleIndex - 1;
+            }
+
+            currArticleIndex = prevIndex;
+            
+            return $pressLinks[prevIndex];
+
+        }
+
+        function findNextLink() {
+            var nextIndex;
+
+            if (currArticleIndex === ($pressLinks.length - 1)) {
+                nextIndex  = 0;
+            } else {
+                nextIndex = currArticleIndex + 1;
+            }
+
+            currArticleIndex = nextIndex;
+            
+            return $pressLinks[nextIndex];
+        }
+
+        function changeArticle (currLink) {
+            $('.press-nav').find('.active').removeClass('active');
+            currLink.addClass('active');
+            $mainImage[0].src = currLink.attr('href');
+            $mainImageHolder.trigger('zoom.destroy');
+            $mainImageHolder.zoom({
+                'url' : currLink.attr('href')
+            });
+            $pressTitle.text(currLink.attr('data-title'));
+            $pressDate.text(currLink.attr('data-pub-date'));
+            
+            prProduct = currLink.attr('data-product-link');
+
+            if (prProduct) {
+                if(prProduct !== '') {
+                    $pressProduct.attr('href', prProduct);
+                } else {
+                    $pressProduct.addClass('invisible');
+                }
+                $pressProduct.removeClass('invisible');
+            } else {
+                $pressProduct.addClass('invisible');
+            }
+        }
+
+        $prevBtn.on('click', function(e){
+            e.preventDefault();
+            var currArticle = $(findPrevLink());
+            changeArticle(currArticle);
+        });
+
+        $nextBtn.on('click', function(e){
+            e.preventDefault();
+            var currArticle = $(findNextLink());
+            changeArticle(currArticle);
+        });
+
+        $pressLinks.on('click', function(e){
+            e.preventDefault();
+            currLink = $(this);
+            currArticleIndex = currLink.parent().index();
+            changeArticle(currLink);
+        });
+    }
+
 
 })(jQuery, window)
 
