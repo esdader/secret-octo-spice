@@ -48,6 +48,9 @@
                             <p class="cart-item-variant">
                                 <a href="/products/{{ item.product.handle }}">{{ item.variant.title }}</a>
                             </p>
+                            {% if item.variant.inventory_quantity < 1 %}
+                                <p class="preorder-msg">This item is available for pre-order, item will ship in 2-4 weeks.</p>
+                            {% endif %}
                         </div>
                         <div class="cart-item-price-qty">
                             <p class="cart-item-line-price">
