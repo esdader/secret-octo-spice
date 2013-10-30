@@ -493,7 +493,6 @@ $(window).load(function(){
         collectionImg.curWidth = img_cache.width();
         collectionImg.curHeight = img_cache.height();
         collectionImg.currSrc = img_cache.attr('src');
-        console.log(collectionImg.currSrc);
 
         if (target.attr('data-category') === 'pendants') {
             image_new_width = 288;
@@ -675,21 +674,43 @@ $(window).load(function(){
                     if ( current_increase <= max_increase ) {
                         var enlarged_width  = current_increase * productImg.cur_width,
                             enlarged_height = current_increase * productImg.cur_height,
-                            curr_left       = ($img_viewer.width() - img_cache.width()) / 2,
-                            curr_top        = ($img_viewer.height() - img_cache.height()) / 2,
-                            enlarged_left   = ($img_viewer.width() - enlarged_width) / 2,
-                            enlarged_top    = ($img_viewer.height() - enlarged_height) / 2;
+                            imgViewerWidth  = $img_viewer.width(),
+                            imgViewerHeight = $img_viewer.height(),
+                            curr_left       = (imgViewerWidth - img_cache.width()) / 2,
+                            curr_top        = (imgViewerHeight - img_cache.height()) / 2,
+                            enlarged_left   = (imgViewerWidth - enlarged_width) / 2,
+                            enlarged_top    = (imgViewerHeight - enlarged_height) / 2;
 
                         enlarged_left = (enlarged_left - curr_left) + parseInt(img_cache.css('left'));
+
+                        var checkWidth  = enlarged_width * .5,
+                            checkHeight = enlarged_height * .5;
+
+                        if ((enlarged_left + enlarged_width) < checkWidth ) {
+                            enlarged_left = -enlarged_width + checkWidth;
+                        } else if ((imgViewerWidth - enlarged_left) < checkWidth) {
+                            enlarged_left = imgViewerWidth - checkWidth;
+                        }
                         
                         if(img_cache.hasClass('pendants')) {
                             if (parseInt(img_cache.css('top')) === 0 ) {
                                 enlarged_top = 0;
                             } else {
-                                enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));    
+                                enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+
+                                if ((enlarged_top + enlarged_height) < checkHeight ) {
+                                    enlarged_top = -enlarged_height + checkHeight;
+                                }  else if ((imgViewerHeight - enlarged_top) < checkHeight) {
+                                    enlarged_top = imgViewerHeight - checkHeight;
+                                }  
                             }
                         } else {
-                            enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));    
+                            enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+                            if ((enlarged_top + enlarged_height) < checkHeight ) {
+                                enlarged_top = -enlarged_height + checkHeight;
+                            } else if ((imgViewerHeight - enlarged_top) < checkHeight) {
+                                enlarged_top = imgViewerHeight - checkHeight;
+                            }    
                         }
 
                         img_cache.animate({
@@ -723,22 +744,42 @@ $(window).load(function(){
                     if ( current_decrease >= max_decrease ) {
                         var enlarged_width  = current_decrease * productImg.cur_width,
                             enlarged_height = current_decrease * productImg.cur_height,
-                            curr_left       = ($img_viewer.width() - img_cache.width()) / 2,
-                            curr_top        = ($img_viewer.height() - img_cache.height()) / 2,
-                            enlarged_left   = ($img_viewer.width() - enlarged_width) / 2,
-                            enlarged_top    = ($img_viewer.height() - enlarged_height) / 2;
+                            imgViewerWidth  = $img_viewer.width(),
+                            imgViewerHeight = $img_viewer.height(),
+                            curr_left       = (imgViewerWidth - img_cache.width()) / 2,
+                            curr_top        = (imgViewerHeight - img_cache.height()) / 2,
+                            enlarged_left   = (imgViewerWidth - enlarged_width) / 2,
+                            enlarged_top    = (imgViewerHeight - enlarged_height) / 2;
 
                         enlarged_left = (enlarged_left - curr_left) + parseInt(img_cache.css('left'));
-                        enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+                        
+                        var checkWidth  = enlarged_width * .5,
+                            checkHeight = enlarged_height * .5;
+                           
+                        if ((enlarged_left + enlarged_width) < checkWidth ) {
+                            enlarged_left = -enlarged_width + checkWidth;
+                        } else if ((imgViewerWidth - enlarged_left) < checkWidth) {
+                            enlarged_left = imgViewerWidth - checkWidth;
+                        }
 
                         if(img_cache.hasClass('pendants')) {
                             if (parseInt(img_cache.css('top')) === 0 ) {
                                 enlarged_top = 0;
                             } else {
-                                enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));    
+                                enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+                                if ((enlarged_top + enlarged_height) < checkHeight ) {
+                                    enlarged_top = -enlarged_height + checkHeight;
+                                } else if ((imgViewerHeight - enlarged_top) < checkHeight) {
+                                    enlarged_top = imgViewerHeight - checkWidth;
+                                } 
                             }
                         } else {
-                            enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));    
+                            enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+                            if ((enlarged_top + enlarged_height) < checkHeight ) {
+                                enlarged_top = -enlarged_height + checkHeight;
+                            } else if ((imgViewerHeight - enlarged_top) < checkHeight) {
+                                enlarged_top = imgViewerHeight - checkHeight;
+                            }
                         }
 
                         img_cache.animate({
