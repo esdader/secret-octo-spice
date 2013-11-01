@@ -101,7 +101,7 @@
         <div class="subnav-con follow-links">
             <ul class="subnav">
                 {% for link in linklists.social-media.links %}
-                    <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %}>{{ link.title }}</a></li> 
+                    <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %} target="_blank">{{ link.title }}</a></li> 
                 {% endfor %}
             </ul>
         </div>
