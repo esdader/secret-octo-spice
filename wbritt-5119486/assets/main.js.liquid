@@ -153,10 +153,22 @@
         var currLink = $($pressLinks[0]);
         currLink.addClass('active');
 
-        $pressTitle.text(currLink.attr('data-title'));
+        var prPubLink = currLink.attr('data-pub-link');
+        if (prPubLink) {
+            if (prPubLink !== '') {
+                var html = '<a href="' + prPubLink + '" target="_blank">' + currLink.attr('data-title') + '</a>';
+                $pressTitle.empty().append(html);
+
+            } else {
+                $pressTitle.empty().append(currLink.attr('data-title'));    
+            }
+        } else {
+            $pressTitle.empty().append(currLink.attr('data-title'));
+        }
+
         $pressDate.text(currLink.attr('data-pub-date'));
         
-        prProduct = currLink.attr('data-product-link');
+        var prProduct = currLink.attr('data-product-link');
 
         if (prProduct) {
             if(prProduct !== '') {
@@ -205,13 +217,26 @@
             $mainImageHolder.zoom({
                 'url' : currLink.attr('href')
             });
-            $pressTitle.text(currLink.attr('data-title'));
+            
+            var prPubLink = currLink.attr('data-pub-link');
+            if (prPubLink) {
+                if (prPubLink !== '') {
+                    var html = '<a href="' + prPubLink + '" target="_blank">' + currLink.attr('data-title') + '</a>';
+                    $pressTitle.empty().append(html);
+
+                } else {
+                    $pressTitle.empty().append(currLink.attr('data-title'));    
+                }
+            } else {
+                $pressTitle.empty().append(currLink.attr('data-title'));
+            }
+
             $pressDate.text(currLink.attr('data-pub-date'));
             
-            prProduct = currLink.attr('data-product-link');
+            var prProduct = currLink.attr('data-product-link');
 
             if (prProduct) {
-                if(prProduct !== '') {
+                if (prProduct !== '') {
                     $pressProduct.attr('href', prProduct);
                 } else {
                     $pressProduct.addClass('invisible');

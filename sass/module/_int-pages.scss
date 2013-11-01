@@ -210,6 +210,23 @@
 	border-top: 1px solid rgb(77, 77, 79);
 }
 
+.int-section .press-title a {
+	border: 1px solid rgb(243, 243, 243);
+	background: none;
+	text-transform: uppercase;
+	font-family: $font-family;
+	letter-spacing: 1px;
+	line-height: 1;
+	padding: 5px 6px 2px;	
+}
+
+.int-section .press-title a:hover {
+	background: rgb(77, 77, 79);
+	border: 1px solid rgb(77, 77, 79);
+	color: #fff;
+	text-decoration: none;
+}
+
 .int-section .press-date {
 	text-align: center;
 	text-transform: lowercase;
