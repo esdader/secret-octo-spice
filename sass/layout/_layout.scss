@@ -23,6 +23,9 @@ body {
 	padding: 0 154px 2em;
 }
 
+// .home-invisible {
+// 	visibility: hidden;
+// }
 
 
 .cart-container {
@@ -34,6 +37,10 @@ body {
 	text-align: right;
 }
 
+// .homepage .cart-container {
+// 	display: none;
+// }
+
 .search-container {
 	position: fixed;
 	right: 36px;
@@ -43,6 +50,10 @@ body {
 	z-index: 999;
 	overflow: hidden;
 }
+
+// .homepage .search-container {
+// 	display: none;
+// }
 
 .main-nav-container {
 	position: fixed;

@@ -1,3 +1,15 @@
+{% paginate collections.view-all.products by 250 %}
+{% for product in collections.view-all.products %}
+    <div id='elem{{ forloop.index }}' class='element isotope-item' data-index='{{ forloop.index }}' data-category="{{ product.type | handleize }}" data-product="{{ product.handle }}">
+        <img class="{{ product.type | handleize }} collection-view-img" src="{{ product.featured_image | product_img_url: 'large' }}">
+        <div class="collection-product-title-price">
+			<h2 class="collection-product-title">{{ product.title}}</h2>
+			<h3 class="collection-product-price">{{ product.price | money | remove: '.00' }}</h3>
+        </div>
+    </div>
+{% endfor %}
+</div>{% comment %} closing out div on template because we add another wrapper here{% endcomment %}
+{% endpaginate %}
 <div class="homepage-container">
     <div class="flexslider">
         <ul class="slides">
@@ -18,4 +30,4 @@
 			{% endif %}
         </ul>
     </div>
-</div>
+{% comment %} no closing div b/c it's closed out on homepage{% endcomment %}

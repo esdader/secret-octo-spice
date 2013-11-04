@@ -10,13 +10,17 @@
 	background-size: 613px 162px;
 }
 
+// .homepage .main-nav-btn {
+// 	display: none;
+// }
+
 .no-svg .main-nav-btn {
 	background: siu("s2.png") no-repeat -60px -6px;
 }
 
-.homepage .main-nav-btn {
-	background-position: -60px -51px;
-}
+// .homepage .main-nav-btn {
+// 	background-position: -60px -51px;
+// }
 
 .main-nav-container {
 	z-index: 9999;
@@ -30,11 +34,11 @@
 	background-position: -36px -6px;
 }
 
-.open-main-nav.homepage .main-nav-btn {
-	background-position: -36px -51px;
-}
+// .open-main-nav.homepage .main-nav-btn {
+// 	background-position: -36px -51px;
+// }
 
-.open-main-nav.homepage .main-nav-btn:hover,
+// .open-main-nav.homepage .main-nav-btn:hover,
 .open-main-nav .main-nav-btn:hover {
 	background-position: -36px -27px;
 }

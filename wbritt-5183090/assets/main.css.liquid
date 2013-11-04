@@ -447,6 +447,10 @@ body {
   margin-left: -214px;
 }
 
+.homepage .main-logo {
+  z-index: 10001;
+}
+
 .cart-link {
   display: block;
   z-index: 999;
@@ -459,10 +463,6 @@ body {
 
 .no-svg .cart-link {
   background: url({{'s3.png' | asset_url}}) no-repeat -417px -7px;
-}
-
-.homepage .cart-link {
-  background-position: -378px -51px;
 }
 
 .cart-container:hover .cart-link,
@@ -478,17 +478,8 @@ body {
   text-decoration: none;
 }
 
-.homepage .cart-count {
-  color: #fff;
-}
-
 .cart-container:hover .cart-count,
 .cart-count:hover {
-  color: #4d4d4f;
-}
-
-.homepage .cart-container:hover .cart-count,
-.homepage .cart-count:hover {
   color: #4d4d4f;
 }
 
@@ -511,10 +502,6 @@ body {
   background: url({{'s2.png' | asset_url}}) no-repeat -60px -6px;
 }
 
-.homepage .main-nav-btn {
-  background-position: -60px -51px;
-}
-
 .main-nav-container {
   z-index: 9999;
 }
@@ -527,11 +514,6 @@ body {
   background-position: -36px -6px;
 }
 
-.open-main-nav.homepage .main-nav-btn {
-  background-position: -36px -51px;
-}
-
-.open-main-nav.homepage .main-nav-btn:hover,
 .open-main-nav .main-nav-btn:hover {
   background-position: -36px -27px;
 }
@@ -718,10 +700,6 @@ body {
 
 .no-svg .open-search-btn {
   background: url({{'s3.png' | asset_url}}) no-repeat -7px -6px;
-}
-
-.homepage .open-search-btn {
-  background-position: -7px -49px;
 }
 
 .open-search-btn:hover {
@@ -2442,6 +2420,8 @@ html[xmlns] .slides {
   bottom: 0;
   width: 100%;
   height: 100%;
+  z-index: 10000;
+  background: #f0f0f0;
 }
 
 .homepage-container .flexslider {

@@ -56,21 +56,12 @@
 {% endif %}
 
 <body class='{% if template == 'index' %}open-main-nav homepage{% endif %}{% if template contains 'collection' or template contains 'product' %}shop-links-open{% endif %}{% if template contains 'customer-care' %}info-links-open{% endif %}{% if template contains 'info' or template contains 'press' or template contains 'about'  or template contains 'moodboard' or template contains 'stockist' or template contains 'contact' or template contains 'lookbook' %}info-links-open{% endif %}{% if show_mood_nav == true %} mood-nav-active{% endif %}{% if show_about_nav == true %} about-nav-active{% endif %}'>
-    {% if template != 'index' %}
-        <a href="/" class="main-logo"><img src="{{ 'logo.svg' | asset_url }}" id="main-logo" alt="Wbritt logo" /></a>
-        <script>
-            if (!Modernizr.svg) {
-                var img = document.getElementById("main-logo").src="logo.png";
-            }
-        </script>
-    {% else %}
-        <a href="/" class="main-logo"><img src="{{ 'logo2.svg' | asset_url }}" id="main-logo" alt="Wbritt logo" /></a>
-        <script>
-            if (!Modernizr.svg) {
-                var img = document.getElementById("main-logo").src="{{ 'logo2.png' | asset_url }}";
-            }
-        </script>
-    {% endif %}
+    <a href="/" class="main-logo"><img src="{{ 'logo.svg' | asset_url }}" id="main-logo" alt="Wbritt logo" /></a>
+    <script>
+        if (!Modernizr.svg) {
+            var img = document.getElementById("main-logo").src="logo.png";
+        }
+    </script>
     <div class="cart-container">
         <a href="/cart" class="cart-link ir">Cart</a>
         <a href="/cart" class="cart-count">{{ cart.item_count }}</a>
@@ -174,7 +165,7 @@
         </div>
     {% endif %}
 
-    {% if template contains 'collection' %}
+    {% if template contains 'collection' or template == 'index' %}
         <div class="container invisible">
     {% elsif template contains 'search' and search.results_count > 0 %}
         <div class="container invisible">
@@ -355,11 +346,33 @@
 
                 })(jQuery, window);
 
-                $('.flexslider').flexslider({
+                var $flexy = $('.flexslider'),
+                    slideCount = $flexy.find('li').length;
+
+                $flexy.flexslider({
                     controlNav: false,
                     slideshowSpeed: 3000, 
-                    directionNav: false 
+                    directionNav: false,
+                    end: sliderAtEnd,
+                    start: sliderAtStart,
+                    animationLoop: false
                 });
+
+                function transitionToProducts() {
+                    $('.homepage-container').fadeOut('slow', function(){
+                        
+                    });
+                }
+
+                function sliderAtEnd() {
+                    setTimeout(transitionToProducts, 3050);
+                }
+
+                function sliderAtStart() {
+                    if (slideCount === 1) {
+                        setTimeout(transitionToProducts, 3050);
+                    }
+                }
             });
 
         </script>
