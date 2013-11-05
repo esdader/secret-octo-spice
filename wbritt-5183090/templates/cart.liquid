@@ -10,7 +10,7 @@
                                 {% for v in item.product.variants %}
                                     {% if v.title == item.variant.option1 %}
                                         {% assign vari_pos = forloop.index %}
-                                        {% capture vari_end %}_var_{{ vari_pos }}.{% endcapture%}
+                                        {% capture vari_end %}_var_{{ vari_pos }}{% endcapture%}
                                         {% for image in item.product.images %}
                                             {% capture image_test %}{{ image.src }}{% endcapture %}
                                             {% if image_test contains  vari_end %}
@@ -23,7 +23,7 @@
                                 {% if item.variant.option2 and found_var == false %}
                                     {% for v in item.product.variants %}
                                         {% if v.option1 == item.variant.option1 %}
-                                            {% capture vari_end %}_var_{{ forloop.index }}.{% endcapture%}
+                                            {% capture vari_end %}_var_{{ forloop.index }}{% endcapture%}
                                             {% for image in item.product.images %}
                                                 {% capture image_test %}{{ image.src }}{% endcapture %}
                                                 {% if image_test contains  vari_end %}
