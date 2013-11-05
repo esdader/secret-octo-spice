@@ -82,7 +82,90 @@
         }
     });
 
-    // open search box
+
+    /*
+     *
+     * email form submission
+     ************************
+     */
+
+    var emailForm   = $("#mc-embedded-subscribe-form"),
+        emailInput  = $("#mce-EMAIL"),
+        emailSignup = $('.emailsignup'),
+        emailBox    = $('.email_box');
+
+    function mce_success_cb (resp){
+        if (resp.result=="success"){
+           emailInput.val('Thank You!');
+        } else {
+           emailInput.val('Please Re-Enter');
+        }
+    }
+
+    var err_style = '';
+    var options = { errorClass: 'mce_inline_error', errorElement: 'div', errorStyle: err_style, onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+    var mce_validator = emailForm.validate(options);
+
+    options = { url:'http://wbritt.us7.list-manage1.com/subscribe/post-json?u=b42255b064d7e3ee31eabe32e&amp;id=8eb04004d4&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+            beforeSubmit: function(){
+                $('#mce_tmp_error_msg').remove();
+                $('.datefield','#mc_embed_signup').each(
+                    function(){
+                        var txt = 'filled';
+                        var fields = [];
+                        var i = 0;
+                        $(':text', this).each(
+                            function(){
+                                fields[i] = this;
+                                i++;
+                            });
+                        $(':hidden', this).each(
+                            function(){
+                                if ( fields[0].value ==='MM' && fields[1].value ==='DD' && fields[2].value ==='YYYY' ){
+                                    this.value = '';
+                                } else if ( fields[0].value ==='' && fields[1].value ==='' && fields[2].value ==='' ){
+                                    this.value = '';
+                                } else {
+                                    this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                }
+                            });
+                    });
+                return mce_validator.form();
+            },
+            success: mce_success_cb
+        };
+
+    emailForm.ajaxForm(options);
+
+    // show email signup
+    emailBox.on('click', function(e){
+        e.preventDefault();
+        $(this).hide(function(){
+            emailSignup.show();
+        });
+
+    });
+
+    // clear out email placeholder
+    emailInput.on('focus', function(e){
+        if (this.value === 'Your Email') {
+            this.value = '';
+        }
+    });
+
+    // show email link on blur
+    emailInput.on('blur', function(e){
+        emailSignup.hide(function(e){
+            emailBox.show();
+        });
+    });
+
+
+    /*
+     * open search box
+     *******************
+     */
+
     searchBtn.on('click', function(e){
         e.preventDefault();
         searchBox.toggleClass('search-showing');
@@ -688,6 +771,16 @@ $(window).load(function(){
                     $shareCon.toggleClass('is-open');
                 });
 
+                function watchForDrag() {
+                    $('.image-viewer')
+                        .on('mouseenter', function(e){
+                            img_cache.draggable();
+                            productImg.isDraggable = true;
+                        })
+                        .on('mouseleave', function(e){
+                            img_cache.draggable('destroy');
+                        });
+                }
                 // image enlarger
                 $biggerImgBtn.on('click', function(e){
                     e.preventDefault();
@@ -747,14 +840,7 @@ $(window).load(function(){
                     }
 
                     if (productImg.isDraggable === false) {
-                        $('.image-viewer')
-                            .on('mouseenter', function(e){
-                                img_cache.draggable();
-                                productImg.isDraggable = true;
-                            })
-                            .on('mouseleave', function(e){
-                                img_cache.draggable('destroy');
-                            });
+                        watchForDrag();
                     }
                     
                 });

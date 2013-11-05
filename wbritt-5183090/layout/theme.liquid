@@ -94,8 +94,24 @@
                 {% for link in linklists.social-media.links %}
                     <li><a href="{{ link.url }}" {% if link.active %} class="active"{% endif %} target="_blank">{{ link.title }}</a></li> 
                 {% endfor %}
+                <li class="mini-go-signup">
+                    <a href="#" class="email_box" >
+                        <span class="mini-email_button">Subscribe</span>
+                    </a>
+                    <div class="emailsignup"  style="display:none;" >
+                          <form action="http://wbritt.us7.list-manage1.com/subscribe/post?u=b42255b064d7e3ee31eabe32e&amp;id=8eb04004d4" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+                            <fieldset style="border-style:none;">
+                                <input type="text" value="Your Email" name="EMAIL" class="your_email_address" id="mce-EMAIL" />
+                                <input type="submit" value=" " name="subscribe" id="mc-embedded-subscribe" class="btn email-sub-btn" style="display:none;" />
+                                <input type="submit" value="PLEASE RE-ENTER" name="subscribe" id="mce-error-response" class="btn" style="display:none;" />
+                                <a href="#" class="email_thanks btn" style="display:none;" >Thank You!</a>                 
+                            </fieldset>    
+                        </form>
+                    </div>
+                </li>
             </ul>
         </div>
+
     </div>
 
     <div class="search-container">

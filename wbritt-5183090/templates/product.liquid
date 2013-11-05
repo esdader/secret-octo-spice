@@ -33,11 +33,14 @@
   {% endif %}
 {% endfor %}
 
-<article class="product product-{{ product.type | handleize }}">
+<article class="product product-{{ product.type | handleize }} {{ product.type | handleize }}-viewer">
     <form action="/cart/add" method="post" enctype="multipart/form-data">
         <section class="product-images">
-            <div class="product-main-image-con">
+            <div class="product-main-image-con image-center">
                 <img src="{{ product.featured_image | product_img_url: 'large' }}" class="product-main-image">     
+            </div>
+            <div class="image-viewer hidden">
+              
             </div>
             <div class="magnify-btns-holder">
                 <a href="#increase-image-size" class="bigger-image-btn ir">Increase image size</a>
@@ -88,6 +91,7 @@
                     data-price="{{variant.price | money | remove: '.00' }}"
                     data-size="{{ variant.option2 }}"
                     data-available="{{ variant.available }}"
+                    data-qty="{{ variant.inventory_quantity }}"
                     >{{ variant.title }} - {{ variant.price | money }}</option>
                {% endfor %}
            </select>

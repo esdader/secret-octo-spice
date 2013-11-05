@@ -11,13 +11,17 @@
         $smallerImgBtn  = $('.smaller-image-btn'),
         $unsortedImages = $('.images-holder-container').find('img'),
         target          = $('article'),
-        $price          = target.find('.product-price')
-        selectSize      = false;
+        $price          = target.find('.product-price'),
+        selectSize      = false,
+        imgViewerActive = false,
+        productImg      = {}; // product image state before using image enlarger
+
+    productImg.isDraggable = false;
 
     // sort the images into the correct grouping 
     // after that add them back to where they need to go
-    var variPattern = /(?:_var_)([0-9])*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
-        altPattern  = /(?:_var_)([0-9])*(?:_alt)(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+    var variPattern = /(?:_vari?_)([0-9])*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+        altPattern  = /(?:_vari?_)([0-9])*(?:_alt)(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
         pattern     = /(_m_)(.*)(?=\.(gif|jpg|jpeg|tiff|png))/,
         flexyLinks = '',
         out,
@@ -163,8 +167,13 @@
 
             if ($currentVari.attr('data-available') === 'true') {
                 $('#add').removeAttr('disabled');
-                var txt = $currentVari.attr('data-price');
-                $price.text(txt);
+                if (parseInt($currentVari.attr('data-qty')) < 1 ) {
+                    $price.text($currentVari.attr('data-price') + ' Pre Order');
+                } else {
+                    var txt = $currentVari.attr('data-price');
+                    $price.text(txt);  
+                }
+                
             } else {
                 $('#add').attr('disabled', true);
                 $price.text('Item unavailable');
@@ -204,7 +213,7 @@
                 $productSizes.empty();
                 $productSizes.append(html);
 
-                var val = $(sizes[0]).attr('data-value');
+                var val = sizes[0].val;
                 $variants.find('option:selected').attr('selected', false);
                 $variants.find('option[value="' + val + '"]').attr('selected', true);
             }   
@@ -218,12 +227,171 @@
         $shareCon.toggleClass('is-open');
     });
 
+    function changeToViewer() {
+        var $mainImgCon  = $('.product-main-image-con'),
+            $mainImg     = $('.product-main-image'),
+            tmpImgViewer = $('.image-viewer');
+
+        // basically checking if it's a pendant or not
+        var topOffset = parseInt(tmpImgViewer.css('top'));
+        tmpImgViewer.remove();
+        
+        productImg.cur_width  = $mainImg.width();
+        productImg.cur_height = $mainImg.height();
+
+        var tmp_pos = $mainImg.position();
+        var left_pos = tmp_pos.left;
+        var top_pos = tmp_pos.top - topOffset;
+
+        $mainImg.css({
+            'left' : left_pos + 'px',
+            'top' : top_pos + 'px',
+            'width' : productImg.cur_width + 'px',
+            'height' : productImg.cur_height + 'px'
+        });
+
+        $mainImgCon.addClass('image-viewer').removeClass('product-main-image-con');
+        $mainImg.removeClass('product-main-image');
+
+        imgViewerActive = true;
+
+    }
+    function watchForDrag() {
+        $('.image-viewer')
+        .on('mouseenter', function(e){
+            $mainImage.draggable();
+            productImg.isDraggable = true;
+        })
+        .on('mouseleave', function(e){
+            $mainImage.draggable('destroy');
+        });
+    }
+
     $biggerImgBtn.on('click', function(e){
         e.preventDefault();
+
+        if (!imgViewerActive) {
+            changeToViewer();
+        }
+
+        var img_cache        = $mainImage,
+            current_increase = img_cache.width() / productImg.cur_width + .25,
+            $img_viewer      = target.find('.image-viewer'),
+            max_increase     = 2;
+
+        if ( current_increase <= max_increase ) {
+            var enlarged_width  = current_increase * productImg.cur_width,
+                enlarged_height = current_increase * productImg.cur_height,
+                imgViewerWidth  = $img_viewer.width(),
+                imgViewerHeight = $img_viewer.height(),
+                curr_left       = (imgViewerWidth - img_cache.width()) / 2,
+                curr_top        = (imgViewerHeight - img_cache.height()) / 2,
+                enlarged_left   = (imgViewerWidth - enlarged_width) / 2,
+                enlarged_top    = (imgViewerHeight - enlarged_height) / 2;
+
+            enlarged_left = (enlarged_left - curr_left) + parseInt(img_cache.css('left'));
+
+            var checkWidth  = enlarged_width * .5,
+                checkHeight = enlarged_height * .5;
+
+            if ((enlarged_left + enlarged_width) < checkWidth ) {
+                enlarged_left = -enlarged_width + checkWidth;
+            } else if ((imgViewerWidth - enlarged_left) < checkWidth) {
+                enlarged_left = imgViewerWidth - checkWidth;
+            }
+            
+            if(img_cache.hasClass('pendants')) {
+                if (parseInt(img_cache.css('top')) === 0 ) {
+                    enlarged_top = 0;
+                } else {
+                    enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+
+                    if ((enlarged_top + enlarged_height) < checkHeight ) {
+                        enlarged_top = -enlarged_height + checkHeight;
+                    }  else if ((imgViewerHeight - enlarged_top) < checkHeight) {
+                        enlarged_top = imgViewerHeight - checkHeight;
+                    }  
+                }
+            } else {
+                enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+                if ((enlarged_top + enlarged_height) < checkHeight ) {
+                    enlarged_top = -enlarged_height + checkHeight;
+                } else if ((imgViewerHeight - enlarged_top) < checkHeight) {
+                    enlarged_top = imgViewerHeight - checkHeight;
+                }    
+            }
+
+            img_cache.animate({
+                'width'  : enlarged_width + 'px',
+                'height' : enlarged_height + 'px',
+                'left'   : enlarged_left + 'px',
+                'top'    : enlarged_top + 'px'
+            }, 100);   
+        }
+
+        if (productImg.isDraggable === false) {
+            watchForDrag();
+        }
     });
 
     $smallerImgBtn.on('click', function(e){
         e.preventDefault();
+
+        var img_cache = $mainImage,
+            current_decrease = img_cache.width() / productImg.cur_width - .25,
+            $img_viewer = target.find('.image-viewer'),
+            max_decrease = 1;
+
+        if ( current_decrease >= max_decrease ) {
+            var enlarged_width  = current_decrease * productImg.cur_width,
+                enlarged_height = current_decrease * productImg.cur_height,
+                imgViewerWidth  = $img_viewer.width(),
+                imgViewerHeight = $img_viewer.height(),
+                curr_left       = (imgViewerWidth - img_cache.width()) / 2,
+                curr_top        = (imgViewerHeight - img_cache.height()) / 2,
+                enlarged_left   = (imgViewerWidth - enlarged_width) / 2,
+                enlarged_top    = (imgViewerHeight - enlarged_height) / 2;
+
+            enlarged_left = (enlarged_left - curr_left) + parseInt(img_cache.css('left'));
+            
+            var checkWidth  = enlarged_width * .5,
+                checkHeight = enlarged_height * .5;
+               
+            if ((enlarged_left + enlarged_width) < checkWidth ) {
+                enlarged_left = -enlarged_width + checkWidth;
+            } else if ((imgViewerWidth - enlarged_left) < checkWidth) {
+                enlarged_left = imgViewerWidth - checkWidth;
+            }
+
+            if(img_cache.hasClass('pendants')) {
+                if (parseInt(img_cache.css('top')) === 0 ) {
+                    enlarged_top = 0;
+                } else {
+                    enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+                    if ((enlarged_top + enlarged_height) < checkHeight ) {
+                        enlarged_top = -enlarged_height + checkHeight;
+                    } else if ((imgViewerHeight - enlarged_top) < checkHeight) {
+                        enlarged_top = imgViewerHeight - checkWidth;
+                    } 
+                }
+            } else {
+                enlarged_top  = (enlarged_top - curr_top) + parseInt(img_cache.css('top'));
+                if ((enlarged_top + enlarged_height) < checkHeight ) {
+                    enlarged_top = -enlarged_height + checkHeight;
+                } else if ((imgViewerHeight - enlarged_top) < checkHeight) {
+                    enlarged_top = imgViewerHeight - checkHeight;
+                }
+            }
+
+            img_cache.animate({
+                'width'  : enlarged_width + 'px',
+                'height' : enlarged_height + 'px',
+                'left'   : enlarged_left + 'px',
+                'top'    : enlarged_top + 'px'
+            }, 100);
+            
+        }
+
     });
 
     $productOptions.on('click', 'a', function(e){
@@ -259,8 +427,13 @@
 
                 if ($currentVari.attr('data-available') === 'true') {
                     $('#add').removeAttr('disabled');
-                    var txt = $currentVari.attr('data-price');
-                    $price.text(txt);
+                    if (parseInt($currentVari.attr('data-qty')) < 1 ) {
+                        $price.text($currentVari.attr('data-price') + ' Pre Order');
+                    } else {
+                        var txt = $currentVari.attr('data-price');
+                        $price.text(txt);  
+                    }
+                    
                 } else {
                     $('#add').attr('disabled', true);
                     $price.text('Item unavailable');
@@ -304,7 +477,7 @@
                 $productSizes.empty();
                 $productSizes.append(html);
 
-                var val = $(sizes[0]).attr('data-value');
+                var val = sizes[0].val;
                 $variants.find('option:selected').attr('selected', false);
                 $variants.find('option[value="' + val + '"]').attr('selected', true);
             }
