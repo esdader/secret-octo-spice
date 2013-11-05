@@ -20,8 +20,8 @@
 
     // sort the images into the correct grouping 
     // after that add them back to where they need to go
-    var variPattern = /(?:_vari?_)([0-9])*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
-        altPattern  = /(?:_vari?_)([0-9])*(?:_alt)(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+    var variPattern = /(?:_vari?_)([0-9])*(?:.)*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+        altPattern  = /(?:_vari?_)([0-9])*(?:_alt)(?:.)*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
         pattern     = /(_m_)(.*)(?=\.(gif|jpg|jpeg|tiff|png))/,
         flexyLinks = '',
         out,

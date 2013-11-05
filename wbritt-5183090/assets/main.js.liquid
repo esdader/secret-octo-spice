@@ -673,8 +673,8 @@ $(window).load(function(){
                     $smallerImgBtn   = target.find('.smaller-image-btn'),
                     $price           = target.find('.product-price'),
                     pattern          = /(_m_)(.*)(?=\.(gif|jpg|jpeg|tiff|png))/,
-                    variPattern      = /(?:_vari?_)([0-9])*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
-                    altPattern       = /(?:_vari?_)([0-9])*(?:_alt)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+                    variPattern      = /(?:_vari?_)([0-9])*(?:.)*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+                    altPattern       = /(?:_vari?_)([0-9])*(?:_alt)(?:.)*(?:_small)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
                     firstImageSrc    = $($variImages[0]).attr('src'),
                     selectSize       = false;
 

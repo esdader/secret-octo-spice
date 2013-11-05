@@ -81,8 +81,8 @@ Handlebars.registerHelper('buildEarls', function(options){
 });
 
 Handlebars.registerHelper('buildCarousel', function(options){
-    var variPattern = /(?:_vari?_)([0-9])*(?:\.(?:gif|jpg|jpeg|tiff|png))/,
-        altPattern  = /(?:_vari?_)([0-9])*(?:_alt)(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+    var variPattern = /(?:_vari?_)([0-9])*(?:.)*(?:\.(?:gif|jpg|jpeg|tiff|png))/,
+        altPattern  = /(?:_vari?_)([0-9])*(?:_alt)(?:.)*(?:\.(?:gif|jpg|jpeg|tiff|png))/,
         out,
         cl,
         variImages,
