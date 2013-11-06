@@ -1,9 +1,9 @@
 .image-viewer {
 	position: absolute;
-	left: 93px;
+	left: 93 / $prod-width * 100%;
 	top: 5em;
 	z-index: 999;
-	width: 337px;
+	width: 337 / $prod-width * 100%;
 	height: 307px;
 	overflow: hidden;
 	text-align: center;
@@ -11,6 +11,11 @@
 	img {
 		position: absolute;
 	}
+}
+
+.product-page .image-viewer {
+	left: 93 / $prod-images-width * 100%;
+	width: 337 / $prod-images-width * 100%;
 }
 
 .pendants-viewer .image-viewer {
