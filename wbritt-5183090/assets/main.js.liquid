@@ -358,143 +358,156 @@
 
 $(window).load(function(){
 
-    // get the window width to see what we're deailing with
-    var win_width          = $(window).width(),
-        full_scale         = 325, // how big should the photo be? 
-        og_padding_width   = 425,
-        begin_reduce_width = 100, //1020,
-        last_item_index    = 0,
+    // some function wide vars
+    var win_width,
+        opti_win_size      = 1150,
+        win_scale_factor,
+        full_scale, 
+        og_padding_width,
         curr_elem_image,
-        elem_width         = 744,
-        elem_height        = 450,
+        elem_width,
+        elem_height,
+        last_item_index,
         collectionImg      = {}, // collection image state before opening product
         productImg         = {}; // product image state before using image enlarger
 
+    function imagesSetup() {
+        
+        last_item_index = 0;
 
-    // if the window is less than arbitrary size
-    // shrink all the sizes
-    if (win_width < begin_reduce_width) {
-        full_scale = full_scale / begin_reduce_width * win_width;
-        og_padding_width = og_padding_width / begin_reduce_width * win_width;
+        // get the window width to see what we're deailing with
+        win_width          = $(window).width(),
+        opti_win_size      = 1150,
+        win_scale_factor   = win_width / opti_win_size, // scale factor based on window size
+        full_scale         = 325 * win_scale_factor, // how big should the photo be? 
+        og_padding_width   = 425 * win_scale_factor,
+        begin_reduce_width = 100, //1020,
+        last_item_index    = 0,
+        elem_width         = 744 * win_scale_factor,
+        elem_height        = 450;
+
+        // Randomize image sizes
+        $('.container').find('.element').each(function(){
+            var $image = $(this).find('img');
+
+            // scale images
+            // on smaller screens the images will get smaller
+            // the window width check above 
+            var scale_factor = 1,
+                img_scale;
+
+            switch ($(this).attr('data-category')) {
+              
+                case 'special-75':
+                    scale_factor = .85;
+                    img_scale = scale_factor * full_scale;
+                    $image.css('width', img_scale + 'px');
+                    break;
+
+                case 'rings':
+                    scale_factor = .35;
+                    img_scale = scale_factor * full_scale;
+                    $image.css('width', img_scale + 'px');
+                    break;
+                
+                case 'hoops':
+                    scale_factor = .53;
+                    img_scale = scale_factor * full_scale;
+                    $image.css('width', img_scale + 'px');
+                    break;
+
+                case 'bracelets':
+                    scale_factor = .70;
+                    img_scale = scale_factor * full_scale;
+                    $image.css('width', img_scale + 'px');
+                    break;
+
+                case 'pendants':
+                    scale_factor = 1;
+                    img_scale = scale_factor * full_scale;
+                    $image.css('width', img_scale + 'px');
+                    break;
+
+                case 'studs':
+                    scale_factor = .29;
+                    img_scale = scale_factor * full_scale;
+                    $image.css('width', img_scale + 'px');
+                    break;
+
+                default:
+                    scale_factor = 1.3;
+                    img_scale = scale_factor * full_scale;
+                    $image.css('width', img_scale + 'px');
+                    break;
+            }
+
+            if ($(this).index() > 0) {
+              var padding_counterfactor = Math.max(0,(og_padding_width - $(this).prev().width()) / (og_padding_width / 2));
+              //console.log('counterfactor: '+padding_counterfactor);
+            } else {
+              var padding_counterfactor = 0;
+            }
+
+            var image_width = $image.width(),
+                image_height = $image.height(),
+                image_padding_x = 25+Math.round((og_padding_width-image_width)*Math.random()*padding_counterfactor/25)*25,
+                image_padding = Math.round((og_padding_width-image_width)*Math.random()/25)*25;
+
+                
+            // special case for first image
+            if ($(this).index() === 0) {
+                image_padding_x = (200 - img_scale);
+            }
+
+            // special case for second image
+            if ($(this).index() === 1) {
+                image_padding_x = (og_padding_width - img_scale);
+            }
+           
+            // Ensure padding will bring image up to a multiple of 25px for grid regularity
+            // Also, cap it at 200 px to avoid really big padding for the smallest items;
+          	image_padding_x = Math.min(200,image_padding_x);
+            //image_padding_x = Math.min(200,Math.round((image_padding_x + image_width)/25)*25 - image_width);
+            image_padding_x = Math.round((image_padding_x + image_width)/25)*25 - image_width - 4;
+
+            // protect against negative padding
+            if (image_padding_x < 0) image_padding_x = 0;
+
+            var image_padding_y = Math.ceil((image_padding_x + image_height)/25)*25 - image_height - 4;
+
+
+            if ($(this).attr('data-category') == 'pendants') {
+                // Since we're only adding half of the y-padding, round to nearest 50 to maintain 25px steps
+                image_padding_y = Math.ceil((image_padding_x + image_height)/50)*50 - image_height - 8; 
+                $(this).css({
+                    'height':(image_height + (image_padding_y/2))+'px',
+                    'width':(image_width + image_padding_x)+'px'
+                });
+                $image.css({
+                    'margin-left':(image_padding_x/2)+'px',
+                    'margin-top':0
+                });
+            } else {
+                $(this).css({
+                    'height':(image_height + image_padding_y)+'px',
+                    'width':(image_width + image_padding_x)+'px'
+                });
+                $image.css({
+                    'margin-left':(image_padding_x/2)+'px',
+                    'margin-bottom':(image_padding_y/2)+'px',
+                    'margin-top':(image_padding_y/2)+'px'
+                });
+            }
+          console.log("item: "+$(this).index()+" pad-x: "+image_padding_x+" pad-y: "+image_padding_y);
+
+            last_item_index = $(this).index() + 1;
+            
+        });
+        
+        console.log('ended iamgesSetup');
     }
 
-    // Randomize image sizes
-    $('.container').find('.element').each(function(){
-        var $image = $(this).find('img');
-
-        // scale images
-        // on smaller screens the images will get smaller
-        // the window width check above 
-        var scale_factor = 1,
-            img_scale;
-
-        switch ($(this).attr('data-category')) {
-          
-            case 'special-75':
-                scale_factor = .85;
-                img_scale = scale_factor * full_scale;
-                $image.css('width', img_scale + 'px');
-                break;
-
-            case 'rings':
-                scale_factor = .35;
-                img_scale = scale_factor * full_scale;
-                $image.css('width', img_scale + 'px');
-                break;
-            
-            case 'hoops':
-                scale_factor = .53;
-                img_scale = scale_factor * full_scale;
-                $image.css('width', img_scale + 'px');
-                break;
-
-            case 'bracelets':
-                scale_factor = .70;
-                img_scale = scale_factor * full_scale;
-                $image.css('width', img_scale + 'px');
-                break;
-
-            case 'pendants':
-                scale_factor = 1;
-                img_scale = scale_factor * full_scale;
-                $image.css('width', img_scale + 'px');
-                break;
-
-            case 'studs':
-                scale_factor = .29;
-                img_scale = scale_factor * full_scale;
-                $image.css('width', img_scale + 'px');
-                break;
-
-            default:
-                scale_factor = 1.3;
-                img_scale = scale_factor * full_scale;
-                $image.css('width', img_scale + 'px');
-                break;
-        }
-
-        if ($(this).index() > 0) {
-          var padding_counterfactor = Math.max(0,(og_padding_width - $(this).prev().width()) / (og_padding_width / 2));
-          //console.log('counterfactor: '+padding_counterfactor);
-        } else {
-          var padding_counterfactor = 0;
-        }
-
-        var image_width = $image.width(),
-            image_height = $image.height(),
-            image_padding_x = 25+Math.round((og_padding_width-image_width)*Math.random()*padding_counterfactor/25)*25,
-            image_padding = Math.round((og_padding_width-image_width)*Math.random()/25)*25;
-
-            
-        // special case for first image
-        if ($(this).index() === 0) {
-            image_padding_x = (200 - img_scale);
-        }
-
-        // special case for second image
-        if ($(this).index() === 1) {
-            image_padding_x = (og_padding_width - img_scale);
-        }
-       
-        // Ensure padding will bring image up to a multiple of 25px for grid regularity
-        // Also, cap it at 200 px to avoid really big padding for the smallest items;
-      	image_padding_x = Math.min(200,image_padding_x);
-        //image_padding_x = Math.min(200,Math.round((image_padding_x + image_width)/25)*25 - image_width);
-        image_padding_x = Math.round((image_padding_x + image_width)/25)*25 - image_width - 4;
-
-        // protect against negative padding
-        if (image_padding_x < 0) image_padding_x = 0;
-
-        var image_padding_y = Math.round((image_padding_x + image_height)/25)*25 - image_height - 4;
-
-
-        if ($(this).attr('data-category') == 'pendants') {
-            // Since we're only adding half of the y-padding, round to nearest 50 to maintain 25px steps
-            image_padding_y = Math.round((image_padding_x + image_height)/50)*50 - image_height - 8; 
-            $(this).css({
-                'height':(image_height + (image_padding_y/2))+'px',
-                'width':(image_width + image_padding_x)+'px'
-            });
-            $image.css({
-                'margin-left':(image_padding_x/2)+'px',
-                'margin-top':0
-            });
-        } else {
-            $(this).css({
-                'height':(image_height + image_padding_y)+'px',
-                'width':(image_width + image_padding_x)+'px'
-            });
-            $image.css({
-                'margin-left':(image_padding_x/2)+'px',
-                'margin-bottom':(image_padding_y/2)+'px',
-                'margin-top':(image_padding_y/2)+'px'
-            });
-        }
-      console.log("item: "+$(this).index()+" pad-x: "+image_padding_x+" pad-y: "+image_padding_y);
-
-        last_item_index = $(this).index() + 1;
-        
-    });
+    imagesSetup(); // kick things off
 
     $('.animation').css('margin-top','0');
     
@@ -503,7 +516,8 @@ $(window).load(function(){
           layoutMode: 'spineAlign',
           spineAlign: {
             gutterWidth: 0
-          }
+          },
+          resizable : false
         },
         function() {
             $('.container').hide().removeClass('invisible').fadeIn();
@@ -1187,6 +1201,21 @@ $(window).load(function(){
         } else {
             expand_element($(this));    
         }
+    });
+
+    $(window).on('smartresize', function(e){
+        imagesSetup();
+        $('.container').isotope('destroy');
+        $('.container').isotope({
+              itemSelector : '.element',
+              layoutMode: 'spineAlign',
+              spineAlign: {
+                gutterWidth: 0
+              },
+              resizable : false
+            }
+        );
+
     });
 
 });

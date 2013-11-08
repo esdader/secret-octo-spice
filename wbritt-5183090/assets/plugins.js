@@ -1454,10 +1454,11 @@
         winWidth = this.element.width(),
         makeHgutter = false,
         availableWidth = 0,
+        minSideMargin = 1,
         wideItem = false,
         //gutterX = Math.round(this.element.width() * 0.4),
         gutterX = Math.round(this.element.width() * (0.35 + (0.15 * ($($elems[0]).width()/$($elems[1]).width())))),
-        centerX = Math.round(this.element.width() / 2);        
+        centerX = Math.round(this.element.width() / 2);      
 
     for (var i=0;i<$elems.length;i++) {
       var $this = $($elems[i]);
@@ -1466,15 +1467,15 @@
 
       // Test to see if the next image will fit in the space between the vertical gutter and edge of container
       if ($this.outerHeight(true) > Math.abs(props.colA - props.colB)) { // if next item will be in opposite column
-        availableWidth = (isColA ? (winWidth - gutterX - 100) : (gutterX - 100)); // check opposite column
+        availableWidth = (isColA ? (winWidth - gutterX - minSideMargin) : (gutterX - minSideMargin)); // check opposite column
       } else {
-        availableWidth = (isColA ? (gutterX - 100) : (winWidth - gutterX - 100)); // check same column
+        availableWidth = (isColA ? (gutterX - minSideMargin) : (winWidth - gutterX - minSideMargin)); // check same column
       }
       wideItem = ($($elems[i+1]).width() > availableWidth);
 
       //console.log('availableWidth: '+availableWidth+', next item width: '+$($elems[i+1]).width());
       //if (wideItem) console.log('next item will be too wide');
- 
+
       if (makeHgutter) { // create horizontal gutter
         //console.log('making h-gutter, last gap was: '+lastGap+', old gutterX: '+gutterX);
         // move current item down to horizontal gutter, which is the GREATER of colA or colB
@@ -1483,17 +1484,17 @@
         props[( isColA ? 'colA' : 'colB' )] = (isColA ? props.colB : props.colA);
 
         // Shift vertical gutter by between 100 and 300 pixels
-        var gutterShift = (Math.floor(Math.random()*6)*25)+100;
+        var gutterShift = (Math.floor(Math.random()*4)*25)+100;
         gutterX += (gutterX > centerX) ? -gutterShift : gutterShift;
 
         // check to see if the current item is too big for the space defined by the new vertical gutter
-        availableWidth = (isColA ? (gutterX - 100) : (winWidth - gutterX - 100));
+        availableWidth = (isColA ? (gutterX - minSideMargin) : (winWidth - gutterX - minSideMargin));
         wideItem = ($this.width() > availableWidth);
         //console.log('New gutterX is '+gutterX+'. Available width in '+( isColA ? 'colA' : 'colB' )+' is '+availableWidth+', item is '+$this.width()+' and wideItem is '+wideItem);
 
         if (wideItem) { // Move stuff around to make the item fit..
           // check if the other column is wider, and if our item will fit there
-          var otherColumnWidth = (isColA ? (winWidth - gutterX - 100) : (gutterX - 100));
+          var otherColumnWidth = (isColA ? (winWidth - gutterX - minSideMargin) : (gutterX - minSideMargin));
           //console.log('other column is '+otherColumnWidth+' wide');
           if (otherColumnWidth > availableWidth) {
             // other column is bigger, switch to that one
@@ -1539,7 +1540,7 @@
 
         // Repeat the test to see if the next item is too wide, given we've moved gutterX
         // (but check opposite column, since we just placed an item in the current column)
-        availableWidth = (isColA ? (winWidth - gutterX - 100) : (gutterX - 100));
+        availableWidth = (isColA ? (winWidth - gutterX - minSideMargin) : (gutterX - minSideMargin));
         wideItem = ($($elems[i+1]).width() > availableWidth);
         //console.log('just made h-gutter, checking if next item is too wide: '+wideItem);
         if (!wideItem) {
@@ -1565,29 +1566,31 @@
           // last element before horizontal gutter, make sure the gap isn't too small
           //var lastGap = ((props.colB > props.colA) ? props.colB - props.colA : props.colA - props.colB);
           var lastGap = (isColA ? props.colA - props.colB : props.colB - props.colA);
-          //console.log('gap is '+lastGap);
-          if (lastGap < 200) {
+          console.log('gap is '+lastGap);
+          if (Math.abs(lastGap) < 200) {
             // gap is too small, either shrink or expand the last item before the horizontal gutter
             var innerImageHeight = $this.find('img').innerHeight();
             //console.log('image height is '+innerImageHeight+' and outer is '+$this.innerHeight());
             if (($this.innerHeight() - $this.find('img').innerHeight()) < lastGap) {
               // Can't shrink last item to eliminate gap, not enough margin around image, so increase it
               sizeChange = 200 - lastGap; // make the gap the minimum 200px
-              //console.log('increasing gap by '+sizeChange);
+              console.log('item '+i+' increasing gap by '+sizeChange);
             } else {
               // Shrink item to elminate gap
               sizeChange = -lastGap;
-              //console.log('changing gap by '+sizeChange);
+              console.log('item '+i+' changing gap by '+sizeChange);
             }
             //console.log('gap is '+lastGap+', changing last image size by '+sizeChange);
 
             // If we're increasing the current image size, make sure there's room in the column
-            availableWidth = (isColA ? (gutterX - 100) : (winWidth - gutterX - 100));
-            if (($this.innerWidth() + sizeChange) > availableWidth) 
+            availableWidth = (isColA ? (gutterX - minSideMargin) : (winWidth - gutterX - minSideMargin));
+            if (($this.innerWidth() + sizeChange) > availableWidth) {
               sizeChange = availableWidth - $this.innerWidth();
-
+                console.log('adjusting sizechange to '+sizeChange+' because availableWidth is '+availableWidth);
+            }
             // If it's a pendant, make sure increase/decrease only affects the sides and bottom
-            if ($(this).attr('data-category') == 'pendants') {
+            console.log('changing element with category '+$this.attr('data-category'));
+            if ($this.attr('data-category') == 'pendants') {
               $this.css({
                 'height':($this.innerHeight()+sizeChange)+'px',
                 'width':($this.innerWidth()+(sizeChange*2))+'px'
@@ -1631,9 +1634,11 @@
 
       // Set the item position in isotope
       instance._pushPosition( $this, x, y );
+      
     //});
     } // end for loop
     console.log('RELAYOUT DONE');
+
   };
 
   $.Isotope.prototype._spineAlignGetContainerSize = function() {
