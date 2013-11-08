@@ -1216,6 +1216,7 @@ $(window).load(function(){
         var open_element = $('.expanded');
         if(open_element.length > 0) {
             contract_element(open_element);
+            open_element.find('.collection-view-img').hide();
         }
         // console.log('imagesSetup starts');
         imagesSetup();
@@ -1233,7 +1234,8 @@ $(window).load(function(){
                 if(open_element.length > 0) {
                     
                     setTimeout(function(){
-                        expand_element(open_element);    
+                        expand_element(open_element);
+                        open_element.find('.collection-view-img').removeClass('invisible');   
                     },750);
                 }
             }
