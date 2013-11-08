@@ -498,13 +498,13 @@ $(window).load(function(){
                     'margin-top':(image_padding_y/2)+'px'
                 });
             }
-          console.log("item: "+$(this).index()+" pad-x: "+image_padding_x+" pad-y: "+image_padding_y);
+          // console.log("item: "+$(this).index()+" pad-x: "+image_padding_x+" pad-y: "+image_padding_y);
 
             last_item_index = $(this).index() + 1;
             
         });
         
-        console.log('ended iamgesSetup');
+        // console.log('ended iamgesSetup');
     }
 
     imagesSetup(); // kick things off
@@ -617,11 +617,11 @@ $(window).load(function(){
         collectionImg.currSrc = img_cache.attr('src');
 
         if (target.attr('data-category') === 'pendants') {
-            image_new_width = 288;
-            product_image_left_offset = 120;
+            image_new_width = 288  * win_scale_factor;
+            product_image_left_offset = 120  * win_scale_factor;
         } else {
-            image_new_width = 268;
-            product_image_left_offset = 130;
+            image_new_width = 268  * win_scale_factor;
+            product_image_left_offset = 130  * win_scale_factor;
         }
 
         var image_new_height = image_new_width / collectionImg.curWidth * collectionImg.curHeight;
@@ -793,6 +793,7 @@ $(window).load(function(){
                         })
                         .on('mouseleave', function(e){
                             img_cache.draggable('destroy');
+                            productImg.isDraggable = false;
                         });
                 }
                 // image enlarger
@@ -1082,6 +1083,8 @@ $(window).load(function(){
             // wrap image in viewer and then position it
             $this.wrap('<div class="image-viewer"></div>');
             var $img_viewer = target.find('.image-viewer');
+            // console.log($img_viewer);
+            // console.log($img_viewer.width());
             $this.removeAttr('style');
 
             // if it's not at the top set a height diff than zero
@@ -1204,8 +1207,14 @@ $(window).load(function(){
     });
 
     $(window).on('smartresize', function(e){
+        var open_element = $('.expanded');
+        if(open_element.length > 0) {
+            contract_element(open_element);
+        }
+        // console.log('imagesSetup starts');
         imagesSetup();
         $('.container').isotope('destroy');
+        // console.log('destory it');
         $('.container').isotope({
               itemSelector : '.element',
               layoutMode: 'spineAlign',
@@ -1213,6 +1222,14 @@ $(window).load(function(){
                 gutterWidth: 0
               },
               resizable : false
+            }, 
+            function() {
+                if(open_element.length > 0) {
+                    
+                    setTimeout(function(){
+                        expand_element(open_element);    
+                    },750);
+                }
             }
         );
 

@@ -1561,12 +1561,12 @@
         }
 
        // Figure out placement of the current item
-        if ((props.itemCount == props.gutterCount) || wideItem ) { // prep for horizontal gutter
+        if ((props.itemCount >= props.gutterCount) || wideItem ) { // prep for horizontal gutter
 
           // last element before horizontal gutter, make sure the gap isn't too small
           //var lastGap = ((props.colB > props.colA) ? props.colB - props.colA : props.colA - props.colB);
           var lastGap = (isColA ? props.colA - props.colB : props.colB - props.colA);
-          console.log('gap is '+lastGap);
+          // console.log('at item '+i+' and gap is '+lastGap);
           if (Math.abs(lastGap) < 200) {
             // gap is too small, either shrink or expand the last item before the horizontal gutter
             var innerImageHeight = $this.find('img').innerHeight();
@@ -1574,11 +1574,11 @@
             if (($this.innerHeight() - $this.find('img').innerHeight()) < lastGap) {
               // Can't shrink last item to eliminate gap, not enough margin around image, so increase it
               sizeChange = 200 - lastGap; // make the gap the minimum 200px
-              console.log('item '+i+' increasing gap by '+sizeChange);
+              // console.log('item '+i+' increasing gap by '+sizeChange);
             } else {
               // Shrink item to elminate gap
               sizeChange = -lastGap;
-              console.log('item '+i+' changing gap by '+sizeChange);
+              // console.log('item '+i+' changing gap by '+sizeChange);
             }
             //console.log('gap is '+lastGap+', changing last image size by '+sizeChange);
 
@@ -1586,14 +1586,15 @@
             availableWidth = (isColA ? (gutterX - minSideMargin) : (winWidth - gutterX - minSideMargin));
             if (($this.innerWidth() + sizeChange) > availableWidth) {
               sizeChange = availableWidth - $this.innerWidth();
-                console.log('adjusting sizechange to '+sizeChange+' because availableWidth is '+availableWidth);
+              // console.log('adjusting sizechange to '+sizeChange+' because availableWidth is '+availableWidth);
             }
             // If it's a pendant, make sure increase/decrease only affects the sides and bottom
-            console.log('changing element with category '+$this.attr('data-category'));
+            // console.log('changing element with category '+$this.attr('data-category'));
             if ($this.attr('data-category') == 'pendants') {
               $this.css({
                 'height':($this.innerHeight()+sizeChange)+'px',
-                'width':($this.innerWidth()+(sizeChange*2))+'px'
+                //'width':($this.innerWidth()+(sizeChange*2))+'px'
+                'width':($this.innerWidth()+(sizeChange))+'px'
               });
               $this.find('img').css({
                 'margin-left':($this.outerWidth(true)-$this.find('img').innerWidth())/2+'px'
@@ -1613,6 +1614,13 @@
 
             lastGap = 0;
           } // end if lastgap
+          // try to see if we can squeeze the next element into the gap
+          var nextImageSize = $($elems[i+1]).find('img').innerHeight();
+          // console.log('next image size is '+nextImageSize+' and gap is '+lastGap);
+          if (nextImageSize < Math.abs(lastGap)) {
+            props.itemCount -= 1;
+            // console.log('trying to squeeze in one more element');
+          }
         } // end if props.itemCount == props.gutterCount
         // Increment the column value by the height (modified or not) of the element
         props.itemCount += 1;
@@ -1637,7 +1645,7 @@
       
     //});
     } // end for loop
-    console.log('RELAYOUT DONE');
+    // console.log('RELAYOUT DONE');
 
   };
 
