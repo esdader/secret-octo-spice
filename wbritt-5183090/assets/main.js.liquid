@@ -1199,11 +1199,17 @@ $(window).load(function(){
     // elements expand on click
     $('.element').on('click', function(e){
         var $this = $(this);
-        if($this.hasClass('expanded')) {
-            // do nothing
+        if (Modernizr.csstransforms3d) {
+            if($this.hasClass('expanded')) {
+                // do nothing
+            } else {
+                expand_element($this);    
+            }
         } else {
-            expand_element($(this));    
+            var product_handle = $this.attr('data-product');
+            window.location.href = '/products/' + product_handle;
         }
+        
     });
 
     $(window).on('smartresize', function(e){
