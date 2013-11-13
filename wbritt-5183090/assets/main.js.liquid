@@ -384,7 +384,19 @@ $(window).load(function(){
         begin_reduce_width = 100, //1020,
         last_item_index    = 0,
         elem_width         = 744 * win_scale_factor,
-        elem_height        = 450;
+        elem_height        = 450  * win_scale_factor;
+
+        var max_height = $(window).height() - 154 - 16; // the container doesn't have padding or margin 154 is standard from top and then 1em
+        console.log('max height: ' + max_height);
+        console.log('elem height: ' + elem_height);
+
+        if (max_height < 450) {
+            max_height = 450;
+        }
+
+        if (elem_height > max_height) {
+            elem_height = max_height;
+        }
 
         // Randomize image sizes
         $('.container').find('.element').each(function(){
@@ -560,21 +572,28 @@ $(window).load(function(){
         // get y-pos and height of previous element, and calculate how much the target element needs to move down
         var prev_element_y       = target.prev().attr('data-y'),
             prev2_element_y       = target.prev().prev().attr('data-y'),
+            prev3_element_y       = target.prev().prev().prev().attr('data-y'),
             current_y            = parseInt(target.attr('data-y')),
             next_element_y       = target.next().attr('data-y'),
             prev_element_h       = parseInt(target.prev().attr('data-height')),
             prev2_element_h       = parseInt(target.prev().prev().attr('data-height')),
+            prev3_element_h       = parseInt(target.prev().prev().prev().attr('data-height')),
             target_downshift;
       
             if (prev2_element_y == undefined) {
                 prev2_element_y = prev_element_y;
                 prev2_element_h = prev_element_h;
             }
-    
+
+            if (prev3_element_y == undefined) {
+                prev3_element_y = prev_element_y;
+                prev3_element_h = prev_element_h;
+            }
+
             if (isNaN(prev_element_h)) {
                 target_downshift     = elem_height + 4;
             } else {
-                target_downshift     = Math.max((prev_element_h - (current_y - prev_element_y)),(prev2_element_h - (current_y - prev2_element_y))) + 4;    
+                target_downshift     = Math.max((prev_element_h - (current_y - prev_element_y)),(prev2_element_h - (current_y - prev2_element_y)),(prev3_element_h - (current_y - prev3_element_y))) + 4;    
                 //target_downshift     = prev_element_h - (current_y - prev_element_y) + 4;    
             }
             
@@ -616,12 +635,12 @@ $(window).load(function(){
         collectionImg.curHeight = img_cache.height();
         collectionImg.currSrc = img_cache.attr('src');
 
-        var imgViewerHeightCheck = 307; // temp until expand elem
+        // var imgViewerHeightCheck = 307; // temp until expand elem
 
         if (target.attr('data-category') === 'pendants') {
             image_new_width = 288  * win_scale_factor;
             product_image_left_offset = 120  * win_scale_factor;
-            imgViewerHeightCheck = 450;
+            // imgViewerHeightCheck = 450;
         } else {
             image_new_width = 268  * win_scale_factor;
             product_image_left_offset = 130  * win_scale_factor;
@@ -631,9 +650,9 @@ $(window).load(function(){
 
         // check if image is too tall, 
         // if so cap it at elem height and then shrink width proportionally
-        if (image_new_height > imgViewerHeightCheck) {
-            image_new_width = imgViewerHeightCheck / image_new_height * image_new_width;
-            image_new_height = imgViewerHeightCheck;
+        if (image_new_height > elem_height) {
+-            image_new_width = elem_height / image_new_height * image_new_width;
+-            image_new_height = elem_height;
         }
 
         if (target.attr('data-category') == 'pendants') {
@@ -674,6 +693,16 @@ $(window).load(function(){
                 // doing it this way seems to cause 
                 // flash on main product image
                 // prod.hide().css('visibility', 'visible').fadeIn();
+                if (elem_height > 450) {
+                    var $pd = target.find('.product-details'),
+                        mt = (elem_height - $pd.height()) / 2;
+                        console.log('eh: ' + elem_height);
+                    $pd.css({
+                        'margin-top' : mt + 'px',
+                        'margin-bottom' : '0'
+                    })
+                    
+                }
                 prod.css('visibility', 'visible'); // no fadeIn no flash
                 
 
@@ -1086,8 +1115,11 @@ $(window).load(function(){
             // wrap image in viewer and then position it
             $this.wrap('<div class="image-viewer"></div>');
             var $img_viewer = target.find('.image-viewer');
-            // console.log($img_viewer);
-            // console.log($img_viewer.width());
+            // set height
+            $img_viewer.css('height', elem_height - 160 + 'px');
+            if (target.attr('data-category') == 'pendants') {
+                $img_viewer.css('height', elem_height + 'px');
+            }
             $this.removeAttr('style');
 
             // if it's not at the top set a height diff than zero
