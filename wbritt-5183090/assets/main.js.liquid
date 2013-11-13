@@ -616,9 +616,12 @@ $(window).load(function(){
         collectionImg.curHeight = img_cache.height();
         collectionImg.currSrc = img_cache.attr('src');
 
+        var imgViewerHeightCheck = 307; // temp until expand elem
+
         if (target.attr('data-category') === 'pendants') {
             image_new_width = 288  * win_scale_factor;
             product_image_left_offset = 120  * win_scale_factor;
+            imgViewerHeightCheck = 450;
         } else {
             image_new_width = 268  * win_scale_factor;
             product_image_left_offset = 130  * win_scale_factor;
@@ -628,9 +631,9 @@ $(window).load(function(){
 
         // check if image is too tall, 
         // if so cap it at elem height and then shrink width proportionally
-        if (image_new_height > elem_height) {
-            image_new_width = elem_height / image_new_height * image_new_width;
-            image_new_height = elem_height;
+        if (image_new_height > imgViewerHeightCheck) {
+            image_new_width = imgViewerHeightCheck / image_new_height * image_new_width;
+            image_new_height = imgViewerHeightCheck;
         }
 
         if (target.attr('data-category') == 'pendants') {
