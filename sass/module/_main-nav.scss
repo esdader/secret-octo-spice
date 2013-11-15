@@ -61,6 +61,12 @@
 	
 }
 
+@media screen and (min-height:500px) {
+	.main-nav li {
+		margin-bottom: 84px;
+	}
+}
+
 .shop-link-btn {
 	display: block;
 	width: 17px;

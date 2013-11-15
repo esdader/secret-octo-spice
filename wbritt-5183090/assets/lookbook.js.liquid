@@ -1,0 +1,68 @@
+(function($, window){
+    function setBookDimensions() {
+        var available_height = $(window).height() - parseInt($('.wrapper').css('margin-top')) - 16, // 16 gives breathing room on bottom
+            available_width = $('.wrapper').width(),
+            photo_ratio = 900 / 603, // photo width / photo height
+            $lookbook = $('.lookbook-section'),
+            book_width, book_height;
+
+        book_width = available_width;
+        book_height = book_width * (1 / photo_ratio);
+        if (book_height > available_height) {
+            book_height = available_height;
+            book_width = available_height * photo_ratio;
+        }
+
+            
+        $lookbook.css({
+            'height' : book_height + 'px',
+            'width' : book_width + 'px'
+        }).removeClass('invisible');
+    }   
+
+    setBookDimensions(); // kick it off
+
+    jQuery(document).ready(function($) {
+        $('.royalSlider').royalSlider({
+            arrowsNav: false,
+            slidesSpacing: 0,
+            usePreloader: false,
+            loop: false,
+            keyboardNavEnabled: true,
+            controlsInside: false,
+            imageScaleMode: 'fill',
+            arrowsNavAutoHide: false,
+            autoScaleSlider: true, 
+            autoScaleSliderWidth: 900,     
+            autoScaleSliderHeight: 603,
+            controlNavigation: 'none',
+            thumbsFitInViewport: false,
+            navigateByClick: false,
+            startSlideId: 0,
+            autoPlay: false,
+            transitionType:'move',
+            globalCaption: false,
+            /* size of all images http://help.dimsemenov.com/kb/royalslider-jquery-plugin-faq/adding-width-and-height-properties-to-images */
+            imgWidth: 900,
+            imgHeight: 603,
+            imageScalePadding: 0
+
+        });
+
+        var $prev   = $('.product-prev-btn'),
+            $next   = $('.product-next-btn'),
+            $slider = $('.royalSlider').data('royalSlider');
+
+        $prev.on('click', function(e){
+            e.preventDefault();
+            $slider.prev();
+        });
+
+        $next.on('click', function(e){
+            e.preventDefault();
+            $slider.next();
+        });
+    });
+
+    $(window).on('resize', setBookDimensions);
+})(jQuery, window)

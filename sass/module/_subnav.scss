@@ -36,7 +36,9 @@
 .shop-links {
 	top: -5px;
 }
-
+.homepage .shop-links .subnav li:first-child a {
+	color: rgb(77, 77, 79);
+}
 .info-links {
 	top: 84px;
 }
@@ -73,4 +75,19 @@
 
 .tertiary-subnav  li {
 	text-align: right;
+}
+
+@media screen and (min-height:500px) {
+	.shop-links {
+		top: -5px;
+	}
+	
+	.info-links {
+		top: 114px;
+	}
+	
+	.follow-links {
+		top: 229px;
+	}
+
 }

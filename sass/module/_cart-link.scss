@@ -12,10 +12,6 @@
 	background: siu("s3.png") no-repeat -417px -7px;
 }
 
-// .homepage .cart-link {
-// 	background-position: -378px -51px;
-// }
-
 .cart-container:hover .cart-link,
 .cart-link:hover {
 	background-position: -417px -51px;
@@ -29,16 +25,25 @@
 	text-decoration: none;
 }
 
-// .homepage .cart-count {
-// 	color: #fff;
-// }
-
 .cart-container:hover .cart-count,
 .cart-count:hover {
 	color: rgb(77,77,79);
 }
 
-// .homepage .cart-container:hover .cart-count,
-// .homepage .cart-count:hover {
-// 	color: rgb(77,77,79);
-// }
+.cart-container.added-item .cart-link,
+.added-item .cart-link {
+	background-position: -417px -51px;
+}
+
+.cart-container.added-item:hover .cart-link,
+.added-item .cart-link:hover {
+	background-position: -417px -7px;
+}
+
+.added-item .cart-count {
+	color: rgb(77,77,79);
+}
+.added-item:hover .cart-count,
+.added-item .cart-count:hover {
+	color: rgb(220, 221, 222);
+}

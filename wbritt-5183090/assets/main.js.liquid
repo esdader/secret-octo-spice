@@ -387,8 +387,6 @@ $(window).load(function(){
         elem_height        = 450  * win_scale_factor;
 
         var max_height = $(window).height() - 154 - 16; // the container doesn't have padding or margin 154 is standard from top and then 1em
-        console.log('max height: ' + max_height);
-        console.log('elem height: ' + elem_height);
 
         if (max_height < 450) {
             max_height = 450;
@@ -518,8 +516,9 @@ $(window).load(function(){
         
         // console.log('ended iamgesSetup');
     }
-
-    imagesSetup(); // kick things off
+    if ($('.container').length > 0) {
+        imagesSetup(); // kick things off
+    }
 
     $('.animation').css('margin-top','0');
     
@@ -611,20 +610,6 @@ $(window).load(function(){
         var height_shift = elem_height - target.attr('data-height') + restofgrid_downshift;
         target.nextAll().css('top',restofgrid_downshift+'px');
 
-        // Expand the actual element, and adjust margins of inner image
-        //target.css({'width':'1000px','height':'500px','left':left_shift+'px'});
-
-        //create new version of this that animates to larger sized final image
-        //
-        // if (target.attr('data-category') == 'pendants') {
-        //     var image_margin_top = 0;
-        // } else {
-        //     var image_margin_top = (elem_height - target.find('img').height()) / 2;
-        // }
-        // var image_margin_bottom = (elem_height - target.find('img').height()) / 2;
-        // var image_margin_sides = (elem_width - target.find('img').width()) / 2;
-        // left_shift = ($('.container').width() - elem_width)/2 - target.attr('data-x');
-
         var img_cache = target.find('.collection-view-img'),
             image_new_width,
             image_new_height,
@@ -635,12 +620,16 @@ $(window).load(function(){
         collectionImg.curHeight = img_cache.height();
         collectionImg.currSrc = img_cache.attr('src');
 
-        // var imgViewerHeightCheck = 307; // temp until expand elem
+        var imgViewerHeightCheck = 307;
+
+        if (elem_height > 450) {
+            imgViewerHeightCheck = elem_height - 160;
+        }
 
         if (target.attr('data-category') === 'pendants') {
             image_new_width = 288  * win_scale_factor;
             product_image_left_offset = 120  * win_scale_factor;
-            // imgViewerHeightCheck = 450;
+            imgViewerHeightCheck = elem_height;
         } else {
             image_new_width = 268  * win_scale_factor;
             product_image_left_offset = 130  * win_scale_factor;
@@ -650,9 +639,9 @@ $(window).load(function(){
 
         // check if image is too tall, 
         // if so cap it at elem height and then shrink width proportionally
-        if (image_new_height > elem_height) {
--            image_new_width = elem_height / image_new_height * image_new_width;
--            image_new_height = elem_height;
+        if (image_new_height > imgViewerHeightCheck) {
+            image_new_width = imgViewerHeightCheck / image_new_height * image_new_width;
+            image_new_height = imgViewerHeightCheck;
         }
 
         if (target.attr('data-category') == 'pendants') {
@@ -696,11 +685,10 @@ $(window).load(function(){
                 if (elem_height > 450) {
                     var $pd = target.find('.product-details'),
                         mt = (elem_height - $pd.height()) / 2;
-                        console.log('eh: ' + elem_height);
                     $pd.css({
                         'margin-top' : mt + 'px',
                         'margin-bottom' : '0'
-                    })
+                    });
                     
                 }
                 prod.css('visibility', 'visible'); // no fadeIn no flash
@@ -1116,9 +1104,11 @@ $(window).load(function(){
             $this.wrap('<div class="image-viewer"></div>');
             var $img_viewer = target.find('.image-viewer');
             // set height
-            $img_viewer.css('height', elem_height - 160 + 'px');
-            if (target.attr('data-category') == 'pendants') {
-                $img_viewer.css('height', elem_height + 'px');
+            if (elem_height > 450) {
+                $img_viewer.css('height', elem_height - 160 + 'px');
+                if (target.attr('data-category') == 'pendants') {
+                    $img_viewer.css('height', elem_height + 'px');
+                }
             }
             $this.removeAttr('style');
 
@@ -1246,36 +1236,37 @@ $(window).load(function(){
         }
         
     });
-
-    $(window).on('smartresize', function(e){
-        var open_element = $('.expanded');
-        if(open_element.length > 0) {
-            contract_element(open_element);
-            open_element.find('.collection-view-img').hide();
-        }
-        // console.log('imagesSetup starts');
-        imagesSetup();
-        $('.container').isotope('destroy');
-        // console.log('destory it');
-        $('.container').isotope({
-              itemSelector : '.element',
-              layoutMode: 'spineAlign',
-              spineAlign: {
-                gutterWidth: 0
-              },
-              resizable : false
-            }, 
-            function() {
-                if(open_element.length > 0) {
-                    
-                    setTimeout(function(){
-                        expand_element(open_element);
-                        open_element.find('.collection-view-img').removeClass('invisible');   
-                    },750);
-                }
+    if ($('.container').length > 0) {
+        $(window).on('smartresize', function(e){
+            var open_element = $('.expanded');
+            if(open_element.length > 0) {
+                contract_element(open_element);
+                open_element.find('.collection-view-img').hide();
             }
-        );
+            // console.log('imagesSetup starts');
+            imagesSetup();
+            $('.container').isotope('destroy');
+            // console.log('destory it');
+            $('.container').isotope({
+                  itemSelector : '.element',
+                  layoutMode: 'spineAlign',
+                  spineAlign: {
+                    gutterWidth: 0
+                  },
+                  resizable : false
+                }, 
+                function() {
+                    if(open_element.length > 0) {
+                        
+                        setTimeout(function(){
+                            expand_element(open_element);
+                            open_element.find('.collection-view-img').removeClass('invisible');   
+                        },750);
+                    }
+                }
+            );
 
-    });
+        });
+    }
 
 });

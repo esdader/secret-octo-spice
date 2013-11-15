@@ -12,9 +12,13 @@
         $unsortedImages = $('.images-holder-container').find('img'),
         target          = $('article'),
         $price          = target.find('.product-price'),
+        opti_win_size   = 1150,
         selectSize      = false,
         imgViewerActive = false,
-        productImg      = {}; // product image state before using image enlarger
+        productImg      = {}, // product image state before using image enlarger
+        scaleFactor     = 1,
+        articleHeight   = 450,
+        articleWidth    = 744;
 
     productImg.isDraggable = false;
 
@@ -219,13 +223,59 @@
             }   
 
         }
-        
+        setArticleHeight();
+        target.removeClass('invisible');
     }
 
     $shareBtn.on('click', function(e){
         e.preventDefault();
         $shareCon.toggleClass('is-open');
     });
+
+    function positionProductDetails(elem_height) {
+        var $pd = target.find('.product-details'),
+            mt = (elem_height - $pd.height()) / 2;
+        $pd.css({
+            'margin-top' : mt + 'px',
+            'margin-bottom' : '0'
+        });
+    }
+
+    function setArticleHeight() {
+
+        var scaleFactor = $(window).width() / opti_win_size,
+            mImgH = $mainImage.height(),
+            testHeight = 1;
+
+        articleHeight = articleHeight * scaleFactor;
+
+            if (articleHeight > 450) {
+                target.css('height', articleHeight + 'px');
+            } else {
+                articleHeight = 450;
+                target.css('height', articleHeight + 'px');
+            }
+
+        if (articleHeight === 450) {
+            testHeight = 307;
+        } else {
+            testHeight = articleHeight / 450 * 307;
+            positionProductDetails(articleHeight);
+        }
+
+
+        if (mImgH > testHeight) {
+
+            var mImgW = testHeight / mImgH * $mainImage.width();
+            $mainImage.css({
+                'width' : mImgW + 'px',
+                'height' : testHeight + 'px'
+            });
+        
+            productImg.cur_width  = mImgW;
+            productImg.cur_height = mImgH;
+        }
+    }
 
     function changeToViewer() {
         var $mainImgCon  = $('.product-main-image-con'),
@@ -235,9 +285,10 @@
         // basically checking if it's a pendant or not
         var topOffset = parseInt(tmpImgViewer.css('top'));
         tmpImgViewer.remove();
-        
+
         productImg.cur_width  = $mainImg.width();
         productImg.cur_height = $mainImg.height();
+
 
         var tmp_pos = $mainImg.position();
         var left_pos = tmp_pos.left;
@@ -250,6 +301,16 @@
             'height' : productImg.cur_height + 'px'
         });
 
+        if (articleHeight > 450) {
+            if (topOffset > 0) {
+                var vHeight = articleHeight / 450 * 307,
+                    vOffset = (articleHeight - vHeight) / 2;
+                $mainImgCon.css({
+                    'height' : vHeight + 'px',
+                    'top' : vOffset + 'px'
+                });
+            }
+        }
         $mainImgCon.addClass('image-viewer').removeClass('product-main-image-con');
         $mainImg.removeClass('product-main-image');
 
@@ -278,7 +339,6 @@
             current_increase = img_cache.width() / productImg.cur_width + .25,
             $img_viewer      = target.find('.image-viewer'),
             max_increase     = 2;
-
         if ( current_increase <= max_increase ) {
             var enlarged_width  = current_increase * productImg.cur_width,
                 enlarged_height = current_increase * productImg.cur_height,

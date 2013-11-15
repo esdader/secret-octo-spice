@@ -33,11 +33,11 @@
   {% endif %}
 {% endfor %}
 
-<article class="product product-{{ product.type | handleize }} {{ product.type | handleize }}-viewer">
+<article class="product product-{{ product.type | handleize }} {{ product.type | handleize }}-viewer invisible">
     <form action="/cart/add" method="post" enctype="multipart/form-data">
         <section class="product-images">
             <div class="product-main-image-con image-center">
-                <img src="{{ product.featured_image | product_img_url: 'large' }}" class="product-main-image">     
+                <img src="{{ product.featured_image | product_img_url: 'large' }}" class="product-main-image {{ product.type | handleize }}">     
             </div>
             <div class="image-viewer hidden">
               
