@@ -1224,11 +1224,12 @@ $(window).load(function(){
     // elements expand on click
     $('.element').on('click', function(e){
         var $this = $(this);
-        if (Modernizr.csstransforms3d) {
+        var $ie9 = $('.lt-ie10');
+        if ($ie9.length === 0) {
             if($this.hasClass('expanded')) {
                 // do nothing
             } else {
-                expand_element($this);    
+                expand_element($this);
             }
         } else {
             var product_handle = $this.attr('data-product');
