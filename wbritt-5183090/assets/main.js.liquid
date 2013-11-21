@@ -620,19 +620,26 @@ $(window).load(function(){
         collectionImg.curHeight = img_cache.height();
         collectionImg.currSrc = img_cache.attr('src');
 
+        
+
         var imgViewerHeightCheck = 307;
 
         if (elem_height > 450) {
             imgViewerHeightCheck = elem_height - 160;
         }
 
+        var tmpImgViewerWidth = 337 * win_scale_factor;
+        var tmpImgViewerLeft  = 90 * win_scale_factor;
+
         if (target.attr('data-category') === 'pendants') {
             image_new_width = 288  * win_scale_factor;
-            product_image_left_offset = 120  * win_scale_factor;
+            product_image_left_offset = (tmpImgViewerWidth - image_new_width) / 2 + tmpImgViewerLeft;
+            // product_image_left_offset = 120  * win_scale_factor;
             imgViewerHeightCheck = elem_height;
         } else {
             image_new_width = 268  * win_scale_factor;
-            product_image_left_offset = 130  * win_scale_factor;
+            product_image_left_offset = (tmpImgViewerWidth - image_new_width) / 2 + tmpImgViewerLeft;
+            // product_image_left_offset = 130  * win_scale_factor;
         }
 
         var image_new_height = image_new_width / collectionImg.curWidth * collectionImg.curHeight;
@@ -641,6 +648,7 @@ $(window).load(function(){
         // if so cap it at elem height and then shrink width proportionally
         if (image_new_height > imgViewerHeightCheck) {
             image_new_width = imgViewerHeightCheck / image_new_height * image_new_width;
+            product_image_left_offset = (tmpImgViewerWidth - image_new_width) / 2 + tmpImgViewerLeft;
             image_new_height = imgViewerHeightCheck;
         }
 
@@ -1103,6 +1111,12 @@ $(window).load(function(){
             // wrap image in viewer and then position it
             $this.wrap('<div class="image-viewer"></div>');
             var $img_viewer = target.find('.image-viewer');
+            var tmpImgViewerWidth = 337 * win_scale_factor;
+            var tmpImgViewerLeft  = 90 * win_scale_factor;
+            $img_viewer.css({
+                'width' : tmpImgViewerWidth + 'px',
+                'left' : tmpImgViewerLeft + 'px',
+            });
             // set height
             if (elem_height > 450) {
                 $img_viewer.css('height', elem_height - 160 + 'px');
