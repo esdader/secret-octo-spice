@@ -100,6 +100,15 @@
 	text-align: center;
 }
 
+@media only screen and (min-device-width: 319px) and (min-device-height: 479px) and (orientation : portrait)  {
+	.contact-content { 
+		left: auto;
+		right: 3%;
+	}
+	
+}
+
+
 /* stockists page */
 .stockist-section {
 	position: relative;
@@ -123,6 +132,13 @@
 	left: 125 / 742 * 100%;
 	top: 200 / 582 * 100%;
 	text-align: center;
+}
+
+@media only screen and (min-device-width: 319px) and (min-device-height: 479px) and (orientation : portrait)  {
+	.stockist-content { 
+		left: 50%;
+	}
+	
 }
 
 /* moodboard pages */
@@ -253,4 +269,9 @@
 	border: 1px solid rgb(77, 77, 79);
 	color: #fff;
 	text-decoration: none;
+}
+
+.press-section .product-prev-btn,
+.press-section .product-next-btn {
+	top: 291px;
 }

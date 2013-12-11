@@ -33,7 +33,14 @@
   {% endif %}
 {% endfor %}
 
-<article class="product product-{{ product.type | handleize }} {{ product.type | handleize }}-viewer invisible">
+{% capture scale_override %} {% endcapture %}
+  {% for tag in product.tags %}
+    {% if tag contains 'scale' %}
+      {% capture scale_override %} data-scale="{{ tag | remove: 'scale-' }}"{% endcapture %}
+    {% endif %}
+  {% endfor %}
+
+<article class="product product-{{ product.type | handleize }} {{ product.type | handleize }}-viewer invisible"  data-product="{{ product.handle }}" data-category="{{ product.type | handleize }}"{{ scale_override }}>
     <form action="/cart/add" method="post" enctype="multipart/form-data">
         <section class="product-images">
             <div class="product-main-image-con image-center">

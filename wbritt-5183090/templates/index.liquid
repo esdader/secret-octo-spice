@@ -1,6 +1,12 @@
 {% paginate collections.view-all.products by 250 %}
 {% for product in collections.view-all.products %}
-    <div id='elem{{ forloop.index }}' class='element isotope-item' data-index='{{ forloop.index }}' data-category="{{ product.type | handleize }}" data-product="{{ product.handle }}">
+	{% capture scale_override %} {% endcapture %}
+	{% for tag in product.tags %}
+		{% if tag contains 'scale' %}
+			{% capture scale_override %} data-scale="{{ tag | remove: 'scale-' }}"{% endcapture %}
+		{% endif %}
+	{% endfor %}
+    <div id='elem{{ forloop.index }}' class='element isotope-item' data-index='{{ forloop.index }}' data-category="{{ product.type | handleize }}" data-product="{{ product.handle }}"{{ scale_override }}>
         <img class="{{ product.type | handleize }} collection-view-img" src="{{ product.featured_image | product_img_url: 'large' }}">
         <div class="collection-product-title-price">
 			<h2 class="collection-product-title">{{ product.title}}</h2>

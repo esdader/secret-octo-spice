@@ -34,7 +34,6 @@
         altImages;
 
     variImages = $.map($unsortedImages, function(n, i){
-
         var f = n.src.match(variPattern);
         if (f) return n;
     });
@@ -112,7 +111,7 @@
                 if (i ===0 ) {
                     out += ' class="active"';
                 } 
-                imgEarl = variImages[i].src;
+                imgEarl = $unsortedImages[i].src;
                 imgEarl = imgEarl.replace('_small.', '_large.');
                 out += '><a href="' + imgEarl + '" title="">';
                 out += '<img src="' + $unsortedImages[i].src + '" alt="" />';
@@ -241,6 +240,50 @@
         });
     }
 
+    function getImageScaleFactor() {
+        var img_scale_factor = 1,
+            $article = $('article'),
+            data_scale_factor;
+
+
+        switch ($article.attr('data-category')) {
+          
+            case 'special-75':
+                img_scale_factor = .85;
+                break;
+
+            case 'rings':
+                img_scale_factor = .35;
+                break;
+            
+            case 'hoops':
+                img_scale_factor = .53;
+                break;
+
+            case 'bracelets':
+                img_scale_factor = .70;
+                break;
+
+            case 'pendants':
+                img_scale_factor = 1;
+                break;
+
+            case 'studs':
+                img_scale_factor = .29;
+                break;
+
+            default:
+                img_scale_factor = 1.3;
+                break;
+        }
+
+        if ($article.data('scale')) {
+            img_scale_factor = parseInt($article.data('scale')) / 100;
+        }
+
+        return Math.sqrt(img_scale_factor);
+    }
+
     function setArticleHeight() {
 
         var scaleFactor = $(window).width() / opti_win_size,
@@ -275,6 +318,20 @@
             productImg.cur_width  = mImgW;
             productImg.cur_height = mImgH;
         }
+
+        var img_scale_factor = getImageScaleFactor();
+
+        console.log($mainImage.height());
+
+        var scaledHeight = $mainImage.height() * img_scale_factor;
+        var scaledWidth  = $mainImage.width() * img_scale_factor;
+
+        $mainImage.css({
+            'width' : scaledWidth + 'px',
+            'height' : scaledHeight + 'px'
+        });
+
+        console.log($mainImage.height());
     }
 
     function changeToViewer() {
@@ -569,7 +626,10 @@
             directionNav: false,
             slideshow: false,
             animation: 'slide',
-            slideshowSpeed: 3000
+            start: function() {
+                var active_slide = $flexy.find('.flex-active-slide');
+                active_slide.css('height', '100%');
+            }
         });
 
         $prevBtn.on('click', function(e){

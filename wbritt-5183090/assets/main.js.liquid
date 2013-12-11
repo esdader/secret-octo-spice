@@ -220,7 +220,7 @@
 
         var pressHeight = $(window).height() - parseInt($('.wrapper').css('margin-top')) - 16;
 
-        $press.css('height', pressHeight + 'px');
+        // $press.css('height', pressHeight + 'px');
 
         var html = '<img src="' + $pressLinks[0].href +'">';
         $mainImageHolder.append(html);
@@ -383,18 +383,26 @@ $(window).load(function(){
         og_padding_width   = 425 * win_scale_factor,
         begin_reduce_width = 100, //1020,
         last_item_index    = 0,
-        elem_width         = 744 * win_scale_factor,
-        elem_height        = 450  * win_scale_factor;
+        elem_width         = Math.round(744 * win_scale_factor),
+        elem_height        = Math.round(450  * win_scale_factor);
 
         var max_height = $(window).height() - 154 - 16; // the container doesn't have padding or margin 154 is standard from top and then 1em
 
-        if (max_height < 450) {
-            max_height = 450;
+        if (elem_width < 700) {
+            elem_width = 700;
         }
 
-        if (elem_height > max_height) {
-            elem_height = max_height;
-        }
+        if ((max_height < 450) || $(window).width() < 1300) {
+            max_height = 450;
+        } 
+
+        // if (elem_height > max_height) {
+        //     elem_height = max_height;
+        // }
+
+        // elem_height should always equal max height since we set it
+
+        elem_height = max_height;
 
         // Randomize image sizes
         $('.container').find('.element').each(function(){
@@ -410,46 +418,56 @@ $(window).load(function(){
               
                 case 'special-75':
                     scale_factor = .85;
-                    img_scale = scale_factor * full_scale;
+                    img_scale = Math.round(scale_factor * full_scale);
                     $image.css('width', img_scale + 'px');
                     break;
 
                 case 'rings':
                     scale_factor = .35;
-                    img_scale = scale_factor * full_scale;
+                    img_scale = Math.round(scale_factor * full_scale);
                     $image.css('width', img_scale + 'px');
                     break;
                 
                 case 'hoops':
                     scale_factor = .53;
-                    img_scale = scale_factor * full_scale;
+                    img_scale = Math.round(scale_factor * full_scale);
                     $image.css('width', img_scale + 'px');
                     break;
 
                 case 'bracelets':
                     scale_factor = .70;
-                    img_scale = scale_factor * full_scale;
+                    img_scale = Math.round(scale_factor * full_scale);
                     $image.css('width', img_scale + 'px');
                     break;
 
                 case 'pendants':
                     scale_factor = 1;
-                    img_scale = scale_factor * full_scale;
+                    img_scale = Math.round(scale_factor * full_scale);
                     $image.css('width', img_scale + 'px');
                     break;
 
                 case 'studs':
                     scale_factor = .29;
-                    img_scale = scale_factor * full_scale;
+                    img_scale = Math.round(scale_factor * full_scale);
                     $image.css('width', img_scale + 'px');
                     break;
 
                 default:
                     scale_factor = 1.3;
-                    img_scale = scale_factor * full_scale;
+                    img_scale = Math.round(scale_factor * full_scale);
                     $image.css('width', img_scale + 'px');
                     break;
             }
+
+            
+
+            if ($(this).data('scale')) {
+                scale_factor = parseInt($(this).data('scale')) / 100;
+                img_scale = Math.round(scale_factor * full_scale);
+                $image.css('width', img_scale + 'px');   
+            }
+
+            $(this).attr('data-scale-factor', scale_factor);
 
             if ($(this).index() > 0) {
               var padding_counterfactor = Math.max(0,(og_padding_width - $(this).prev().width()) / (og_padding_width / 2));
@@ -514,7 +532,6 @@ $(window).load(function(){
             
         });
         
-        // console.log('ended iamgesSetup');
     }
     if ($('.container').length > 0) {
         imagesSetup(); // kick things off
@@ -531,7 +548,19 @@ $(window).load(function(){
           resizable : false
         },
         function() {
-            $('.container').hide().removeClass('invisible').fadeIn();
+            var elements = $('.element'),
+                con   = $('.container');
+
+
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|Blackberry)/g)) {
+                var eItem = $(elements[last_item_index - 1]),
+                    h     = parseInt(eItem.data('height')), // item height
+                    y     = parseInt(eItem.data('y')), // item y pos
+                    total = h + y + elem_height + 10;
+                con.css('height', total  + 'px');
+            }
+
+            con.hide().removeClass('invisible').fadeIn();
         }
     );
 
@@ -630,6 +659,14 @@ $(window).load(function(){
 
         var tmpImgViewerWidth = 337 * win_scale_factor;
         var tmpImgViewerLeft  = 90 * win_scale_factor;
+        var img_scale_factor = target.data('scale-factor');
+        
+        img_scale_factor = Math.sqrt(img_scale_factor);
+        
+
+        if (img_scale_factor > 1) {
+            img_scale_factor = 1;
+        }
 
         if (target.attr('data-category') === 'pendants') {
             image_new_width = 288  * win_scale_factor;
@@ -637,7 +674,7 @@ $(window).load(function(){
             // product_image_left_offset = 120  * win_scale_factor;
             imgViewerHeightCheck = elem_height;
         } else {
-            image_new_width = 268  * win_scale_factor;
+            image_new_width = 268  * win_scale_factor * img_scale_factor;
             product_image_left_offset = (tmpImgViewerWidth - image_new_width) / 2 + tmpImgViewerLeft;
             // product_image_left_offset = 130  * win_scale_factor;
         }
@@ -647,9 +684,9 @@ $(window).load(function(){
         // check if image is too tall, 
         // if so cap it at elem height and then shrink width proportionally
         if (image_new_height > imgViewerHeightCheck) {
-            image_new_width = imgViewerHeightCheck / image_new_height * image_new_width;
+            image_new_width = imgViewerHeightCheck / image_new_height * image_new_width  * img_scale_factor;
             product_image_left_offset = (tmpImgViewerWidth - image_new_width) / 2 + tmpImgViewerLeft;
-            image_new_height = imgViewerHeightCheck;
+            image_new_height = imgViewerHeightCheck  * img_scale_factor;
         }
 
         if (target.attr('data-category') == 'pendants') {
@@ -672,7 +709,7 @@ $(window).load(function(){
                 'width': elem_width + 'px',
                 'height': elem_height + 'px'
             });
-        // todo: scroll top not working in firefox
+        
         $('body, html').animate({scrollTop : (current_y + target_downshift) - 100},200);
         setTimeout(doAfter, 400);
         function doAfter() {
@@ -1065,7 +1102,12 @@ $(window).load(function(){
                             controlNav: false,
                             directionNav: false,
                             slideshow: false,
-                            animation: 'slide'
+                            animation: 'slide',
+                            touch: false,
+                            start: function() {
+                                var active_slide = $flexy.find('.flex-active-slide');
+                                active_slide.css('height', '100%');
+                            }
                         });
 
                         $prevBtn.on('click', function(e){

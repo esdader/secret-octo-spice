@@ -2,7 +2,13 @@
     {% paginate search.results by 250 %}
         {% if search.results_count > 0 %}
             {% for  product in search.results %}
-                <div id='elem{{ forloop.index }}' class='element isotope-item' data-index='{{ forloop.index }}' data-category="{{ product.type | handleize }}" data-product="{{ product.handle }}">
+                {% for tag in product.tags %}
+                    {% capture scale_override %} {% endcapture %}
+                    {% if tag contains 'scale' %}
+                        {% capture scale_override %} data-scale="{{ tag | remove: 'scale-' }}"{% endcapture %}
+                    {% endif %}
+                {% endfor %}
+                <div id='elem{{ forloop.index }}' class='element isotope-item' data-index='{{ forloop.index }}' data-category="{{ product.type | handleize }}" data-product="{{ product.handle }}"{{ scale_override }}>
                     <img class="{{ product.type | handleize }} collection-view-img" src="{{ product.featured_image | product_img_url: 'large' }}">
                     <div class="collection-product-title-price">
                         <h2 class="collection-product-title">{{ product.title}}</h2>

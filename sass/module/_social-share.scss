@@ -58,7 +58,7 @@
 	background: siu("s2.png") no-repeat -336px -119px;	
 }
 
-.facebook:hover {
+.no-touch .facebook:hover {
 	background-position: -336px -139px;
 }
 
@@ -73,7 +73,8 @@
 .no-svg .twitter {
 	background: siu("s2.png") no-repeat -352px -119px;
 }
-.twitter:hover {
+
+.no-touch .twitter:hover {
 	background-position: -352px -139px;	
 }
 
@@ -89,6 +90,6 @@
 	background: siu("s2.png") no-repeat -398px -119px;
 }
 
-.pinterest:hover {
+.no-touch .pinterest:hover {
 	background-position: -398px -139px;
 }

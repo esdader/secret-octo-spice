@@ -307,11 +307,18 @@
                 })(jQuery, window);
 
                 var $flexy = $('.flexslider'),
-                    slideCount = $flexy.find('li').length;
+                    slideCount = $flexy.find('li').length,
+                    slideSpeed;
+
+                {% if settings.homepage_slide_speed %}
+                    slideSpeed = parseInt({{ settings.homepage_slide_speed }}) * 1000;
+                {% else %}
+                    slideSpeed = 3000
+                {% endif %}
 
                 $flexy.flexslider({
                     controlNav: false,
-                    slideshowSpeed: 3000, 
+                    slideshowSpeed: slideSpeed, 
                     directionNav: false,
                     end: sliderAtEnd,
                     start: sliderAtStart,
@@ -325,12 +332,12 @@
                 }
 
                 function sliderAtEnd() {
-                    setTimeout(transitionToProducts, 3050);
+                    setTimeout(transitionToProducts, slideSpeed + 50);
                 }
 
                 function sliderAtStart() {
                     if (slideCount === 1) {
-                        setTimeout(transitionToProducts, 3050);
+                        setTimeout(transitionToProducts, slideSpeed + 50);
                     }
                 }
             });
